@@ -23,7 +23,7 @@ Thank you for your interest in contributing to AI Agent Workforce! This document
 
 ### Suggesting Features
 
-1. Check [existing feature requests](https://github.com/yourusername/ai-agent-workforce/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+1. Check [existing feature requests](https://github.com/muhamadto/ai-agent-workforce/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
 2. Open a new issue with:
    - Clear use case and motivation
    - Proposed solution or API
