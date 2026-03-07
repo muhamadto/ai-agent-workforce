@@ -89,8 +89,3 @@
     path: "{{ ansible_facts.env.HOME }}/.gemini"
     state: absent
   when: setup_state == "absent"
-
-- name: Display removal message
-  debug:
-    msg: "Gemini CLI agents and configuration removed from ~/.gemini/"
-  when: setup_state == "absent"

@@ -122,8 +122,3 @@
     path: "{{ ansible_facts.env.HOME }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
     state: absent
   when: setup_state == "absent"
-
-- name: Display removal message
-  debug:
-    msg: "Claude Code agents and guides removed from ~/.claude/"
-  when: setup_state == "absent"

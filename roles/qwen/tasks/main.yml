@@ -84,8 +84,3 @@
     path: "{{ ansible_facts.env.HOME }}/.qwen/agents"
     state: absent
   when: setup_state == "absent"
-
-- name: Display removal message
-  debug:
-    msg: "Qwen Code agents and settings removed from ~/.qwen/"
-  when: setup_state == "absent"
