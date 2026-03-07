@@ -1,0 +1,26 @@
+# Code Owners for AI Agent Workforce
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for the entire repository
+* @muhamadto @ericmm
+
+# Ansible configuration and playbooks
+*.yml @muhamadto @ericmm
+*.yaml @muhamadto @ericmm
+ansible.cfg @muhamadto @ericmm
+inventory.ini @muhamadto @ericmm
+
+# Role definitions
+roles/** @muhamadto @ericmm
+
+# GitHub Actions workflows
+.github/workflows/** @muhamadto @ericmm
+
+# Documentation
+*.md @muhamadto @ericmm
+docs/** @muhamadto @ericmm
+
+# AI Agent configurations
+~/.claude/** @muhamadto @ericmm
+~/.qwen/** @muhamadto @ericmm
+~/.gemini/** @muhamadto @ericmm
