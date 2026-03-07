@@ -1,0 +1,40 @@
+---
+# AI Agent Workforce - Deploy AI agent teams as code
+# Licensed to Muhammad Hamadto 2026
+# Licensed under the Apache License, Version 2.0
+
+- name: Deploy AI Agent Workforce
+  hosts: all
+  gather_facts: true
+  become: false
+
+  pre_tasks:
+    - name: Verify macOS platform
+      fail:
+        msg: "This playbook is designed for macOS only. Detected OS: {{ ansible_facts.system }}"
+      when: ansible_facts.system != "Darwin"
+
+  roles:
+    - role: claude
+      tags:
+        - ai
+        - claude
+        - agents
+
+    - role: qwen
+      tags:
+        - ai
+        - qwen
+        - agents
+
+    - role: gemini
+      tags:
+        - ai
+        - gemini
+        - agents
+
+    - role: vibe-kanban
+      tags:
+        - tools
+        - kanban
+        - task-management

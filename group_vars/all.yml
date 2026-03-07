@@ -1,0 +1,11 @@
+---
+# AI Agent Workforce Global Variables
+# Licensed to Muhammad Hamadto 2026
+
+# Control installation (present) or removal (absent) of components
+setup_state: present
+
+# Default model configurations
+# claude_default_model: "sonnet-4.5"
+# qwen_default_model: "qwen3-coder-next"
+# gemini_default_model: "gemini-2.0-flash"

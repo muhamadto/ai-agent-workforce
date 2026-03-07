@@ -1,0 +1,149 @@
+#
+# Licensed to Muhammad Hamadto 2026
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#   See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+---
+# Claude Code agent configuration management
+
+- name: Ensure ~/.claude directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.claude"
+    state: directory
+    mode: '0755'
+  when: setup_state == "present"
+
+- name: Deploy Claude Code settings.json
+  copy:
+    src: "claude/settings.json"
+    dest: "{{ ansible_facts.env.HOME }}/.claude/settings.json"
+    mode: '0644'
+  when: setup_state == "present"
+
+- name: Ensure ~/.claude/agents directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.claude/agents"
+    state: directory
+    mode: '0755'
+  when: setup_state == "present"
+
+- name: Deploy Conventional Commits guide
+  copy:
+    src: "CONVENTIONAL_COMMITS.md"
+    dest: "{{ ansible_facts.env.HOME }}/.claude/CONVENTIONAL_COMMITS.md"
+    mode: '0644'
+  when: setup_state == "present"
+
+- name: Deploy Git Hooks guide
+  copy:
+    src: "GIT_HOOKS_GUIDE.md"
+    dest: "{{ ansible_facts.env.HOME }}/.claude/GIT_HOOKS_GUIDE.md"
+    mode: '0644'
+  when: setup_state == "present"
+
+- name: Deploy Shortcut ↔ VibeKanban workflow guide
+  copy:
+    src: "SHORTCUT_VIBEKANBAN_WORKFLOW.md"
+    dest: "{{ ansible_facts.env.HOME }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
+    mode: '0644'
+  when: setup_state == "present"
+
+- name: Ensure ~/.local/bin directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.local/bin"
+    state: directory
+    mode: '0755'
+  when: setup_state == "present"
+
+- name: Deploy Shortcut-Vibe sync helper script
+  copy:
+    src: "shortcut-vibe-sync.sh"
+    dest: "{{ ansible_facts.env.HOME }}/.local/bin/shortcut-vibe-sync"
+    mode: '0755'
+  when: setup_state == "present"
+
+- name: Deploy Claude Code agents
+  copy:
+    src: "claude/agents/{{ item }}"
+    dest: "{{ ansible_facts.env.HOME }}/.claude/agents/{{ item }}"
+    mode: '0644'
+  loop:
+    - architecture-guardian.md
+    - backend-developer.md
+    - data-engineer.md
+    - frontend-developer.md
+    - identity-security-developer.md
+    - infrastructure-engineer.md
+    - mobile-engineer.md
+    - principal-engineer.md
+    - secops-engineer.md
+  when: setup_state == "present"
+
+- name: Display deployed agents
+  debug:
+    msg: |
+      Claude Code agents deployed to ~/.claude/agents/:
+      - architecture-guardian: Clean Architecture enforcer (Sonnet)
+      - backend-developer: Java 24+, Spring Boot 4.x, Spring Native expert (Sonnet)
+      - data-engineer: ETL/ELT, big data, data warehousing expert (Sonnet)
+      - frontend-developer: React, Next.js, Flutter expert (Sonnet)
+      - identity-security-developer: OAuth2, OIDC, passkeys expert (Sonnet)
+      - infrastructure-engineer: AWS, GCP, K3S, IaC expert (Sonnet)
+      - mobile-engineer: iOS, Android, Flutter, React Native expert (Sonnet)
+      - principal-engineer: Strategic arbiter and decision-maker (Sonnet)
+      - secops-engineer: OWASP, security tooling expert (Sonnet)
+
+      Usage: Invoke with @agent-name in Claude Code or let Claude choose automatically
+  when: setup_state == "present"
+
+- name: Remove Claude Code settings.json
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.claude/settings.json"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Remove Claude Code agents
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.claude/agents"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Remove Conventional Commits guide
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.claude/CONVENTIONAL_COMMITS.md"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Remove Git Hooks guide
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.claude/GIT_HOOKS_GUIDE.md"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Remove Shortcut ↔ VibeKanban workflow guide
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Remove Shortcut-Vibe sync helper script
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.local/bin/shortcut-vibe-sync"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Display removal message
+  debug:
+    msg: "Claude Code agents and guides removed from ~/.claude/"
+  when: setup_state == "absent"

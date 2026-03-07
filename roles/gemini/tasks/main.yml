@@ -1,0 +1,48 @@
+#
+# Licensed to Muhammad Hamadto 2026
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#   See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+---
+# Gemini CLI agent configuration management
+
+- name: Ensure ~/.gemini directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.gemini"
+    state: directory
+    mode: '0755'
+  when: setup_state == "present"
+
+- name: Display Gemini placeholder message
+  debug:
+    msg: |
+      Gemini CLI agent role is a placeholder for future implementation.
+
+      Planned features:
+        - Gemini CLI configuration
+        - Agent definitions
+        - Integration with Google AI Studio
+        - Model selection (gemini-2.0-flash, gemini-2.0-pro, etc.)
+  when: setup_state == "present"
+
+- name: Remove Gemini configuration directory
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.gemini"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Display removal message
+  debug:
+    msg: "Gemini configuration removed from ~/.gemini/"
+  when: setup_state == "absent"

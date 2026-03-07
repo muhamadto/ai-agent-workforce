@@ -1,0 +1,67 @@
+{
+  "$version": 2,
+  "general": {
+    "gitCoAuthor": "Qwen3-Coder <noreply@qwen.ai>",
+    "autoUpdate": true
+  },
+  "output": {
+    "format": "text"
+  },
+  "model": {
+    "name": "coder-model"
+  },
+  "tools": {
+    "approvalMode": "yolo",
+    "sandbox": true,
+    "shell": "/bin/bash"
+  },
+  "subagents": {
+    "enabled": true,
+    "agentPath": "~/.qwen/agents"
+  },
+  "context": {
+    "contextFiles": ["QWEN.md"],
+    "includePatterns": ["**/*.java", "**/*.py", "**/*.js", "**/*.ts", "**/*.go"],
+    "excludePatterns": ["**/node_modules/**", "**/target/**", "**/.git/**", "**/build/**"]
+  },
+  "hooks": {
+    "preToolUse": [
+      {
+        "matcher": "shell",
+        "condition": "contains(command, 'git commit') && !contains(command, '--no-verify')",
+        "command": "bash -c 'if [ -f pom.xml ]; then echo \"⚠️  Pre-commit checks will run:\\n  1. Code formatting (mvn spotless:check)\\n  2. Unit tests (mvn test)\\n  3. Coverage check (≥90% required)\\n  4. Conventional commits format\\n\\nThese checks will BLOCK the commit if they fail.\"; else echo \"ℹ️  Committing (no Maven project detected)\"; fi'",
+        "description": "Warn about blocking pre-commit checks"
+      },
+      {
+        "matcher": "shell",
+        "condition": "contains(command, 'git push') && !contains(command, '--no-verify')",
+        "command": "bash -c 'if [ -f pom.xml ] && [ -n \"$SONAR_TOKEN\" ]; then echo \"⚠️  Pre-push quality gate will run:\\n  1. Full test suite (mvn verify)\\n  2. SonarQube analysis\\n  3. Quality gate enforcement (≥90% coverage)\\n\\nThis will BLOCK the push if quality gate fails.\\nThis may take several minutes...\"; elif [ -f pom.xml ]; then echo \"ℹ️  SONAR_TOKEN not set, SonarQube checks will be skipped\"; else echo \"ℹ️  Pushing (no Maven project detected)\"; fi'",
+        "description": "Warn about blocking pre-push quality gate"
+      }
+    ],
+    "postToolUse": [
+      {
+        "matcher": "edit|write",
+        "command": "bash -c 'if [ -f pom.xml ]; then echo \"💡 Reminder: Run mvn spotless:apply to format code\"; fi'",
+        "description": "Reminder to format code after edits",
+        "continueOnError": true
+      }
+    ]
+  },
+  "security": { "auth": { "selectedType": "qwen-oauth" } },
+  "mcpServers": {
+    "shortcut": {
+      "command": "npx",
+      "args": ["-y", "@shortcut/mcp@latest"],
+      "env": {
+        "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
+      },
+      "timeout": 15000
+    },
+    "vibe_kanban": {
+      "command": "npx",
+      "args": ["-y", "vibe-kanban@latest", "--mcp"],
+      "timeout": 15000
+    }
+  }
+}

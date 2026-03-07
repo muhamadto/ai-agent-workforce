@@ -1,0 +1,91 @@
+#
+# Licensed to Muhammad Hamadto 2026
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#   See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+---
+# Qwen Code agent configuration management
+
+- name: Ensure ~/.qwen directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.qwen"
+    state: directory
+    mode: '0755'
+  when: setup_state == "present"
+
+- name: Deploy Qwen Code settings.json
+  copy:
+    src: "qwen/settings.json"
+    dest: "{{ ansible_facts.env.HOME }}/.qwen/settings.json"
+    mode: '0644'
+  when: setup_state == "present"
+
+- name: Ensure ~/.qwen/agents directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.qwen/agents"
+    state: directory
+    mode: '0755'
+  when: setup_state == "present"
+
+- name: Deploy Qwen Code agents
+  copy:
+    src: "qwen/agents/{{ item }}"
+    dest: "{{ ansible_facts.env.HOME }}/.qwen/agents/{{ item }}"
+    mode: '0644'
+  loop:
+    - architecture-guardian.md
+    - backend-developer.md
+    - data-engineer.md
+    - frontend-developer.md
+    - identity-security-developer.md
+    - infrastructure-engineer.md
+    - mobile-engineer.md
+    - principal-engineer.md
+    - secops-engineer.md
+  when: setup_state == "present"
+
+- name: Display deployed agents
+  debug:
+    msg: |
+      Qwen Code agents deployed to ~/.qwen/agents/:
+      - architecture-guardian: Clean Architecture enforcer (Qwen3-Coder-Next)
+      - backend-developer: Java 24+, Spring Boot 4.x, Spring Native expert (Qwen3-Coder-Next)
+      - data-engineer: ETL/ELT, big data, data warehousing expert (Qwen3-Coder-Next)
+      - frontend-developer: React, Next.js, Flutter expert (Qwen3-Coder-Next)
+      - identity-security-developer: OAuth2, OIDC, passkeys expert (Qwen3-Coder-Next)
+      - infrastructure-engineer: AWS, GCP, K3S, IaC expert (Qwen3-Coder-Next)
+      - mobile-engineer: iOS, Android, Flutter, React Native expert (Qwen3-Coder-Next)
+      - principal-engineer: Strategic arbiter and decision-maker (Qwen3-Coder-Next)
+      - secops-engineer: OWASP, security tooling expert (Qwen3-Coder-Next)
+
+      Configuration: YOLO mode enabled (auto-approve all tools)
+      Usage: Qwen automatically delegates to appropriate subagents
+  when: setup_state == "present"
+
+- name: Remove Qwen Code settings.json
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.qwen/settings.json"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Remove Qwen Code agents
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.qwen/agents"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Display removal message
+  debug:
+    msg: "Qwen Code agents and settings removed from ~/.qwen/"
+  when: setup_state == "absent"

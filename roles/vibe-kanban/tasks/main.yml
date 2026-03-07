@@ -1,0 +1,60 @@
+#
+# Licensed to Muhammad Hamadto 2026
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#   See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+---
+# VibeKanban task management tool
+
+- name: Install vibe-kanban globally via npm
+  community.general.npm:
+    name: vibe-kanban
+    global: true
+    state: "{{ setup_state }}"
+
+- name: Ensure ~/.local/bin directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.local/bin"
+    state: directory
+    mode: '0755'
+  when: setup_state == "present"
+
+- name: Deploy Shortcut-Vibe sync helper script
+  copy:
+    src: "shortcut-vibe-sync.sh"
+    dest: "{{ ansible_facts.env.HOME }}/.local/bin/shortcut-vibe-sync"
+    mode: '0755'
+  when: setup_state == "present"
+
+- name: Display VibeKanban installation message
+  debug:
+    msg: |
+      VibeKanban installed globally via npm
+      Shortcut-Vibe sync script: ~/.local/bin/shortcut-vibe-sync
+
+      Usage:
+        vibe-kanban          # Start local kanban board
+        shortcut-vibe-sync   # Sync tasks with Shortcut
+  when: setup_state == "present"
+
+- name: Remove Shortcut-Vibe sync helper script
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.local/bin/shortcut-vibe-sync"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Display removal message
+  debug:
+    msg: "VibeKanban and sync script removed"
+  when: setup_state == "absent"
