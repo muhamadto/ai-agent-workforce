@@ -12,7 +12,29 @@ AI Agent Workforce is an Ansible-based automation tool for deploying and managin
 
 - **Claude Code** - Anthropic's Claude with specialized agent teams
 - **Qwen Code** - Alibaba's Qwen with YOLO-mode agent configurations
-- **Gemini CLI** - Google's Gemini (planned)
+- **Gemini CLI** - Google's Gemini with repo-navigation-first agents
+
+#### What Each Model Is Good At
+
+| Model | Strength | Agent Style | Best For | When to Use |
+|---|---|---|---|---|
+| **Claude** | Long-context behavioral adherence | Constitution — verbose doctrine, philosophy, rulebooks | Architecture reviews, security, complex cross-cutting decisions | Default for anything non-trivial. Best balance of reasoning + implementation. Use when quality > speed, or when Claude Code rate limits hit and you need a fallback. |
+| **Qwen Coder** | Token-efficient instruction following | Compressed rules — short, direct, structured | Fast implementation, repetitive coding tasks, strict rule execution | High-volume, low-complexity tasks. Boilerplate, repetitive patterns, tight budgets. Use when speed/cost > deliberation. |
+| **Gemini** | Tool orchestration, repo navigation, large-context reasoning | Playbook — tool-aware, explore-first, task-focused | Codebase discovery, multi-file refactors, planning across a large repo | Unfamiliar codebases, cross-system tracing, tool-heavy workflows. Use when exploration > execution. |
+
+#### Recommended Model per Agent
+
+| Agent | Best Model | Reasoning |
+|---|---|---|
+| **architecture-guardian** | Claude | Doctrine-holding + judgment. Claude's core strength. |
+| **backend-developer** | Claude or Qwen | Claude when the task involves cross-cutting concerns, new patterns, or complex domain logic. Qwen when it's straightforward CRUD, boilerplate, or you need speed over deliberation. |
+| **frontend-developer** | Claude or Qwen | Same as backend. Claude handles state management complexity better. Qwen is fine for component boilerplate. |
+| **data-engineer** | Gemini or Claude | Gemini when you need to trace lineage across an unfamiliar codebase. Claude when you're implementing transformations with complex business logic. Qwen works for routine SQL/dbt. |
+| **identity-security-developer** | Claude | Non-negotiable. You want the model that won't drift from security doctrine. |
+| **infrastructure-engineer** | Gemini or Claude | Gemini for exploration and blast-radius mapping. Claude for writing IaC with complex interdependencies. |
+| **mobile-engineer** | Claude or Qwen | Claude when architecture patterns are complex (state machines, navigation flows). Qwen for standard screens and boilerplate. |
+| **principal-engineer** | Claude | Trade-off analysis and ADRs are Claude's native mode. |
+| **secops-engineer** | Claude (judge) + Gemini (scan) | Hybrid approach: Gemini scans and discovers, Claude judges against security standards. |
 
 ### Key Features
 

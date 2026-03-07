@@ -24,17 +24,65 @@
     mode: '0755'
   when: setup_state == "present"
 
-- name: Display Gemini placeholder message
+- name: Deploy Gemini CLI settings.json
+  copy:
+    src: "gemini/settings.json"
+    dest: "{{ ansible_facts.env.HOME }}/.gemini/settings.json"
+    mode: '0644'
+  when: setup_state == "present"
+
+- name: Ensure ~/.gemini/agents directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.gemini/agents"
+    state: directory
+    mode: '0755'
+  when: setup_state == "present"
+
+- name: Deploy Gemini CLI agents
+  copy:
+    src: "gemini/agents/{{ item }}"
+    dest: "{{ ansible_facts.env.HOME }}/.gemini/agents/{{ item }}"
+    mode: '0644'
+  loop:
+    - architecture-guardian.md
+    - backend-developer.md
+    - data-engineer.md
+    - frontend-developer.md
+    - identity-security-developer.md
+    - infrastructure-engineer.md
+    - mobile-engineer.md
+    - principal-engineer.md
+    - secops-engineer.md
+  when: setup_state == "present"
+
+- name: Display deployed agents
   debug:
     msg: |
-      Gemini CLI agent role is a placeholder for future implementation.
+      Gemini CLI agents deployed to ~/.gemini/agents/:
+      - architecture-guardian: Clean Architecture enforcer — repo-navigation first (gemini-2.5-pro)
+      - backend-developer: Java 24+, Spring Boot 4.x, explores before implementing (gemini-2.5-pro)
+      - data-engineer: ETL/ELT, dbt, Spark, data quality expert (gemini-2.5-pro)
+      - frontend-developer: React, Next.js, Flutter — reads patterns before building (gemini-2.5-pro)
+      - identity-security-developer: OAuth2, OIDC, zero-trust specialist (gemini-2.5-pro)
+      - infrastructure-engineer: AWS, GCP, Kubernetes, Terraform IaC-first (gemini-2.5-pro)
+      - mobile-engineer: iOS, Android, Flutter, React Native expert (gemini-2.5-pro)
+      - principal-engineer: Strategic arbiter, cross-system view (gemini-2.5-pro)
+      - secops-engineer: OWASP, security scanning, paranoid by design (gemini-2.5-pro)
 
-      Planned features:
-        - Gemini CLI configuration
-        - Agent definitions
-        - Integration with Google AI Studio
-        - Model selection (gemini-2.0-flash, gemini-2.0-pro, etc.)
+      Usage: Invoke with @agent-name in Gemini CLI or configure as default agent
   when: setup_state == "present"
+
+- name: Remove Gemini CLI settings.json
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.gemini/settings.json"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Remove Gemini CLI agents
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.gemini/agents"
+    state: absent
+  when: setup_state == "absent"
 
 - name: Remove Gemini configuration directory
   file:
@@ -44,5 +92,5 @@
 
 - name: Display removal message
   debug:
-    msg: "Gemini configuration removed from ~/.gemini/"
+    msg: "Gemini CLI agents and configuration removed from ~/.gemini/"
   when: setup_state == "absent"
