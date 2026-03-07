@@ -33,7 +33,7 @@
         - gemini
         - agents
 
-    - role: vibe-kanban
+    - role: vibekanban
       tags:
         - tools
         - kanban
