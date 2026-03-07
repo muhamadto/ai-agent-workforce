@@ -39,8 +39,12 @@ jobs:
         run: ansible-playbook playbook.yml --syntax-check -i localhost,
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v5
         if: ${{ secrets.SONAR_TOKEN != '' }}
+        with:
+          args: >
+            -Dsonar.projectKey=muhamadto_ai-agent-workforce
+            -Dsonar.organization=muhamadto
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
