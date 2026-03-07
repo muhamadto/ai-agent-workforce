@@ -27,6 +27,7 @@ Each skill is deployed to:
 | Skill | Description | Requires |
 |---|---|---|
 | `shortcut` | Shortcut project management via `short` CLI | `short` CLI installed and authenticated |
+| `shortcut-to-vibe` | Import Shortcut stories into VibeKanban | `short` CLI + VibeKanban MCP server running |
 
 ## Usage
 
