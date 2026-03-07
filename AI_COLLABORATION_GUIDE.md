@@ -2,15 +2,16 @@
 
 ## Overview
 
-This repository is configured with two AI coding assistant ecosystems working in parallel:
+This repository is configured with three AI coding assistant ecosystems working in parallel:
 - **Claude Code** with Agent Teams (peer-to-peer collaboration)
 - **Qwen Code** with SubAgents (hierarchical delegation)
+- **Gemini CLI** with Repo-Navigation-First agents (explore-then-implement)
 
-Both systems have equivalent specialist agents covering the same expertise areas.
+All three systems have equivalent specialist agents covering the same expertise areas.
 
 ## Agent Specializations
 
-Both Claude and Qwen have these specialized agents:
+All three models have these specialized agents:
 
 | Agent | Expertise |
 |-------|-----------|
@@ -24,6 +25,28 @@ Both Claude and Qwen have these specialized agents:
 | **architecture-guardian** | Clean Architecture enforcement, SOLID principles |
 | **principal-engineer** | Strategic decisions, conflict resolution |
 
+## Model Comparison
+
+| Model | Strength | Agent Style | Best For |
+|-------|----------|-------------|----------|
+| **Claude** | Long-context behavioral adherence | Constitution — verbose doctrine, philosophy, rulebooks | Architecture reviews, security, complex cross-cutting decisions |
+| **Qwen Coder** | Token-efficient instruction following | Compressed rules — short, direct, structured | Fast implementation, repetitive coding tasks, strict rule execution |
+| **Gemini** | Tool orchestration, repo navigation, large-context reasoning | Playbook — tool-aware, explore-first, task-focused | Codebase discovery, multi-file refactors, planning across a large repo |
+
+## Recommended Model per Agent
+
+| Agent | Best Model | Reasoning |
+|-------|------------|-----------|
+| **architecture-guardian** | Claude | Doctrine-holding + judgment. Claude's core strength. |
+| **backend-developer** | Claude or Qwen | Claude for complex domain logic. Qwen for CRUD, boilerplate, speed. |
+| **frontend-developer** | Claude or Qwen | Claude for state management complexity. Qwen for component boilerplate. |
+| **data-engineer** | Gemini or Claude | Gemini for tracing lineage. Claude for complex transformations. |
+| **identity-security-developer** | Claude | Non-negotiable. You want the model that won't drift from security doctrine. |
+| **infrastructure-engineer** | Gemini or Claude | Gemini for exploration and blast-radius mapping. Claude for complex IaC. |
+| **mobile-engineer** | Claude or Qwen | Claude for complex patterns. Qwen for standard screens and boilerplate. |
+| **principal-engineer** | Claude | Trade-off analysis and ADRs are Claude's native mode. |
+| **secops-engineer** | Claude (judge) + Gemini (scan) | Hybrid: Gemini scans and discovers, Claude judges against standards. |
+
 ## Configuration
 
 ### Claude Code
@@ -35,6 +58,7 @@ Both Claude and Qwen have these specialized agents:
   - tmux split-pane mode
   - Permission mode: bypassPermissions
   - Pre-commit/pre-push hooks configured
+- **Style**: Constitution-based — reads doctrine, judges against rules
 
 ### Qwen Code
 - **Location**: `~/.qwen/`
@@ -44,6 +68,19 @@ Both Claude and Qwen have these specialized agents:
   - SubAgent delegation (automatic)
   - YOLO mode (auto-approve all)
   - Same pre-commit/pre-push hooks as Claude
+- **Style**: Compressed rules — token-efficient, fast implementation
+
+### Gemini CLI
+- **Location**: `~/.gemini/`
+- **Settings**: `~/.gemini/settings.json`
+- **Agents**: `~/.gemini/agents/*.md`
+- **Features**:
+  - Repo-navigation-first approach
+  - Tool-aware agents (read_file, glob, grep, run_shell_command)
+  - Role-specific attention cones
+  - Constraint checkpoints mid-workflow
+  - Model: gemini-2.5-pro
+- **Style**: Playbook-based — explores first, then implements
 
 ## Multi-Agent Task Assignment
 
@@ -117,7 +154,69 @@ Please delegate to the appropriate subagents to:
 - Main agent synthesizes all work
 - Automatic agent selection based on task
 
-### Strategy 3: Hybrid Approach (Claude + Qwen in Parallel)
+### Strategy 3: Gemini CLI (Repo-Navigation-First)
+
+```bash
+gemini
+```
+
+Then ask:
+```
+@backend-developer Implement OAuth2 authentication with Spring Boot.
+
+First, explore the codebase:
+1. Map the existing service structure
+2. Find similar authentication patterns already in use
+3. Read the closest existing use case before implementing
+
+Then implement following Clean Architecture layers.
+```
+
+**How it works**:
+- Agent explores repo before implementing (shell commands, grep, glob)
+- Reads existing patterns before writing new code
+- Constraint checkpoints mid-workflow (e.g., "which layer does this belong in?")
+- Uses gemini-2.5-pro for large-context reasoning
+- Tool-aware: runs diagnostic commands, maps dependencies
+
+### Strategy 4: Hybrid Approach (All Three Models)
+
+Use all three simultaneously for maximum coverage:
+
+**Terminal 1 - Claude (Architecture + Security)**:
+```bash
+claude
+```
+```
+@principal-engineer @identity-security-developer
+Design the OAuth2 architecture and security model.
+Write ADRs for key decisions.
+```
+
+**Terminal 2 - Qwen (Implementation)**:
+```bash
+qwen-code
+```
+```
+Implement the OAuth2 server based on the ADRs.
+Generate unit tests with ≥90% coverage.
+```
+
+**Terminal 3 - Gemini (Discovery + Validation)**:
+```bash
+gemini
+```
+```
+@architecture-guardian @secops-engineer
+1. Map the dependency graph of the OAuth2 implementation
+2. Find any security vulnerabilities or architecture violations
+3. Report violations with file paths and line numbers
+```
+
+**Benefits**:
+- Claude: Holds doctrine, makes trade-off decisions
+- Qwen: Fast, token-efficient implementation
+- Gemini: Explores, discovers issues, validates against actual code
 
 Use both simultaneously in different terminal sessions:
 
@@ -158,6 +257,7 @@ Perform comprehensive review and architecture validation:
 - ✅ Agents need to challenge each other's approaches
 - ✅ Want to see all work in parallel (tmux splits)
 - ✅ Multiple independent modules being built simultaneously
+- ✅ Architecture reviews and security doctrine enforcement
 
 ### Use Qwen SubAgents When:
 - ✅ Clear task delegation with focused specializations
@@ -165,13 +265,22 @@ Perform comprehensive review and architecture validation:
 - ✅ Automatic agent selection preferred
 - ✅ Single synthesized output desired
 - ✅ Hierarchical workflow makes sense
+- ✅ Fast implementation of repetitive patterns (CRUD, boilerplate)
 
-### Use Both (Hybrid) When:
+### Use Gemini CLI When:
+- ✅ Unfamiliar codebase requiring exploration
+- ✅ Multi-file refactors across layers
+- ✅ Need to trace dependencies or data lineage
+- ✅ Tool orchestration (grep, git, find, shell commands)
+- ✅ Large-context reasoning across the entire repo
+- ✅ Validation against actual code (not just doctrine)
+
+### Use All Three (Hybrid) When:
 - ✅ Very complex, high-stakes projects
-- ✅ Want implementation + independent review
+- ✅ Want implementation + independent review + validation
 - ✅ Need maximum code quality and coverage
 - ✅ Multiple perspectives valuable
-- ✅ Budget allows for dual AI usage
+- ✅ Budget allows for triple AI usage
 
 ## Task Assignment Examples
 
@@ -239,14 +348,15 @@ Both Claude and Qwen are configured with the same git hooks:
 
 1. **Start with Architecture**: Use principal-engineer or architecture-guardian first to design approach
 2. **Security First**: Involve identity-security-developer and secops-engineer early
-3. **Test Coverage**: Both systems enforce ≥90% unit and ≥80% integration tests
-4. **Code Review**: Use both Claude teams and Qwen for independent reviews
+3. **Test Coverage**: All three systems enforce ≥90% unit and ≥80% integration tests
+4. **Code Review**: Use Claude, Qwen, and Gemini for independent reviews
 5. **Documentation**: Let principal-engineer synthesize and document decisions
-6. **Conventional Commits**: Both enforce conventional commits format
+6. **Conventional Commits**: All three enforce conventional commits format
+7. **Model Selection**: Match the model to the task (see Recommended Model per Agent table)
 
 ## Deployment
 
-Ansible automatically deploys both configurations:
+Ansible automatically deploys all three configurations:
 
 ```bash
 ansible-playbook playbook.yml -e setup_state=present --limit local
@@ -255,13 +365,14 @@ ansible-playbook playbook.yml -e setup_state=present --limit local
 This installs:
 - Claude Code agents to `~/.claude/agents/`
 - Qwen Code agents to `~/.qwen/agents/`
-- Settings for both with matching hooks
+- Gemini CLI agents to `~/.gemini/agents/`
+- Settings for all three with matching hooks
 - Guides and documentation
 
 ## Troubleshooting
 
 ### Claude Agent Teams Not Working
-- Ensure `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in `~/.claude/settings.json`
+- Ensure agent teams experimental flag is enabled in `~/.claude/settings.json`
 - Verify tmux is installed: `which tmux`
 - Check `teammateMode` is set to `"tmux"` or `"auto"`
 
@@ -269,6 +380,12 @@ This installs:
 - Verify `tools.approvalMode` is `"yolo"` in `~/.qwen/settings.json`
 - Check agents exist in `~/.qwen/agents/`
 - Ensure agent markdown files have valid YAML frontmatter
+
+### Gemini CLI Agents Not Exploring
+- Check agents exist in `~/.gemini/agents/`
+- Verify agent files have proper YAML frontmatter (name, description, tools)
+- Ensure `gemini-2.5-pro` model is selected in settings.json
+- Agents should have `run_shell_command` in tools list for exploration
 
 ### Permission Prompts
 - Claude: `permissionMode: "bypassPermissions"` in settings.json
@@ -278,3 +395,4 @@ This installs:
 - [Claude Code Agent Teams Documentation](https://code.claude.com/docs/en/agent-teams)
 - [Qwen Code SubAgents Documentation](https://qwenlm.github.io/qwen-code-docs/en/users/features/sub-agents/)
 - [Qwen Code Settings Reference](https://qwenlm.github.io/qwen-code-docs/en/users/configuration/settings/)
+- [Gemini CLI Sub-Agents Documentation](https://qwenlm.github.io/qwen-code-docs/en/users/features/sub-agents/)
