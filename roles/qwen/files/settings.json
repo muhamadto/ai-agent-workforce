@@ -13,7 +13,11 @@
   "tools": {
     "approvalMode": "yolo",
     "sandbox": true,
-    "shell": "/bin/bash"
+    "shell": "/bin/bash",
+    "skills": {
+      "enabled": true,
+      "skillPath": "~/.qwen/skills"
+    }
   },
   "context": {
     "contextFiles": ["QWEN.md"],
