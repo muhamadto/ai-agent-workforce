@@ -21,7 +21,7 @@
 
 - name: Ensure skills directories exist for all models
   file:
-    path: "{{ ansible_facts.env.HOME }}/{{ item }}"
+    path: "{{ ansible_user_dir }}/{{ item }}"
     state: directory
     mode: '0755'
   loop:
@@ -31,6 +31,9 @@
     - .claude/skills/shortcut-to-vibe
     - .qwen/skills/shortcut-to-vibe
     - .gemini/skills/shortcut-to-vibe
+    - .claude/skills/github-issue-to-vibe
+    - .qwen/skills/github-issue-to-vibe
+    - .gemini/skills/github-issue-to-vibe
   when: setup_state == "present"
 
 # ── Shortcut skill ─────────────────────────────────────────────────────────────
@@ -38,7 +41,7 @@
 - name: Deploy Shortcut SKILL.md to all models
   copy:
     src: "shortcut/SKILL.md"
-    dest: "{{ ansible_facts.env.HOME }}/{{ item }}/SKILL.md"
+    dest: "{{ ansible_user_dir }}/{{ item }}/SKILL.md"
     mode: '0644'
   loop:
     - .claude/skills/shortcut
@@ -49,7 +52,7 @@
 - name: Download Shortcut OpenAPI spec from official source
   get_url:
     url: "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json"
-    dest: "{{ ansible_facts.env.HOME }}/{{ item }}/shortcut.openapi.json"
+    dest: "{{ ansible_user_dir }}/{{ item }}/shortcut.openapi.json"
     mode: '0644'
     timeout: 30
   loop:
@@ -63,12 +66,25 @@
 - name: Deploy Shortcut-to-VibeKanban SKILL.md to all models
   copy:
     src: "shortcut-to-vibe/SKILL.md"
-    dest: "{{ ansible_facts.env.HOME }}/{{ item }}/SKILL.md"
+    dest: "{{ ansible_user_dir }}/{{ item }}/SKILL.md"
     mode: '0644'
   loop:
     - .claude/skills/shortcut-to-vibe
     - .qwen/skills/shortcut-to-vibe
     - .gemini/skills/shortcut-to-vibe
+  when: setup_state == "present"
+
+# ── GitHub Issue → VibeKanban import skill ─────────────────────────────────────
+
+- name: Deploy GitHub-Issue-to-VibeKanban SKILL.md to all models
+  copy:
+    src: "github-issue-to-vibe/SKILL.md"
+    dest: "{{ ansible_user_dir }}/{{ item }}/SKILL.md"
+    mode: '0644'
+  loop:
+    - .claude/skills/github-issue-to-vibe
+    - .qwen/skills/github-issue-to-vibe
+    - .gemini/skills/github-issue-to-vibe
   when: setup_state == "present"
 
 - name: Display skills installation summary
@@ -89,6 +105,11 @@
         ~/.qwen/skills/shortcut-to-vibe/SKILL.md
         ~/.gemini/skills/shortcut-to-vibe/SKILL.md
 
+      github-issue-to-vibe — Import GitHub issues into VibeKanban
+        ~/.claude/skills/github-issue-to-vibe/SKILL.md
+        ~/.qwen/skills/github-issue-to-vibe/SKILL.md
+        ~/.gemini/skills/github-issue-to-vibe/SKILL.md
+
       Requires: short CLI installed and authenticated (short install)
       Note: OpenAPI spec is bundled in the repo — update manually from developer.shortcut.com when the API changes
   when: setup_state == "present"
@@ -97,7 +118,7 @@
 
 - name: Remove skills directories from all models
   file:
-    path: "{{ ansible_facts.env.HOME }}/{{ item }}"
+    path: "{{ ansible_user_dir }}/{{ item }}"
     state: absent
   loop:
     - .claude/skills/shortcut
@@ -106,4 +127,7 @@
     - .claude/skills/shortcut-to-vibe
     - .qwen/skills/shortcut-to-vibe
     - .gemini/skills/shortcut-to-vibe
+    - .claude/skills/github-issue-to-vibe
+    - .qwen/skills/github-issue-to-vibe
+    - .gemini/skills/github-issue-to-vibe
   when: setup_state == "absent"
