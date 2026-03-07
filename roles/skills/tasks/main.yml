@@ -1,0 +1,85 @@
+#
+# Licensed to Muhammad Hamadto 2026
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#   See the NOTICE file distributed with this work for additional information regarding copyright ownership.
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+---
+# Shared AI agent skills — deployed to all models
+
+# ── Directory setup ────────────────────────────────────────────────────────────
+
+- name: Ensure skills directories exist for all models
+  file:
+    path: "{{ ansible_facts.env.HOME }}/{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - .claude/skills/shortcut/reference
+    - .qwen/skills/shortcut/reference
+    - .gemini/skills/shortcut/reference
+  when: setup_state == "present"
+
+# ── Shortcut skill ─────────────────────────────────────────────────────────────
+
+- name: Deploy Shortcut SKILL.md to all models
+  copy:
+    src: "shortcut/SKILL.md"
+    dest: "{{ ansible_facts.env.HOME }}/{{ item }}/SKILL.md"
+    mode: '0644'
+  loop:
+    - .claude/skills/shortcut
+    - .qwen/skills/shortcut
+    - .gemini/skills/shortcut
+  when: setup_state == "present"
+
+- name: Download Shortcut OpenAPI spec from official source
+  get_url:
+    url: "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json"
+    dest: "{{ ansible_facts.env.HOME }}/{{ item }}/shortcut.openapi.json"
+    mode: '0644'
+    timeout: 30
+  loop:
+    - .claude/skills/shortcut/reference
+    - .qwen/skills/shortcut/reference
+    - .gemini/skills/shortcut/reference
+  when: setup_state == "present"
+
+- name: Display skills installation summary
+  debug:
+    msg: |
+      Skills deployed to all models:
+
+      shortcut — Shortcut project management via `short` CLI
+        ~/.claude/skills/shortcut/SKILL.md
+        ~/.claude/skills/shortcut/reference/shortcut.openapi.json
+        ~/.qwen/skills/shortcut/SKILL.md
+        ~/.qwen/skills/shortcut/reference/shortcut.openapi.json
+        ~/.gemini/skills/shortcut/SKILL.md
+        ~/.gemini/skills/shortcut/reference/shortcut.openapi.json
+
+      Requires: short CLI installed and authenticated (short install)
+      Note: OpenAPI spec is bundled in the repo — update manually from developer.shortcut.com when the API changes
+  when: setup_state == "present"
+
+# ── Removal ────────────────────────────────────────────────────────────────────
+
+- name: Remove skills directories from all models
+  file:
+    path: "{{ ansible_facts.env.HOME }}/{{ item }}"
+    state: absent
+  loop:
+    - .claude/skills/shortcut
+    - .qwen/skills/shortcut
+    - .gemini/skills/shortcut
+  when: setup_state == "absent"

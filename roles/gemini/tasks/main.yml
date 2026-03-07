@@ -26,7 +26,7 @@
 
 - name: Deploy Gemini CLI settings.json
   copy:
-    src: "gemini/settings.json"
+    src: "settings.json"
     dest: "{{ ansible_facts.env.HOME }}/.gemini/settings.json"
     mode: '0644'
   when: setup_state == "present"
@@ -40,7 +40,7 @@
 
 - name: Deploy Gemini CLI agents
   copy:
-    src: "gemini/agents/{{ item }}"
+    src: "agents/{{ item }}"
     dest: "{{ ansible_facts.env.HOME }}/.gemini/agents/{{ item }}"
     mode: '0644'
   loop:

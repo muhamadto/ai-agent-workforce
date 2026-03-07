@@ -26,7 +26,7 @@
 
 - name: Deploy Qwen Code settings.json
   copy:
-    src: "qwen/settings.json"
+    src: "settings.json"
     dest: "{{ ansible_facts.env.HOME }}/.qwen/settings.json"
     mode: '0644'
   when: setup_state == "present"
@@ -40,7 +40,7 @@
 
 - name: Deploy Qwen Code agents
   copy:
-    src: "qwen/agents/{{ item }}"
+    src: "agents/{{ item }}"
     dest: "{{ ansible_facts.env.HOME }}/.qwen/agents/{{ item }}"
     mode: '0644'
   loop:

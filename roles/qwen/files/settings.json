@@ -22,14 +22,6 @@
   },
   "security": { "auth": { "selectedType": "qwen-oauth" } },
   "mcpServers": {
-    "shortcut": {
-      "command": "npx",
-      "args": ["-y", "@shortcut/mcp@latest"],
-      "env": {
-        "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
-      },
-      "timeout": 15000
-    },
     "vibe_kanban": {
       "command": "npx",
       "args": ["-y", "vibe-kanban@latest", "--mcp"],
