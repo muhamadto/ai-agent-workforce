@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+reviews:
+  auto_review:
+    enabled: true
+    severity: "major"  # Only report major and critical issues (skip minor/nitpicks)
+  request_changes_workflow: true  # Require CodeRabbit comments to be resolved before approval
+  auto_title_instructions: |
+    Generate a PR title using this MANDATORY format:
+    type(scope): [sc-XXXX] description
+
+    Rules (ALL MANDATORY):
+    - type: feat, fix, refactor, docs, chore, test, ci, perf, build, or style
+    - scope: brief context/area of change (e.g., initial-setup, python-env, dev-tools)
+    - [sc-XXXX]: Shortcut ticket ID from branch name (extract from branch like sc-260/...)
+    - description: concise summary of the change
+    - Total length: 50-72 characters max
+
+    Example: "refactor(initial-setup): [sc-260] modularised setup"
