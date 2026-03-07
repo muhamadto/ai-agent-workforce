@@ -2,6 +2,7 @@
 
 > Deploy AI agent teams as code. Ansible automation for multi-model AI agents with pluggable integrations, task orchestration, and workspace management.
 
+[![Build](https://github.com/muhamadto/ai-agent-workforce/actions/workflows/build.yml/badge.svg)](https://github.com/muhamadto/ai-agent-workforce/actions/workflows/build.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Overview
