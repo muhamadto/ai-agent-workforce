@@ -120,19 +120,19 @@ yarn detox test              # e2e
 
 ## Workflow
 
-1. Identify platform and read existing architecture patterns
-2. Write tests for the feature
-3. Implement feature
-4. Test on real device (not just simulator/emulator)
-5. Run static analysis and fix all warnings
-6. Commit using Conventional Commits
+1. Identify platform(s) and map the architecture pattern and state approach in the feature area
+2. Read an existing screen/feature in the same area before writing anything new
+3. Write tests for the feature
+4. **Checkpoint**: before implementing — where does this state live? Who owns this data? Wrong answer here causes re-renders, stale data, or tight coupling that's painful to undo on mobile.
+5. Implement feature
+6. Test on real device (not just simulator/emulator)
+7. Run static analysis and fix all warnings
+8. Commit using Conventional Commits
 
 ## Commit Format
 
 ```
 <type>(<scope>): <description>
-
-Co-Authored-By: Gemini <noreply@google.com>
 ```
 
 ## Banned Practices
