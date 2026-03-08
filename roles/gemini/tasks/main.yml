@@ -26,7 +26,7 @@
 
 - name: Deploy Gemini CLI settings.json
   copy:
-    src: "gemini/settings.json"
+    src: "settings.json"
     dest: "{{ ansible_facts.env.HOME }}/.gemini/settings.json"
     mode: '0644'
   when: setup_state == "present"
@@ -40,7 +40,7 @@
 
 - name: Deploy Gemini CLI agents
   copy:
-    src: "gemini/agents/{{ item }}"
+    src: "agents/{{ item }}"
     dest: "{{ ansible_facts.env.HOME }}/.gemini/agents/{{ item }}"
     mode: '0644'
   loop:
@@ -88,9 +88,4 @@
   file:
     path: "{{ ansible_facts.env.HOME }}/.gemini"
     state: absent
-  when: setup_state == "absent"
-
-- name: Display removal message
-  debug:
-    msg: "Gemini CLI agents and configuration removed from ~/.gemini/"
   when: setup_state == "absent"

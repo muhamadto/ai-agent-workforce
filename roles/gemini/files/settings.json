@@ -1,7 +1,9 @@
 {
   "theme": "Default",
   "selectedAuthType": "oauth-personal",
-  "model": "gemini-2.5-pro",
+  "model": {
+    "name": "gemini-2.5-pro"
+  },
   "sandbox": true,
   "autoUpdate": true,
   "telemetry": false,
@@ -9,25 +11,23 @@
     "enabled": true,
     "agentPath": "~/.gemini/agents"
   },
+  "skills": {
+    "enabled": true,
+    "skillPath": "~/.gemini/skills"
+  },
   "context": {
     "contextFiles": ["GEMINI.md"],
     "includePatterns": ["**/*.java", "**/*.py", "**/*.ts", "**/*.tsx", "**/*.go", "**/*.tf", "**/*.yaml", "**/*.yml"],
     "excludePatterns": ["**/node_modules/**", "**/target/**", "**/.git/**", "**/build/**", "**/.terraform/**"]
   },
   "tools": {
-    "shell": "/bin/bash",
-    "approvalMode": "auto",
+    "shell": {
+      "cmd": "/bin/bash"
+    },
+    "approvalMode": "auto_edit",
     "allowedCommands": ["git", "mvn", "npm", "npx", "docker", "kubectl", "terraform", "gh"]
   },
   "mcpServers": {
-    "shortcut": {
-      "command": "npx",
-      "args": ["-y", "@shortcut/mcp@latest"],
-      "env": {
-        "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
-      },
-      "timeout": 15000
-    },
     "vibe_kanban": {
       "command": "npx",
       "args": ["-y", "vibe-kanban@latest", "--mcp"],

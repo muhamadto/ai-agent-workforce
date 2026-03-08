@@ -17,24 +17,21 @@
   roles:
     - role: claude
       tags:
-        - ai
         - claude
-        - agents
 
     - role: qwen
       tags:
-        - ai
         - qwen
-        - agents
 
     - role: gemini
       tags:
-        - ai
         - gemini
-        - agents
+
+    - role: skills
+      tags:
+        - skills
 
     - role: vibekanban
       tags:
-        - tools
         - kanban
         - task-management
