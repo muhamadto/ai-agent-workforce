@@ -21,21 +21,21 @@
   file:
     path: "{{ ansible_facts.env.HOME }}/.claude"
     state: directory
-    mode: '0755'
+    mode: '0700'
   when: setup_state == "present"
 
 - name: Deploy Claude Code settings.json
   copy:
     src: "settings.json"
     dest: "{{ ansible_facts.env.HOME }}/.claude/settings.json"
-    mode: '0644'
+    mode: '0600'
   when: setup_state == "present"
 
 - name: Ensure ~/.claude/agents directory exists
   file:
     path: "{{ ansible_facts.env.HOME }}/.claude/agents"
     state: directory
-    mode: '0755'
+    mode: '0700'
   when: setup_state == "present"
 
 - name: Deploy Conventional Commits guide

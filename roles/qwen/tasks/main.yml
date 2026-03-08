@@ -21,21 +21,21 @@
   file:
     path: "{{ ansible_facts.env.HOME }}/.qwen"
     state: directory
-    mode: '0755'
+    mode: '0700'
   when: setup_state == "present"
 
 - name: Deploy Qwen Code settings.json
   copy:
     src: "settings.json"
     dest: "{{ ansible_facts.env.HOME }}/.qwen/settings.json"
-    mode: '0644'
+    mode: '0600'
   when: setup_state == "present"
 
 - name: Ensure ~/.qwen/agents directory exists
   file:
     path: "{{ ansible_facts.env.HOME }}/.qwen/agents"
     state: directory
-    mode: '0755'
+    mode: '0700'
   when: setup_state == "present"
 
 - name: Deploy Qwen Code agents

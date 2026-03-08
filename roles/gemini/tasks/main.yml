@@ -21,21 +21,21 @@
   file:
     path: "{{ ansible_facts.env.HOME }}/.gemini"
     state: directory
-    mode: '0755'
+    mode: '0700'
   when: setup_state == "present"
 
 - name: Deploy Gemini CLI settings.json
   copy:
     src: "settings.json"
     dest: "{{ ansible_facts.env.HOME }}/.gemini/settings.json"
-    mode: '0644'
+    mode: '0600'
   when: setup_state == "present"
 
 - name: Ensure ~/.gemini/agents directory exists
   file:
     path: "{{ ansible_facts.env.HOME }}/.gemini/agents"
     state: directory
-    mode: '0755'
+    mode: '0700'
   when: setup_state == "present"
 
 - name: Deploy Gemini CLI agents
