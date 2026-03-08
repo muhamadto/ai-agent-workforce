@@ -15,119 +15,173 @@
 #   limitations under the License.
 #
 ---
-# Shared AI agent skills — deployed to all models
+# Shared AI agent skills — deployed to ~/.skills/ with per-model symlinks
 
-# ── Directory setup ────────────────────────────────────────────────────────────
+# ── Command detection ──────────────────────────────────────────────────────────
 
-- name: Ensure skills directories exist for all models
+- name: Check if claude is installed
+  command: which claude
+  register: skills_claude_check
+  failed_when: false
+  changed_when: false
+  when: setup_state == "present"
+
+- name: Check if qwen is installed
+  command: which qwen
+  register: skills_qwen_check
+  failed_when: false
+  changed_when: false
+  when: setup_state == "present"
+
+- name: Check if gemini is installed
+  command: which gemini
+  register: skills_gemini_check
+  failed_when: false
+  changed_when: false
+  when: setup_state == "present"
+
+# ── Central skills directory ───────────────────────────────────────────────────
+
+- name: Ensure central ~/.skills directory structure exists
   file:
-    path: "{{ ansible_user_dir }}/{{ item }}"
+    path: "{{ ansible_user_dir }}/.skills/{{ item }}"
     state: directory
     mode: '0755'
   loop:
-    - .claude/skills/shortcut/reference
-    - .qwen/skills/shortcut/reference
-    - .gemini/skills/shortcut/reference
-    - .claude/skills/shortcut-to-vibe
-    - .qwen/skills/shortcut-to-vibe
-    - .gemini/skills/shortcut-to-vibe
-    - .claude/skills/github-issue-to-vibe
-    - .qwen/skills/github-issue-to-vibe
-    - .gemini/skills/github-issue-to-vibe
+    - shortcut/reference
+    - shortcut-to-vibe
+    - github-issue-to-vibe
   when: setup_state == "present"
 
 # ── Shortcut skill ─────────────────────────────────────────────────────────────
 
-- name: Deploy Shortcut SKILL.md to all models
+- name: Deploy Shortcut SKILL.md to central skills
   copy:
     src: "shortcut/SKILL.md"
-    dest: "{{ ansible_user_dir }}/{{ item }}/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/shortcut/SKILL.md"
     mode: '0644'
-  loop:
-    - .claude/skills/shortcut
-    - .qwen/skills/shortcut
-    - .gemini/skills/shortcut
   when: setup_state == "present"
 
-- name: Download Shortcut OpenAPI spec from official source
+- name: Download Shortcut OpenAPI spec to central skills
   get_url:
     url: "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json"
-    dest: "{{ ansible_user_dir }}/{{ item }}/shortcut.openapi.json"
+    dest: "{{ ansible_user_dir }}/.skills/shortcut/reference/shortcut.openapi.json"
     mode: '0644'
     timeout: 30
-  loop:
-    - .claude/skills/shortcut/reference
-    - .qwen/skills/shortcut/reference
-    - .gemini/skills/shortcut/reference
   when: setup_state == "present"
 
 # ── Shortcut → VibeKanban import skill ─────────────────────────────────────────
 
-- name: Deploy Shortcut-to-VibeKanban SKILL.md to all models
+- name: Deploy Shortcut-to-VibeKanban SKILL.md to central skills
   copy:
     src: "shortcut-to-vibe/SKILL.md"
-    dest: "{{ ansible_user_dir }}/{{ item }}/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/shortcut-to-vibe/SKILL.md"
     mode: '0644'
-  loop:
-    - .claude/skills/shortcut-to-vibe
-    - .qwen/skills/shortcut-to-vibe
-    - .gemini/skills/shortcut-to-vibe
   when: setup_state == "present"
 
 # ── GitHub Issue → VibeKanban import skill ─────────────────────────────────────
 
-- name: Deploy GitHub-Issue-to-VibeKanban SKILL.md to all models
+- name: Deploy GitHub-Issue-to-VibeKanban SKILL.md to central skills
   copy:
     src: "github-issue-to-vibe/SKILL.md"
-    dest: "{{ ansible_user_dir }}/{{ item }}/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/github-issue-to-vibe/SKILL.md"
     mode: '0644'
-  loop:
-    - .claude/skills/github-issue-to-vibe
-    - .qwen/skills/github-issue-to-vibe
-    - .gemini/skills/github-issue-to-vibe
   when: setup_state == "present"
+
+# ── Per-model symlinks ─────────────────────────────────────────────────────────
+
+- name: Ensure ~/.claude exists before creating skills symlink
+  file:
+    path: "{{ ansible_user_dir }}/.claude"
+    state: directory
+    mode: '0755'
+  when:
+    - setup_state == "present"
+    - skills_claude_check.rc == 0
+
+- name: Create skills symlink for Claude
+  file:
+    src: "{{ ansible_user_dir }}/.skills"
+    dest: "{{ ansible_user_dir }}/.claude/skills"
+    state: link
+  when:
+    - setup_state == "present"
+    - skills_claude_check.rc == 0
+
+- name: Ensure ~/.qwen exists before creating skills symlink
+  file:
+    path: "{{ ansible_user_dir }}/.qwen"
+    state: directory
+    mode: '0755'
+  when:
+    - setup_state == "present"
+    - skills_qwen_check.rc == 0
+
+- name: Create skills symlink for Qwen
+  file:
+    src: "{{ ansible_user_dir }}/.skills"
+    dest: "{{ ansible_user_dir }}/.qwen/skills"
+    state: link
+  when:
+    - setup_state == "present"
+    - skills_qwen_check.rc == 0
+
+- name: Ensure ~/.gemini exists before creating skills symlink
+  file:
+    path: "{{ ansible_user_dir }}/.gemini"
+    state: directory
+    mode: '0755'
+  when:
+    - setup_state == "present"
+    - skills_gemini_check.rc == 0
+
+- name: Create skills symlink for Gemini
+  file:
+    src: "{{ ansible_user_dir }}/.skills"
+    dest: "{{ ansible_user_dir }}/.gemini/skills"
+    state: link
+  when:
+    - setup_state == "present"
+    - skills_gemini_check.rc == 0
 
 - name: Display skills installation summary
   debug:
     msg: |
-      Skills deployed to all models:
+      Skills deployed to ~/.skills/ (central source of truth)
 
       shortcut — Shortcut project management via `short` CLI
-        ~/.claude/skills/shortcut/SKILL.md
-        ~/.claude/skills/shortcut/reference/shortcut.openapi.json
-        ~/.qwen/skills/shortcut/SKILL.md
-        ~/.qwen/skills/shortcut/reference/shortcut.openapi.json
-        ~/.gemini/skills/shortcut/SKILL.md
-        ~/.gemini/skills/shortcut/reference/shortcut.openapi.json
+        ~/.skills/shortcut/SKILL.md
+        ~/.skills/shortcut/reference/shortcut.openapi.json
 
       shortcut-to-vibe — Import Shortcut stories into VibeKanban
-        ~/.claude/skills/shortcut-to-vibe/SKILL.md
-        ~/.qwen/skills/shortcut-to-vibe/SKILL.md
-        ~/.gemini/skills/shortcut-to-vibe/SKILL.md
+        ~/.skills/shortcut-to-vibe/SKILL.md
 
       github-issue-to-vibe — Import GitHub issues into VibeKanban
-        ~/.claude/skills/github-issue-to-vibe/SKILL.md
-        ~/.qwen/skills/github-issue-to-vibe/SKILL.md
-        ~/.gemini/skills/github-issue-to-vibe/SKILL.md
+        ~/.skills/github-issue-to-vibe/SKILL.md
+
+      Symlinked to:
+        ~/.claude/skills  →  ~/.skills  (claude {{ 'installed' if skills_claude_check.rc == 0 else 'not found — skipped' }})
+        ~/.qwen/skills    →  ~/.skills  (qwen {{ 'installed' if skills_qwen_check.rc == 0 else 'not found — skipped' }})
+        ~/.gemini/skills  →  ~/.skills  (gemini {{ 'installed' if skills_gemini_check.rc == 0 else 'not found — skipped' }})
 
       Requires: short CLI installed and authenticated (short install)
-      Note: OpenAPI spec is bundled in the repo — update manually from developer.shortcut.com when the API changes
+      Note: OpenAPI spec is bundled — update manually from developer.shortcut.com when the API changes
   when: setup_state == "present"
 
 # ── Removal ────────────────────────────────────────────────────────────────────
 
-- name: Remove skills directories from all models
+- name: Remove skills symlinks from model directories
   file:
-    path: "{{ ansible_user_dir }}/{{ item }}"
+    path: "{{ ansible_user_dir }}/{{ item }}/skills"
     state: absent
   loop:
-    - .claude/skills/shortcut
-    - .qwen/skills/shortcut
-    - .gemini/skills/shortcut
-    - .claude/skills/shortcut-to-vibe
-    - .qwen/skills/shortcut-to-vibe
-    - .gemini/skills/shortcut-to-vibe
-    - .claude/skills/github-issue-to-vibe
-    - .qwen/skills/github-issue-to-vibe
-    - .gemini/skills/github-issue-to-vibe
+    - .claude
+    - .qwen
+    - .gemini
+  when: setup_state == "absent"
+
+- name: Remove central skills directory
+  file:
+    path: "{{ ansible_user_dir }}/.skills"
+    state: absent
   when: setup_state == "absent"
