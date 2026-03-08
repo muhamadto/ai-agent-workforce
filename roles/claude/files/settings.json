@@ -82,16 +82,6 @@
   },
   "commitMessageTemplate": "<type>(<scope>): <subject>\n\n<body>\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>",
   "mcpServers": {
-    "shortcut": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@shortcut/mcp@latest"
-      ],
-      "env": {
-        "SHORTCUT_API_TOKEN": "$SHORTCUT_API_TOKEN"
-      }
-    },
     "vibe_kanban": {
       "command": "npx",
       "args": [

@@ -26,7 +26,7 @@
 
 - name: Deploy Claude Code settings.json
   copy:
-    src: "claude/settings.json"
+    src: "settings.json"
     dest: "{{ ansible_facts.env.HOME }}/.claude/settings.json"
     mode: '0644'
   when: setup_state == "present"
@@ -59,23 +59,9 @@
     mode: '0644'
   when: setup_state == "present"
 
-- name: Ensure ~/.local/bin directory exists
-  file:
-    path: "{{ ansible_facts.env.HOME }}/.local/bin"
-    state: directory
-    mode: '0755'
-  when: setup_state == "present"
-
-- name: Deploy Shortcut-Vibe sync helper script
-  copy:
-    src: "shortcut-vibe-sync.sh"
-    dest: "{{ ansible_facts.env.HOME }}/.local/bin/shortcut-vibe-sync"
-    mode: '0755'
-  when: setup_state == "present"
-
 - name: Deploy Claude Code agents
   copy:
-    src: "claude/agents/{{ item }}"
+    src: "agents/{{ item }}"
     dest: "{{ ansible_facts.env.HOME }}/.claude/agents/{{ item }}"
     mode: '0644'
   loop:
@@ -135,15 +121,4 @@
   file:
     path: "{{ ansible_facts.env.HOME }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
     state: absent
-  when: setup_state == "absent"
-
-- name: Remove Shortcut-Vibe sync helper script
-  file:
-    path: "{{ ansible_facts.env.HOME }}/.local/bin/shortcut-vibe-sync"
-    state: absent
-  when: setup_state == "absent"
-
-- name: Display removal message
-  debug:
-    msg: "Claude Code agents and guides removed from ~/.claude/"
   when: setup_state == "absent"

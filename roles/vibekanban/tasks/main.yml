@@ -53,8 +53,3 @@
     path: "{{ ansible_facts.env.HOME }}/.local/bin/shortcut-vibe-sync"
     state: absent
   when: setup_state == "absent"
-
-- name: Display removal message
-  debug:
-    msg: "VibeKanban and sync script removed"
-  when: setup_state == "absent"
