@@ -23,33 +23,11 @@
     global: true
     state: "{{ setup_state }}"
 
-- name: Ensure ~/.local/bin directory exists
-  file:
-    path: "{{ ansible_facts.env.HOME }}/.local/bin"
-    state: directory
-    mode: '0750'
-  when: setup_state == "present"
-
-- name: Deploy Shortcut-Vibe sync helper script
-  copy:
-    src: "shortcut-vibe-sync.sh"
-    dest: "{{ ansible_facts.env.HOME }}/.local/bin/shortcut-vibe-sync"
-    mode: '0750'
-  when: setup_state == "present"
-
 - name: Display VibeKanban installation message
   debug:
     msg: |
       VibeKanban installed globally via npm
-      Shortcut-Vibe sync script: ~/.local/bin/shortcut-vibe-sync
 
       Usage:
-        vibe-kanban          # Start local kanban board
-        shortcut-vibe-sync   # Sync tasks with Shortcut
+        vibe-kanban   # Start local kanban board
   when: setup_state == "present"
-
-- name: Remove Shortcut-Vibe sync helper script
-  file:
-    path: "{{ ansible_facts.env.HOME }}/.local/bin/shortcut-vibe-sync"
-    state: absent
-  when: setup_state == "absent"
