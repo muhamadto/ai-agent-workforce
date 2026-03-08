@@ -42,28 +42,28 @@
   copy:
     src: "CONVENTIONAL_COMMITS.md"
     dest: "{{ ansible_facts.env.HOME }}/.claude/CONVENTIONAL_COMMITS.md"
-    mode: '0644'
+    mode: '0600'
   when: setup_state == "present"
 
 - name: Deploy Git Hooks guide
   copy:
     src: "GIT_HOOKS_GUIDE.md"
     dest: "{{ ansible_facts.env.HOME }}/.claude/GIT_HOOKS_GUIDE.md"
-    mode: '0644'
+    mode: '0600'
   when: setup_state == "present"
 
 - name: Deploy Shortcut ↔ VibeKanban workflow guide
   copy:
     src: "SHORTCUT_VIBEKANBAN_WORKFLOW.md"
     dest: "{{ ansible_facts.env.HOME }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
-    mode: '0644'
+    mode: '0600'
   when: setup_state == "present"
 
 - name: Deploy Claude Code agents
   copy:
     src: "agents/{{ item }}"
     dest: "{{ ansible_facts.env.HOME }}/.claude/agents/{{ item }}"
-    mode: '0644'
+    mode: '0600'
   loop:
     - architecture-guardian.md
     - backend-developer.md

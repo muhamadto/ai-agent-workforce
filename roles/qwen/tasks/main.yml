@@ -42,7 +42,7 @@
   copy:
     src: "agents/{{ item }}"
     dest: "{{ ansible_facts.env.HOME }}/.qwen/agents/{{ item }}"
-    mode: '0644'
+    mode: '0600'
   loop:
     - architecture-guardian.md
     - backend-developer.md

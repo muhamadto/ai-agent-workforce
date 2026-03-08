@@ -46,7 +46,7 @@
   file:
     path: "{{ ansible_user_dir }}/.skills/{{ item }}"
     state: directory
-    mode: '0755'
+    mode: '0700'
   loop:
     - shortcut/reference
     - shortcut-to-vibe
@@ -59,7 +59,7 @@
   copy:
     src: "shortcut/SKILL.md"
     dest: "{{ ansible_user_dir }}/.skills/shortcut/SKILL.md"
-    mode: '0644'
+    mode: '0600'
   when: setup_state == "present"
 
 - name: Download Shortcut OpenAPI spec to central skills
@@ -76,7 +76,7 @@
   copy:
     src: "shortcut-to-vibe/SKILL.md"
     dest: "{{ ansible_user_dir }}/.skills/shortcut-to-vibe/SKILL.md"
-    mode: '0644'
+    mode: '0600'
   when: setup_state == "present"
 
 # ── GitHub Issue → VibeKanban import skill ─────────────────────────────────────
@@ -85,7 +85,7 @@
   copy:
     src: "github-issue-to-vibe/SKILL.md"
     dest: "{{ ansible_user_dir }}/.skills/github-issue-to-vibe/SKILL.md"
-    mode: '0644'
+    mode: '0600'
   when: setup_state == "present"
 
 # ── Per-model symlinks ─────────────────────────────────────────────────────────
@@ -94,7 +94,7 @@
   file:
     path: "{{ ansible_user_dir }}/.claude"
     state: directory
-    mode: '0755'
+    mode: '0700'
   when:
     - setup_state == "present"
     - skills_claude_check.rc == 0
@@ -112,7 +112,7 @@
   file:
     path: "{{ ansible_user_dir }}/.qwen"
     state: directory
-    mode: '0755'
+    mode: '0700'
   when:
     - setup_state == "present"
     - skills_qwen_check.rc == 0
@@ -130,7 +130,7 @@
   file:
     path: "{{ ansible_user_dir }}/.gemini"
     state: directory
-    mode: '0755'
+    mode: '0700'
   when:
     - setup_state == "present"
     - skills_gemini_check.rc == 0

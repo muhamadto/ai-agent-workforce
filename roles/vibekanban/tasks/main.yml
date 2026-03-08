@@ -27,14 +27,14 @@
   file:
     path: "{{ ansible_facts.env.HOME }}/.local/bin"
     state: directory
-    mode: '0755'
+    mode: '0750'
   when: setup_state == "present"
 
 - name: Deploy Shortcut-Vibe sync helper script
   copy:
     src: "shortcut-vibe-sync.sh"
     dest: "{{ ansible_facts.env.HOME }}/.local/bin/shortcut-vibe-sync"
-    mode: '0755'
+    mode: '0750'
   when: setup_state == "present"
 
 - name: Display VibeKanban installation message
