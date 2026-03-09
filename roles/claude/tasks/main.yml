@@ -38,20 +38,6 @@
     mode: '0700'
   when: setup_state == "present"
 
-- name: Deploy Conventional Commits guide
-  copy:
-    src: "CONVENTIONAL_COMMITS.md"
-    dest: "{{ ansible_facts.env.HOME }}/.claude/CONVENTIONAL_COMMITS.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-- name: Deploy Git Hooks guide
-  copy:
-    src: "GIT_HOOKS_GUIDE.md"
-    dest: "{{ ansible_facts.env.HOME }}/.claude/GIT_HOOKS_GUIDE.md"
-    mode: '0600'
-  when: setup_state == "present"
-
 - name: Deploy Shortcut ↔ VibeKanban workflow guide
   copy:
     src: "SHORTCUT_VIBEKANBAN_WORKFLOW.md"
@@ -102,18 +88,6 @@
 - name: Remove Claude Code agents
   file:
     path: "{{ ansible_facts.env.HOME }}/.claude/agents"
-    state: absent
-  when: setup_state == "absent"
-
-- name: Remove Conventional Commits guide
-  file:
-    path: "{{ ansible_facts.env.HOME }}/.claude/CONVENTIONAL_COMMITS.md"
-    state: absent
-  when: setup_state == "absent"
-
-- name: Remove Git Hooks guide
-  file:
-    path: "{{ ansible_facts.env.HOME }}/.claude/GIT_HOOKS_GUIDE.md"
     state: absent
   when: setup_state == "absent"
 

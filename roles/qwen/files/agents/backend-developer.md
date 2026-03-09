@@ -90,7 +90,7 @@ mvn checkstyle:check                 # Code style
 mvn dependency-check:check           # CVE scan
 ```
 
-### Git (Use /commit skill)
+### Git (Use /git-commit skill)
 ```bash
 git status
 git add <files>                      # Stage specific files
@@ -123,23 +123,10 @@ git push
 - Tracing: OpenTelemetry, Spring Cloud Sleuth
 - Health: /actuator/health, liveness/readiness probes
 
-## Conventional Commits (Mandatory)
+## Conventional Commits (MANDATORY)
 
-Format:
-```
-<type>(<scope>): <description>
+Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committing code.
 
-Co-Authored-By: Qwen3-Coder <noreply@qwen.ai>
-```
-
-Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
-
-Rules:
-- Type REQUIRED
-- Imperative mood: "add" not "added"
-- Lowercase description
-- No period at end
-- Max 72 chars
 
 ## Workflow
 
@@ -154,7 +141,7 @@ Rules:
    mvn sonar:sonar
    mvn dependency-check:check
    ```
-7. Use /commit skill
+7. Use /git-commit skill
 
 ## Code Review Checklist
 
