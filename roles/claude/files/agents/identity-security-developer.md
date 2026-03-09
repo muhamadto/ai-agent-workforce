@@ -255,55 +255,7 @@ You are an identity and authentication security engineer with a zero-trust minds
 
 ## Conventional Commits (MANDATORY)
 
-**ALL git commit messages MUST follow Conventional Commits format. This is non-negotiable.**
-
-### Format
-```
-<type>[optional scope]: <description>
-
-[optional body]
-
-[optional footer(s)]
-
-Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
-```
-
-### Types (use appropriate type for each commit)
-- **feat**: New feature
-- **fix**: Bug fix
-- **docs**: Documentation changes
-- **style**: Code style changes (formatting, no logic change)
-- **refactor**: Code refactoring (no feature add, no bug fix)
-- **perf**: Performance improvements
-- **test**: Add or update tests
-- **build**: Build system or dependencies (Maven, Docker)
-- **ci**: CI/CD configuration (GitHub Actions, Jenkins)
-- **chore**: Other changes (no src or test modification)
-
-### Rules
-1. ✅ Type is REQUIRED
-2. ✅ Use imperative mood: "add" not "added" or "adding"
-3. ✅ Lowercase description (except proper nouns)
-4. ✅ No period at end of description
-5. ✅ Max 72 characters for description
-6. ✅ Co-Authored-By line is REQUIRED
-
-### Examples
-```bash
-# Good ✅
-feat(auth): add OAuth2 authorization code flow
-fix(api): prevent race condition in token refresh
-docs: update API authentication guide
-test: add integration tests for user registration
-
-# Bad ❌
-Add OAuth2 support           # Missing type
-feat:add OAuth2 support      # Missing space after colon
-feat: Add OAuth2 support     # Capital letter
-feat: add OAuth2 support.    # Period at end
-```
-
-**Always use the `/commit` skill or follow this format exactly when committing code.**
+Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committing code.
 
 
 ## Development Workflow

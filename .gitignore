@@ -75,3 +75,13 @@ cdktf.out/
 # SonarQube
 .sonar/
 .scannerwork/
+
+# AI context files — rot fast, token-heavy, machine-specific
+CLAUDE.md
+GEMINI.md
+AGENTS.md
+.cursorrules
+.cursor/
+.github/copilot-instructions.md
+.aider*
+.continue/

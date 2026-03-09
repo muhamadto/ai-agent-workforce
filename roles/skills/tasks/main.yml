@@ -51,6 +51,7 @@
     - shortcut/reference
     - shortcut-to-vibe
     - github-issue-to-vibe
+    - git-commit
   when: setup_state == "present"
 
 # ── Shortcut skill ─────────────────────────────────────────────────────────────
@@ -79,6 +80,15 @@
     mode: '0600'
   when: setup_state == "present"
 
+# ── Git Commit skill ───────────────────────────────────────────────────────────
+
+- name: Deploy Git Commit SKILL.md to central skills
+  copy:
+    src: "git-commit/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/git-commit/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
 # ── GitHub Issue → VibeKanban import skill ─────────────────────────────────────
 
 - name: Deploy GitHub-Issue-to-VibeKanban SKILL.md to central skills
@@ -89,6 +99,27 @@
   when: setup_state == "present"
 
 # ── Per-model symlinks ─────────────────────────────────────────────────────────
+
+- name: Stat existing skills paths for all models
+  stat:
+    path: "{{ ansible_user_dir }}/{{ item }}/skills"
+  register: skills_stat
+  loop:
+    - .claude
+    - .qwen
+    - .gemini
+  when: setup_state == "present"
+
+- name: Remove skills path if it is not a symlink pointing to ~/.skills
+  file:
+    path: "{{ ansible_user_dir }}/{{ item.item }}/skills"
+    state: absent
+  loop: "{{ skills_stat.results | default([]) }}"
+  when:
+    - setup_state == "present"
+    - item.stat is defined
+    - item.stat.exists
+    - not (item.stat.islnk | default(false) and item.stat.lnk_source | default('') == ansible_user_dir + '/.skills')
 
 - name: Ensure ~/.claude exists before creating skills symlink
   file:
@@ -148,6 +179,9 @@
   debug:
     msg: |
       Skills deployed to ~/.skills/ (central source of truth)
+
+      git-commit — Conventional Commits compliant commits with hook awareness
+        ~/.skills/git-commit/SKILL.md
 
       shortcut — Shortcut project management via `short` CLI
         ~/.skills/shortcut/SKILL.md

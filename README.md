@@ -138,8 +138,6 @@ Located in `~/.qwen/agents/` with the same specialized roles, configured for YOL
 
 ### Workflow Guides
 
-- **CONVENTIONAL_COMMITS.md** - Git commit standards
-- **GIT_HOOKS_GUIDE.md** - Git hook automation
 - **SHORTCUT_VIBEKANBAN_WORKFLOW.md** - Task management integration
 
 ## Configuration

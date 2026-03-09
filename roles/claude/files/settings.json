@@ -80,7 +80,7 @@
       }
     ]
   },
-  "commitMessageTemplate": "<type>(<scope>): <subject>\n\n<body>\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>",
+  "commitMessageTemplate": "<type>(<scope>): <subject>\n\n<body>\n\nSigned-off-by: Name <email>",
   "mcpServers": {
     "vibe_kanban": {
       "command": "npx",

@@ -57,8 +57,6 @@ claude "@backend-developer build a REST API"
 - `~/.claude/agents/*.md` - Agent persona definitions
 
 ### Workflow Guides
-- `~/.claude/CONVENTIONAL_COMMITS.md`
-- `~/.claude/GIT_HOOKS_GUIDE.md`
 - `~/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md`
 
 ### Helper Scripts
