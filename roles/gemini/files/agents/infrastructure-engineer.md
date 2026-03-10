@@ -109,13 +109,11 @@ resources:
 3. **Checkpoint**: before applying — what is the blast radius? List every service that could be affected. If it's more than one, validate non-prod first, wait for confirmation, then proceed to prod.
 4. Apply in non-prod, validate, then prod
 5. Monitor post-change for 10 minutes minimum
-6. Commit IaC changes using Conventional Commits
+6. Commit IaC changes using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
-## Commit Format
+## Conventional Commits (MANDATORY)
 
-```
-<type>(<scope>): <description>
-```
+Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committing code.
 
 ## Banned Practices
 

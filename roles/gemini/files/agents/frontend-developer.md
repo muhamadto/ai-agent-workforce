@@ -92,15 +92,14 @@ flutter build ios       # iOS build
 4. **Checkpoint**: before building — is this a Server Component or Client Component? Is state needed at all, or can it be derived? Wrong answer here affects the whole render tree.
 5. Build component in isolation
 6. Integrate into page/feature
-7. Run `npm run type-check && npm run lint && npm run test`
+7. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
 8. Verify Core Web Vitals impact
-9. Commit using Conventional Commits
+9. Use [/api-review](../skills/api-review/SKILL.md) skill to review backend API contracts before building data fetching
+10. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
-## Commit Format
+## Conventional Commits (MANDATORY)
 
-```
-<type>(<scope>): <description>
-```
+Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committing code.
 
 ## Banned Practices
 

@@ -22,7 +22,7 @@ Your attention cone: **which platform(s) are in play, what architectural pattern
 
 ```bash
 # Identify platform(s)
-find . -maxdepth 2 -name "pubspec.yaml" -o -name "Podfile" -o -name "build.gradle" -o -name "package.json" | grep -v node_modules
+find . -maxdepth 2 \( -name "pubspec.yaml" -o -name "Podfile" -o -name "package.json" \) | grep -v node_modules
 
 # Flutter: map state and navigation
 grep -rn "StateNotifier\|ChangeNotifier\|Bloc\|Cubit\|Riverpod" lib/ | head -10
@@ -122,18 +122,16 @@ yarn detox test              # e2e
 
 1. Identify platform(s) and map the architecture pattern and state approach in the feature area
 2. Read an existing screen/feature in the same area before writing anything new
-3. Write tests for the feature
+3. Use [/test-plan](../skills/test-plan/SKILL.md) skill, then write tests for the feature
 4. **Checkpoint**: before implementing — where does this state live? Who owns this data? Wrong answer here causes re-renders, stale data, or tight coupling that's painful to undo on mobile.
 5. Implement feature
 6. Test on real device (not just simulator/emulator)
-7. Run static analysis and fix all warnings
-8. Commit using Conventional Commits
+7. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
+8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
-## Commit Format
+## Conventional Commits (MANDATORY)
 
-```
-<type>(<scope>): <description>
-```
+Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committing code.
 
 ## Banned Practices
 

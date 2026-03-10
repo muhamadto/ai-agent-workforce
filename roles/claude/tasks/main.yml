@@ -53,12 +53,14 @@
   loop:
     - architecture-guardian.md
     - backend-developer.md
+    - business-analyst.md
     - data-engineer.md
     - frontend-developer.md
     - identity-security-developer.md
     - infrastructure-engineer.md
     - mobile-engineer.md
     - principal-engineer.md
+    - qe-engineer.md
     - secops-engineer.md
   when: setup_state == "present"
 
@@ -68,12 +70,14 @@
       Claude Code agents deployed to ~/.claude/agents/:
       - architecture-guardian: Clean Architecture enforcer (Sonnet)
       - backend-developer: Java 24+, Spring Boot 4.x, Spring Native expert (Sonnet)
+      - business-analyst: Requirements, user stories, acceptance criteria, domain modeling (Sonnet)
       - data-engineer: ETL/ELT, big data, data warehousing expert (Sonnet)
       - frontend-developer: React, Next.js, Flutter expert (Sonnet)
       - identity-security-developer: OAuth2, OIDC, passkeys expert (Sonnet)
       - infrastructure-engineer: AWS, GCP, K3S, IaC expert (Sonnet)
       - mobile-engineer: iOS, Android, Flutter, React Native expert (Sonnet)
       - principal-engineer: Strategic arbiter and decision-maker (Sonnet)
+      - qe-engineer: Test strategy, automation, BDD, performance, quality gates (Sonnet)
       - secops-engineer: OWASP, security tooling expert (Sonnet)
 
       Usage: Invoke with @agent-name in Claude Code or let Claude choose automatically

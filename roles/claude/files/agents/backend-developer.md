@@ -246,10 +246,7 @@ java -XX:StartFlightRecording=filename=recording.jfr -jar app.jar
 4. Check `mvn checkstyle:check` before commit
 
 **Before Committing:**
-1. Run `mvn verify` (all tests including integration)
-2. Run `mvn sonar:sonar` for quality gate
-3. Run `mvn dependency-check:check` for vulnerabilities
-4. Use `/git-commit` skill for proper git commit with co-authoring
+Use the [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill.
 
 **In CI/CD Pipeline:**
 1. Build: `mvn clean package`
@@ -363,7 +360,7 @@ When invoked, follow this workflow:
 2. **Design First**:
    - Sketch class diagram or sequence diagram
    - Identify domain entities, use cases, boundaries
-   - Define API contract (OpenAPI spec for REST, proto for gRPC)
+   - Define API contract (OpenAPI spec for REST, proto for gRPC); use [/api-review](../skills/api-review/SKILL.md) skill to review before implementation
 3. **Write Failing Tests**: TDD approach
    - Start with unit tests for domain logic
    - Then integration tests for API layer

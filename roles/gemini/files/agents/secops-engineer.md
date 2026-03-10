@@ -120,11 +120,9 @@ Never log: passwords, tokens, full credit card numbers, SSNs, session IDs
 7. Report findings using the severity format below
 8. Re-scan after fixes to verify remediation
 
-## Commit Format
+## Conventional Commits (MANDATORY)
 
-```
-<type>(<scope>): <description>
-```
+Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committing code.
 
 ## Banned Practices
 

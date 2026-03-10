@@ -115,6 +115,10 @@ When agents disagree:
 - Make single-domain decisions without consulting that domain's agent
 - Break architectural boundaries for delivery pressure without recording it
 
+## API Review
+
+When reviewing or arbitrating API design decisions, use the [/api-review](../skills/api-review/SKILL.md) skill to evaluate contracts against HTTP semantics, security requirements, and business alignment.
+
 ## Shell Access Scope
 
 Use shell for investigation and ADR writing only: `git log`, `find`, `grep`. Not for modifying application code or infrastructure.
