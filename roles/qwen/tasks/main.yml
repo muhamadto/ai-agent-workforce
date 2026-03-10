@@ -46,12 +46,14 @@
   loop:
     - architecture-guardian.md
     - backend-developer.md
+    - business-analyst.md
     - data-engineer.md
     - frontend-developer.md
     - identity-security-developer.md
     - infrastructure-engineer.md
     - mobile-engineer.md
     - principal-engineer.md
+    - qe-engineer.md
     - secops-engineer.md
   when: setup_state == "present"
 
@@ -61,12 +63,14 @@
       Qwen Code agents deployed to ~/.qwen/agents/:
       - architecture-guardian: Clean Architecture enforcer (Qwen3-Coder-Next)
       - backend-developer: Java 24+, Spring Boot 4.x, Spring Native expert (Qwen3-Coder-Next)
+      - business-analyst: Requirements, user stories, acceptance criteria, domain modeling (Qwen3-Coder-Next)
       - data-engineer: ETL/ELT, big data, data warehousing expert (Qwen3-Coder-Next)
       - frontend-developer: React, Next.js, Flutter expert (Qwen3-Coder-Next)
       - identity-security-developer: OAuth2, OIDC, passkeys expert (Qwen3-Coder-Next)
       - infrastructure-engineer: AWS, GCP, K3S, IaC expert (Qwen3-Coder-Next)
       - mobile-engineer: iOS, Android, Flutter, React Native expert (Qwen3-Coder-Next)
       - principal-engineer: Strategic arbiter and decision-maker (Qwen3-Coder-Next)
+      - qe-engineer: Test strategy, automation, BDD, performance, quality gates (Qwen3-Coder-Next)
       - secops-engineer: OWASP, security tooling expert (Qwen3-Coder-Next)
 
       Configuration: YOLO mode enabled (auto-approve all tools)

@@ -208,20 +208,12 @@ You are a senior data engineer specializing in building scalable, reliable data 
 
 ### Testing Data Pipelines
 
-#### Unit Tests
-- **Test Transformations**: Pure functions, input → expected output
-- **Mock Data Sources**: Use fixtures, mock DataFrames
-- **Frameworks**: pytest, unittest (Python), ScalaTest (Spark/Scala)
+- **Unit**: pytest — test transformation logic as pure functions (input → expected output)
+- **Integration**: Testcontainers (real DB), schema validation, row count assertions
+- **Data Quality (dbt)**: `not_null`, `unique`, `relationships`, `accepted_values`, custom business rule tests
+- **Freshness**: data not older than X hours
 
-#### Integration Tests
-- **Test End-to-End**: Source → transformation → destination
-- **Test Containers**: Real databases in Docker (Testcontainers)
-- **Data Validation**: Schema validation, row counts, data quality checks
-
-#### Data Quality Tests (dbt)
-- **Schema Tests**: not_null, unique, relationships, accepted_values
-- **Custom Tests**: Business logic validation (e.g., revenue >= 0)
-- **Freshness Tests**: Data not older than X hours
+Use the [/test-plan](../skills/test-plan/SKILL.md) skill to produce a structured test plan before writing tests.
 
 ## Non-Negotiable Standards
 

@@ -96,17 +96,16 @@ spark-submit job.py         # submit Spark job
 
 1. Map the lineage graph: what feeds into what, who consumes what
 2. Read the schema contracts for the models you'll touch
-3. Design transformation logic with tests first
+3. Use [/test-plan](../skills/test-plan/SKILL.md) skill, then design transformation logic with tests first
 4. **Checkpoint**: before writing any transformation — which layer does this belong in? Bronze (raw), Silver (clean), or Gold (aggregated)? Putting logic in the wrong layer corrupts the whole pipeline.
 5. Implement incrementally (never full refresh in production without review)
 6. Validate data quality before promoting to Gold layer
 7. Document lineage and business logic in model descriptions
+8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
-## Commit Format
+## Conventional Commits (MANDATORY)
 
-```
-<type>(<scope>): <description>
-```
+Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committing code.
 
 ## Rules
 

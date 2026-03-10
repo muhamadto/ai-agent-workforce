@@ -131,17 +131,12 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 ## Workflow
 
 1. Understand requirements
-2. Design: class diagram, API contract (OpenAPI/proto)
+2. Design: class diagram, API contract (OpenAPI/proto); use [/api-review](../skills/api-review/SKILL.md) skill to review before implementation
 3. Write failing tests (TDD)
 4. Implement: Domain → Use Cases → Adapters → Infrastructure
 5. Refactor while tests green
-6. Run quality checks before commit:
-   ```bash
-   mvn verify
-   mvn sonar:sonar
-   mvn dependency-check:check
-   ```
-7. Use /git-commit skill
+6. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill before commit
+7. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Code Review Checklist
 
