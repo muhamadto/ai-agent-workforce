@@ -1,10 +1,15 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 
 reviews:
+  profile: "chill"  # Reduces noise — only flags meaningful issues, skips nitpicks
   auto_review:
     enabled: true
-    severity: "major"  # Only report major and critical issues (skip minor/nitpicks)
-  request_changes_workflow: true  # Require CodeRabbit comments to be resolved before approval
+  request_changes_workflow: true
+  poem: false
+  high_level_summary: true
+  sequence_diagrams: false
+  estimate_code_review_effort: false
+
   auto_title_instructions: |
     Generate a PR title using this MANDATORY format:
     type(scope): [sc-XXXX] description
