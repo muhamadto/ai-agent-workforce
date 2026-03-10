@@ -33,22 +33,25 @@ AI Agent Workforce is an Ansible-based automation tool for deploying and managin
 |---|---|---|
 | **architecture-guardian** | Claude | Doctrine-holding + judgment. Claude's core strength. |
 | **backend-developer** | Claude or Qwen | Claude when the task involves cross-cutting concerns, new patterns, or complex domain logic. Qwen when it's straightforward CRUD, boilerplate, or you need speed over deliberation. |
-| **frontend-developer** | Claude or Qwen | Same as backend. Claude handles state management complexity better. Qwen is fine for component boilerplate. |
+| **business-analyst** | Claude or Gemini | Claude for structured requirements and acceptance criteria with complex business rules. Gemini for tracing requirements across a large unfamiliar codebase. |
 | **data-engineer** | Gemini or Claude | Gemini when you need to trace lineage across an unfamiliar codebase. Claude when you're implementing transformations with complex business logic. Qwen works for routine SQL/dbt. |
+| **frontend-developer** | Claude or Qwen | Same as backend. Claude handles state management complexity better. Qwen is fine for component boilerplate. |
 | **identity-security-developer** | Claude | Non-negotiable. You want the model that won't drift from security doctrine. |
 | **infrastructure-engineer** | Gemini or Claude | Gemini for exploration and blast-radius mapping. Claude for writing IaC with complex interdependencies. |
 | **mobile-engineer** | Claude or Qwen | Claude when architecture patterns are complex (state machines, navigation flows). Qwen for standard screens and boilerplate. |
 | **principal-engineer** | Claude | Trade-off analysis and ADRs are Claude's native mode. |
+| **qe-engineer** | Claude or Qwen | Claude for test strategy, BDD, and complex automation design. Qwen for boilerplate test generation and routine coverage tasks. |
 | **secops-engineer** | Claude (judge) + Gemini (scan) | Hybrid approach: Gemini scans and discovers, Claude judges against security standards. |
 
 ### Key Features
 
-- 🤖 **Multi-Model Support** - Deploy agent teams across Claude, Qwen, and Gemini
-- 🔧 **Extensible Integrations** - MCP (Model Context Protocol), skills, and custom plugins
-- 📋 **Task Orchestration** - Integrated VibeKanban and Shortcut workflow management
-- 🎯 **Specialized Agents** - Pre-configured expert agents (backend, frontend, security, etc.)
-- 📦 **Idempotent Operations** - Install and uninstall agents cleanly
-- 🔒 **Security-First** - Safe configuration management with environment-based secrets
+- **Multi-Model Support** - Deploy agent teams across Claude, Qwen, and Gemini
+- **Extensible Integrations** - MCP (Model Context Protocol), skills, and custom plugins
+- **Task Orchestration** - Integrated VibeKanban and Shortcut workflow management
+- **Specialized Agents** - Pre-configured expert agents (backend, frontend, security, QA, BA, etc.)
+- **Shared Skills** - Reusable slash-command skills deployed to all models
+- **Idempotent Operations** - Install and uninstall agents cleanly
+- **Security-First** - Safe configuration management with environment-based secrets
 
 ## Quick Start
 
@@ -63,7 +66,7 @@ AI Agent Workforce is an Ansible-based automation tool for deploying and managin
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/ai-agent-workforce.git
+git clone https://github.com/muhamadto/ai-agent-workforce.git
 cd ai-agent-workforce
 ```
 
@@ -79,6 +82,12 @@ ansible-playbook playbook.yml -e setup_state=present --tags claude
 
 # Qwen agents only
 ansible-playbook playbook.yml -e setup_state=present --tags qwen
+
+# Gemini agents only
+ansible-playbook playbook.yml -e setup_state=present --tags gemini
+
+# Skills only (deployed to all models)
+ansible-playbook playbook.yml -e setup_state=present --tags skills
 
 # VibeKanban only
 ansible-playbook playbook.yml -e setup_state=present --tags vibe-kanban
@@ -105,8 +114,9 @@ ai-agent-workforce/
 └── roles/
     ├── claude/              # Claude Code agents
     ├── qwen/                # Qwen Code agents
-    ├── gemini/              # Gemini CLI agents (planned)
-    └── vibe-kanban/         # Task management tools
+    ├── gemini/              # Gemini CLI agents
+    ├── skills/              # Shared skills (all models)
+    └── vibekanban/          # Task management tools
 ```
 
 ### Role-Based Design
@@ -124,21 +134,39 @@ Each AI model has a dedicated role that manages:
 Located in `~/.claude/agents/`:
 - **architecture-guardian** - Clean Architecture enforcer
 - **backend-developer** - Java, Spring Boot, GraalVM expert
+- **business-analyst** - Requirements elicitation, user stories, acceptance criteria
 - **data-engineer** - ETL/ELT, big data expert
 - **frontend-developer** - React, Next.js, Flutter expert
 - **identity-security-developer** - OAuth2, OIDC, passkeys expert
 - **infrastructure-engineer** - AWS, GCP, Kubernetes expert
 - **mobile-engineer** - iOS, Android, cross-platform expert
 - **principal-engineer** - Strategic decision-maker
+- **qe-engineer** - Test strategy, automation, BDD, performance expert
 - **secops-engineer** - OWASP, security tooling expert
 
 ### Qwen Code Agents
 
-Located in `~/.qwen/agents/` with the same specialized roles, configured for YOLO mode (auto-approve).
+Located in `~/.qwen/agents/` — same specialized roles as Claude, configured for YOLO mode (auto-approve).
 
-### Workflow Guides
+### Gemini CLI Agents
 
-- **SHORTCUT_VIBEKANBAN_WORKFLOW.md** - Task management integration
+Located in `~/.gemini/agents/` — same specialized roles, tuned for repo-navigation-first, tool-heavy workflows.
+
+### Shared Skills
+
+Located in `~/.claude/skills/`, `~/.qwen/skills/`, and `~/.gemini/skills/`:
+
+| Skill | Description |
+|---|---|
+| `api-review` | REST API contract review and design feedback |
+| `git-branch` | Branch lifecycle management (create, switch, cleanup) |
+| `git-commit` | Conventional Commits compliant commit message generation |
+| `github-issue-to-vibe` | Import GitHub issues into VibeKanban |
+| `run-quality-checks` | Execute project quality gates (lint, test, build) |
+| `shortcut` | Shortcut project management via `short` CLI |
+| `shortcut-to-vibe` | Import Shortcut stories into VibeKanban |
+| `test-plan` | Generate structured test plans from requirements |
+| `threat-model` | STRIDE-based threat modelling for features or systems |
 
 ## Configuration
 
@@ -223,8 +251,8 @@ Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for detai
 
 ## Roadmap
 
-- [ ] Gemini CLI integration
-- [ ] Skills framework support
+- [x] Gemini CLI integration
+- [x] Skills framework support
 - [ ] MCP server configurations
 - [ ] Multi-platform support (Linux, WSL)
 - [ ] Agent performance metrics
@@ -234,8 +262,8 @@ Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for detai
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/ai-agent-workforce/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/ai-agent-workforce/discussions)
+- **Issues**: [GitHub Issues](https://github.com/muhamadto/ai-agent-workforce/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/muhamadto/ai-agent-workforce/discussions)
 
 ## Acknowledgments
 
