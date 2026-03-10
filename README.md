@@ -62,8 +62,10 @@ AI Agent Workforce is an Ansible-based automation tool for deploying and managin
 - Node.js (for VibeKanban)
 - Python 3.8+
 
+## Installation
+
 <details>
-<summary>Installation</summary>
+<summary>Expand</summary>
 
 1. Clone the repository:
 
@@ -149,8 +151,10 @@ Each AI model has a dedicated role that manages:
 - Integration scripts and helpers
 - Documentation and workflow guides
 
+## Agent Teams
+
 <details>
-<summary>Agent Teams</summary>
+<summary>Expand</summary>
 
 ### Claude Code Agents
 
@@ -199,8 +203,10 @@ Located in `~/.claude/skills/`, `~/.qwen/skills/`, and `~/.gemini/skills/`:
 
 </details>
 
+## Configuration
+
 <details>
-<summary>Configuration</summary>
+<summary>Expand</summary>
 
 ### Variables
 
@@ -244,8 +250,10 @@ ansible-playbook playbook.yml --check
 ansible-playbook playbook.yml -vvvv
 ```
 
+### Adding New Models
+
 <details>
-<summary>Adding New Models</summary>
+<summary>Expand</summary>
 
 1. Create role directory: `roles/new-model/`
 2. Add tasks in `roles/new-model/tasks/main.yml`
@@ -255,8 +263,10 @@ ansible-playbook playbook.yml -vvvv
 
 </details>
 
+### Adding New Skills
+
 <details>
-<summary>Adding New Skills</summary>
+<summary>Expand</summary>
 
 1. Create the skill directory:
 
