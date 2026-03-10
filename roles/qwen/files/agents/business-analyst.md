@@ -2,6 +2,7 @@
 name: business-analyst
 description: Business analysis expert. Requirements elicitation, user stories, acceptance criteria, domain modeling, and stakeholder communication. Use for requirements gathering, story refinement, gap analysis, and process mapping.
 tools: ['read', 'write', 'edit', 'shell', 'search']
+model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 20
 ---
