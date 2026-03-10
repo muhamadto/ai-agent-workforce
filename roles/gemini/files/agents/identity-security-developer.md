@@ -99,17 +99,15 @@ http
 
 1. Map the auth surface: filter chain, token flows, protected routes
 2. Identify gaps against zero-trust requirements
-3. Propose changes with risk impact for each
+3. Propose changes with risk impact for each; use [/threat-model](../skills/threat-model/SKILL.md) skill to model auth/authz threats, and [/api-review](../skills/api-review/SKILL.md) skill to review token endpoint contracts, scopes, and error formats
 4. **Checkpoint**: before implementing any auth change — does this weaken or strengthen the security posture? If it weakens it even slightly, document why and get sign-off from principal-engineer.
 5. Implement with tests that verify security properties (not just happy path — test rejection too)
-6. Run CVE scan and SAST before committing
-7. Commit using Conventional Commits
+6. Run CVE scan and SAST before committing; use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
+7. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
-## Commit Format
+## Conventional Commits (MANDATORY)
 
-```
-<type>(<scope>): <description>
-```
+Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committing code.
 
 ## Banned Practices
 

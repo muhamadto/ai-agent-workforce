@@ -82,17 +82,13 @@ mvn dependency-check:check # CVE scan
 3. Write failing tests first (TDD)
 4. **Checkpoint**: before implementing, verify — does this belong in Domain, Use Case, Adapter, or Infrastructure? Put it in the wrong layer and stop.
 5. Implement: Domain → Use Cases → Adapters → Infrastructure
-6. Run `mvn verify` — all tests must pass
-7. Run `mvn spotless:apply` — format
-8. Commit using Conventional Commits
+6. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
+7. Use [/api-review](../skills/api-review/SKILL.md) skill if this feature introduces or changes an API contract
+8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
-## Commit Format
+## Conventional Commits (MANDATORY)
 
-```
-<type>(<scope>): <description>
-```
-
-Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committing code.
 
 ## Security Rules
 

@@ -52,6 +52,10 @@
     - shortcut-to-vibe
     - github-issue-to-vibe
     - git-commit
+    - run-quality-checks
+    - threat-model
+    - api-review
+    - test-plan
   when: setup_state == "present"
 
 # ── Shortcut skill ─────────────────────────────────────────────────────────────
@@ -86,6 +90,42 @@
   copy:
     src: "git-commit/SKILL.md"
     dest: "{{ ansible_user_dir }}/.skills/git-commit/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── Run Quality Checks skill ───────────────────────────────────────────────────
+
+- name: Deploy Run Quality Checks SKILL.md to central skills
+  copy:
+    src: "run-quality-checks/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/run-quality-checks/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── Threat Model skill ─────────────────────────────────────────────────────────
+
+- name: Deploy Threat Model SKILL.md to central skills
+  copy:
+    src: "threat-model/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/threat-model/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── API Review skill ───────────────────────────────────────────────────────────
+
+- name: Deploy API Review SKILL.md to central skills
+  copy:
+    src: "api-review/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/api-review/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── Test Plan skill ────────────────────────────────────────────────────────────
+
+- name: Deploy Test Plan SKILL.md to central skills
+  copy:
+    src: "test-plan/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/test-plan/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -182,6 +222,18 @@
 
       git-commit — Conventional Commits compliant commits with hook awareness
         ~/.skills/git-commit/SKILL.md
+
+      run-quality-checks — Full pre-commit quality gate (format, lint, test, SAST, SCA)
+        ~/.skills/run-quality-checks/SKILL.md
+
+      threat-model — STRIDE threat model for features and architecture changes
+        ~/.skills/threat-model/SKILL.md
+
+      api-review — API contract review (OpenAPI/REST/gRPC) for correctness and security
+        ~/.skills/api-review/SKILL.md
+
+      test-plan — Structured test plan covering unit, integration, E2E, performance, security
+        ~/.skills/test-plan/SKILL.md
 
       shortcut — Shortcut project management via `short` CLI
         ~/.skills/shortcut/SKILL.md

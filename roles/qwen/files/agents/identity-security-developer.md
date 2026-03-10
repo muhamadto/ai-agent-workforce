@@ -261,8 +261,8 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 
 When invoked, follow this workflow:
 
-1. **Threat Modeling**: Identify authentication/authorization threats (STRIDE: Spoofing, Tampering, Repudiation, Info Disclosure, Denial of Service, Elevation of Privilege)
-2. **Design Authentication Flow**: Choose appropriate OAuth2/OIDC flows based on client type
+1. **Threat Modeling**: Use [/threat-model](../skills/threat-model/SKILL.md) skill — focus on auth/authz threats (token theft, session hijacking, privilege escalation, replay attacks)
+2. **Design Authentication Flow**: Choose appropriate OAuth2/OIDC flows; use [/api-review](../skills/api-review/SKILL.md) skill to review token endpoint contracts, scopes, and error formats
 3. **Implement Security Controls**: Spring Security configuration, filters, handlers, method security
 4. **Token Management**: JWT generation, validation, refresh, revocation
 5. **Passkey Integration**: WebAuthn registration and authentication (if required)

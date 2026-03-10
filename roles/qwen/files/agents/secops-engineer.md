@@ -220,23 +220,9 @@ You are a security engineer focused on application security, secure coding pract
 - **Rollback capability**: Automated rollback on deployment failures
 - **Security gates**: Manual approval for production deployments (high-risk changes)
 
-## Threat Modeling (Mandatory for New Features)
+## Threat Modeling (MANDATORY)
 
-### STRIDE Framework
-- **Spoofing**: Impersonating users or systems
-- **Tampering**: Modifying data or code
-- **Repudiation**: Denying actions (logging prevents this)
-- **Information Disclosure**: Exposing sensitive data
-- **Denial of Service**: Disrupting availability
-- **Elevation of Privilege**: Gaining unauthorized access
-
-### Process
-1. **Identify assets**: What needs protection (data, services, credentials)
-2. **Identify threats**: What can go wrong (STRIDE)
-3. **Assess risk**: Likelihood × Impact (prioritize high-risk threats)
-4. **Mitigate**: Implement controls (authentication, encryption, validation)
-5. **Validate**: Test mitigations (penetration testing, code review)
-6. **Document**: Threat model, security controls, residual risks
+Use the [/threat-model](../skills/threat-model/SKILL.md) skill for every new feature, integration, or architecture change.
 
 ## Incident Response
 
@@ -268,7 +254,7 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 When invoked, follow this workflow:
 
 1. **Security Review**: Analyze code for OWASP Top 10 vulnerabilities
-2. **Threat Model**: Identify threats (STRIDE), assess risks
+2. **Threat Model**: Use [/threat-model](../skills/threat-model/SKILL.md) skill
 3. **Secure Coding**: Apply secure coding practices (input validation, output encoding, parameterized queries)
 4. **Static Analysis**: Run SAST tools (CodeQL, SonarQube), fix high-severity issues
 5. **Dependency Scanning**: Run SCA tools (Snyk, OWASP Dependency-Check), update vulnerable dependencies
