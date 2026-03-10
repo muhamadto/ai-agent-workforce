@@ -158,15 +158,21 @@ Located in `~/.claude/skills/`, `~/.qwen/skills/`, and `~/.gemini/skills/`:
 
 | Skill | Description |
 |---|---|
-| `api-review` | REST API contract review and design feedback |
-| `git-branch` | Branch lifecycle management (create, switch, cleanup) |
-| `git-commit` | Conventional Commits compliant commit message generation |
+| `adr` | Create Architecture Decision Records with context, options, and rationale |
+| `api-review` | REST/gRPC API contract review for correctness, security, and design |
+| `db-migration-review` | Review database migrations for destructive ops, locks, and missing rollbacks |
+| `dependency-review` | Evaluate dependency upgrades for breaking changes, CVEs, and license compliance |
+| `git-branch` | Branch lifecycle — cut from `origin/main`, sync via rebase, never merge |
+| `git-commit` | Conventional Commits compliant commit messages with hook awareness |
 | `github-issue-to-vibe` | Import GitHub issues into VibeKanban |
-| `run-quality-checks` | Execute project quality gates (lint, test, build) |
+| `incident` | Incident response (detect → contain → resolve) and blameless postmortem |
+| `release-notes` | Generate structured changelog from Conventional Commits between two refs |
+| `run-quality-checks` | Full pre-commit quality gate — format, lint, test, SAST, SCA |
 | `shortcut` | Shortcut project management via `short` CLI |
 | `shortcut-to-vibe` | Import Shortcut stories into VibeKanban |
-| `test-plan` | Generate structured test plans from requirements |
-| `threat-model` | STRIDE-based threat modelling for features or systems |
+| `spike` | Time-boxed technical investigation with structured report and go/no-go outcome |
+| `test-plan` | Structured test plans covering unit, integration, E2E, performance, and security |
+| `threat-model` | STRIDE-based threat modelling for features and architecture changes |
 
 ## Configuration
 
@@ -207,9 +213,6 @@ Installed globally via npm with Shortcut integration:
 ```bash
 # Start local kanban board
 vibe-kanban
-
-# Sync with Shortcut
-shortcut-vibe-sync
 ```
 
 ## Development
