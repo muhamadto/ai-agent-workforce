@@ -56,6 +56,13 @@
     - threat-model
     - api-review
     - test-plan
+    - git-branch
+    - adr
+    - release-notes
+    - db-migration-review
+    - incident
+    - dependency-review
+    - spike
   when: setup_state == "present"
 
 # ── Shortcut skill ─────────────────────────────────────────────────────────────
@@ -126,6 +133,69 @@
   copy:
     src: "test-plan/SKILL.md"
     dest: "{{ ansible_user_dir }}/.skills/test-plan/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── Git Branch skill ───────────────────────────────────────────────────────────
+
+- name: Deploy Git Branch SKILL.md to central skills
+  copy:
+    src: "git-branch/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/git-branch/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── ADR skill ──────────────────────────────────────────────────────────────────
+
+- name: Deploy ADR SKILL.md to central skills
+  copy:
+    src: "adr/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/adr/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── Release Notes skill ────────────────────────────────────────────────────────
+
+- name: Deploy Release Notes SKILL.md to central skills
+  copy:
+    src: "release-notes/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/release-notes/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── DB Migration Review skill ──────────────────────────────────────────────────
+
+- name: Deploy DB Migration Review SKILL.md to central skills
+  copy:
+    src: "db-migration-review/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/db-migration-review/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── Incident skill ─────────────────────────────────────────────────────────────
+
+- name: Deploy Incident SKILL.md to central skills
+  copy:
+    src: "incident/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/incident/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── Dependency Review skill ────────────────────────────────────────────────────
+
+- name: Deploy Dependency Review SKILL.md to central skills
+  copy:
+    src: "dependency-review/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/dependency-review/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+
+# ── Spike skill ────────────────────────────────────────────────────────────────
+
+- name: Deploy Spike SKILL.md to central skills
+  copy:
+    src: "spike/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/spike/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -244,6 +314,27 @@
 
       github-issue-to-vibe — Import GitHub issues into VibeKanban
         ~/.skills/github-issue-to-vibe/SKILL.md
+
+      git-branch — Branch lifecycle: cut from origin/main, sync via rebase
+        ~/.skills/git-branch/SKILL.md
+
+      adr — Architecture Decision Records
+        ~/.skills/adr/SKILL.md
+
+      release-notes — Generate release notes from Conventional Commits history
+        ~/.skills/release-notes/SKILL.md
+
+      db-migration-review — Review database migrations for safety and correctness
+        ~/.skills/db-migration-review/SKILL.md
+
+      incident — Incident response and blameless postmortem
+        ~/.skills/incident/SKILL.md
+
+      dependency-review — Review dependency upgrades for CVEs and breaking changes
+        ~/.skills/dependency-review/SKILL.md
+
+      spike — Time-boxed technical investigation with structured report
+        ~/.skills/spike/SKILL.md
 
       Symlinked to:
         ~/.claude/skills  →  ~/.skills  (claude {{ 'installed' if skills_claude_check.rc == 0 else 'not found — skipped' }})
