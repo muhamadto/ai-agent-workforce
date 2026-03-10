@@ -62,20 +62,24 @@ AI Agent Workforce is an Ansible-based automation tool for deploying and managin
 - Node.js (for VibeKanban)
 - Python 3.8+
 
-### Installation
+<details>
+<summary>Installation</summary>
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/muhamadto/ai-agent-workforce.git
 cd ai-agent-workforce
 ```
 
 2. Deploy all agents locally:
+
 ```bash
 ansible-playbook playbook.yml -e setup_state=present --limit local
 ```
 
 3. Deploy specific agents using tags:
+
 ```bash
 # Claude agents only
 ansible-playbook playbook.yml -e setup_state=present --tags claude
@@ -93,12 +97,30 @@ ansible-playbook playbook.yml -e setup_state=present --tags skills
 ansible-playbook playbook.yml -e setup_state=present --tags vibe-kanban
 ```
 
+### Remote Deployment
+
+Add remote hosts to `inventory.ini`:
+
+```ini
+[remote]
+my-mac ansible_host=192.168.1.100 ansible_user=username
+```
+
+Deploy remotely:
+
+```bash
+ansible-playbook playbook.yml -e setup_state=present --limit remote --ask-become-pass
+```
+
 ### Uninstallation
 
 Remove all agents and configurations:
+
 ```bash
 ansible-playbook playbook.yml -e setup_state=absent --limit local
 ```
+
+</details>
 
 ## Architecture
 
@@ -127,7 +149,8 @@ Each AI model has a dedicated role that manages:
 - Integration scripts and helpers
 - Documentation and workflow guides
 
-## Agent Teams
+<details>
+<summary>Agent Teams</summary>
 
 ### Claude Code Agents
 
@@ -174,7 +197,10 @@ Located in `~/.claude/skills/`, `~/.qwen/skills/`, and `~/.gemini/skills/`:
 | `test-plan` | Structured test plans covering unit, integration, E2E, performance, and security |
 | `threat-model` | STRIDE-based threat modelling for features and architecture changes |
 
-## Configuration
+</details>
+
+<details>
+<summary>Configuration</summary>
 
 ### Variables
 
@@ -190,19 +216,7 @@ qwen_default_model: "qwen3-coder-next"
 gemini_default_model: "gemini-2.0-flash"
 ```
 
-### Remote Deployment
-
-Add remote hosts to `inventory.ini`:
-
-```ini
-[remote]
-my-mac ansible_host=192.168.1.100 ansible_user=username
-```
-
-Deploy remotely:
-```bash
-ansible-playbook playbook.yml -e setup_state=present --limit remote --ask-become-pass
-```
+</details>
 
 ## Task Management Integration
 
@@ -230,7 +244,8 @@ ansible-playbook playbook.yml --check
 ansible-playbook playbook.yml -vvvv
 ```
 
-### Adding New Models
+<details>
+<summary>Adding New Models</summary>
 
 1. Create role directory: `roles/new-model/`
 2. Add tasks in `roles/new-model/tasks/main.yml`
@@ -238,15 +253,58 @@ ansible-playbook playbook.yml -vvvv
 4. Update `playbook.yml` to include the role
 5. Document in this README
 
+</details>
+
+<details>
+<summary>Adding New Skills</summary>
+
+1. Create the skill directory:
+
+```bash
+mkdir roles/skills/files/<skill-name>
+```
+
+2. Write `roles/skills/files/<skill-name>/SKILL.md` with a frontmatter header:
+
+```markdown
+---
+name: skill-name
+description: One-sentence description shown in the skills list.
+---
+
+# Skill Name
+
+...
+```
+
+3. Add the directory to the loop in `roles/skills/tasks/main.yml`:
+
+```yaml
+- shortcut/reference
+- git-commit
+- ...
+- skill-name   # add here
+```
+
+4. Add a deploy task in `roles/skills/tasks/main.yml` following the existing pattern:
+
+```yaml
+- name: Deploy Skill Name SKILL.md to central skills
+  copy:
+    src: "skill-name/SKILL.md"
+    dest: "{{ ansible_user_dir }}/.skills/skill-name/SKILL.md"
+    mode: '0600'
+  when: setup_state == "present"
+```
+
+5. Update the summary message in the same file.
+6. Update the skills table in this README.
+
+</details>
+
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting pull requests, reporting bugs, and adding new models or skills.
 
 ## License
 
@@ -267,13 +325,6 @@ Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for detai
 
 - **Issues**: [GitHub Issues](https://github.com/muhamadto/ai-agent-workforce/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/muhamadto/ai-agent-workforce/discussions)
-
-## Acknowledgments
-
-- Anthropic for Claude Code
-- Alibaba for Qwen
-- Google for Gemini
-- The Ansible community
 
 ---
 

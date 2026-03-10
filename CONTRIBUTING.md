@@ -1,6 +1,6 @@
 # Contributing to AI Agent Workforce
 
-Thank you for your interest in contributing to AI Agent Workforce! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing! This document covers how to report bugs, suggest features, submit pull requests, and extend the project with new models or skills.
 
 ## Code of Conduct
 
@@ -13,7 +13,7 @@ Thank you for your interest in contributing to AI Agent Workforce! This document
 
 ### Reporting Bugs
 
-1. Check if the bug has already been reported in [Issues](https://github.com/yourusername/ai-agent-workforce/issues)
+1. Check if the bug has already been reported in [Issues](https://github.com/muhamadto/ai-agent-workforce/issues)
 2. If not, create a new issue with:
    - Clear title and description
    - Steps to reproduce
@@ -32,14 +32,17 @@ Thank you for your interest in contributing to AI Agent Workforce! This document
 
 ### Pull Requests
 
-1. **Fork the repository** and create a feature branch
+1. Fork the repository and create a feature branch from `main`:
+
    ```bash
-   git checkout -b feature/your-feature-name
+   git fetch origin
+   git checkout -b feat/your-feature-name origin/main
    ```
 
-2. **Make your changes** following our coding standards
+2. Make your changes following the coding standards below.
 
-3. **Test your changes**
+3. Test your changes:
+
    ```bash
    # Syntax check
    ansible-playbook playbook.yml --syntax-check
@@ -54,18 +57,20 @@ Thank you for your interest in contributing to AI Agent Workforce! This document
    ansible-playbook playbook.yml -e setup_state=absent --limit local
    ```
 
-4. **Commit with conventional commits**
-   ```bash
-   git commit -m "feat: add gemini role implementation"
-   git commit -m "fix: correct claude agent deployment path"
-   git commit -m "docs: update README with new examples"
+4. Commit using [Conventional Commits](https://www.conventionalcommits.org/) with a `Signed-off-by` footer:
+
+   ```
+   feat(skills): add spike skill for technical investigations
+
+   Signed-off-by: Your Name <your@email.com>
    ```
 
-   Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+   Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `ci`, `build`, `perf`
 
-5. **Push and create PR**
+5. Push and open a pull request against `main`:
+
    ```bash
-   git push origin feature/your-feature-name
+   git push -u origin feat/your-feature-name
    ```
 
 ## Coding Standards
@@ -83,67 +88,42 @@ Thank you for your interest in contributing to AI Agent Workforce! This document
 
 ```
 roles/model-name/
-├── README.md           # Role documentation
 ├── defaults/
-│   └── main.yml       # Default variables
-├── files/             # Static files to deploy
+│   └── main.yml        # Default variables
+├── files/              # Static files to deploy
 │   ├── settings.json
 │   └── agents/
-├── tasks/
-│   └── main.yml       # Task definitions
-└── meta/
-    └── main.yml       # Role metadata (optional)
+└── tasks/
+    └── main.yml        # Task definitions
 ```
 
 ### Documentation
 
-- Update README.md for new features
-- Add role-specific README in each role directory
+- Update `README.md` for new features
+- Add role-specific `README.md` in each role directory
 - Include usage examples
 - Document all variables
-- Keep CHANGELOG.md updated
-
-### Commit Messages
-
-Follow [Conventional Commits](https://www.conventionalcommits.org/):
-
-```
-<type>(<scope>): <description>
-
-[optional body]
-
-[optional footer]
-```
-
-Examples:
-```
-feat(gemini): add gemini CLI role implementation
-fix(claude): correct agent deployment permissions
-docs(readme): add troubleshooting section
-chore(deps): update ansible to 2.15
-```
 
 ## Adding New AI Models
 
-To add support for a new AI model:
+1. Create role structure:
 
-1. **Create role structure**
    ```bash
    mkdir -p roles/model-name/{tasks,files,defaults}
    ```
 
-2. **Implement tasks** in `roles/model-name/tasks/main.yml`
+2. Implement tasks in `roles/model-name/tasks/main.yml`:
    - Directory creation
    - File deployment
    - Configuration management
    - Cleanup tasks (when `setup_state == "absent"`)
 
-3. **Add agent files** to `roles/model-name/files/`
-   - settings.json
-   - agent definitions
-   - helper scripts
+3. Add agent files to `roles/model-name/files/`:
+   - `settings.json`
+   - Agent definitions under `agents/`
 
-4. **Update playbook.yml**
+4. Update `playbook.yml`:
+
    ```yaml
    - role: model-name
      tags:
@@ -152,16 +132,57 @@ To add support for a new AI model:
        - agents
    ```
 
-5. **Document in README.md**
+5. Update `README.md`:
    - Add to supported models list
+   - Add to the recommended-model-per-agent table
    - Update usage examples
-   - Document any special requirements
 
-6. **Create role README** at `roles/model-name/README.md`
+## Adding New Skills
+
+1. Create the skill directory:
+
+   ```bash
+   mkdir roles/skills/files/<skill-name>
+   ```
+
+2. Write `roles/skills/files/<skill-name>/SKILL.md` with a frontmatter header:
+
+   ```markdown
+   ---
+   name: skill-name
+   description: One-sentence description shown in the skills list.
+   ---
+
+   # Skill Name
+
+   ...
+   ```
+
+3. Add the directory name to the loop in `roles/skills/tasks/main.yml`:
+
+   ```yaml
+   loop:
+     - shortcut/reference
+     - git-commit
+     - ...
+     - skill-name   # add here
+   ```
+
+4. Add a deploy task in the same file, following the existing pattern:
+
+   ```yaml
+   - name: Deploy Skill Name SKILL.md to central skills
+     copy:
+       src: "skill-name/SKILL.md"
+       dest: "{{ ansible_user_dir }}/.skills/skill-name/SKILL.md"
+       mode: '0600'
+     when: setup_state == "present"
+   ```
+
+5. Update the summary message in the same file.
+6. Update the skills table in `README.md`.
 
 ## Testing Guidelines
-
-### Local Testing
 
 Always test both installation and removal:
 
@@ -189,9 +210,8 @@ ls -la ~/.model-name/  # Should not exist
 
 ## Questions?
 
-- Open a [Discussion](https://github.com/yourusername/ai-agent-workforce/discussions)
-- Join our community chat (if available)
-- Tag maintainers in issues
+- Open a [Discussion](https://github.com/muhamadto/ai-agent-workforce/discussions)
+- Or file an [Issue](https://github.com/muhamadto/ai-agent-workforce/issues)
 
 ## License
 
