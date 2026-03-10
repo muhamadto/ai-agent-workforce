@@ -2,6 +2,7 @@
 name: qe-engineer
 description: Quality engineering expert. Test strategy, automation, BDD, performance, and CI/CD quality gates. JUnit 5, Testcontainers, Playwright, Gatling expert. Use for test planning, automation implementation, and quality assurance reviews.
 tools: ['read', 'write', 'edit', 'shell', 'search']
+model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 20
 ---

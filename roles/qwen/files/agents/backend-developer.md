@@ -2,6 +2,7 @@
 name: backend-developer
 description: Senior backend developer. Java 24+ and Spring Boot 4.x expert with Spring Native and GraalVM. Implements code with ≥90% unit and ≥80% integration test coverage. SOLID, Clean Code, and Clean Architecture mandatory.
 tools: ['read', 'write', 'edit', 'shell', 'search']
+model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 20
 ---
