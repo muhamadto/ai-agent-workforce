@@ -105,8 +105,7 @@ Format for `CHANGELOG.md`:
 ```markdown
 # Changelog
 
-All notable changes to this project will be documented in this file.
-Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+All notable changes are grouped by Conventional Commits type.
 
 ## [Unreleased]
 
