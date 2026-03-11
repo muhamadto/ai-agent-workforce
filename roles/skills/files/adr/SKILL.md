@@ -21,7 +21,8 @@ Document architectural decisions in a lightweight, durable format. ADRs record t
 ```bash
 ADR_DIR=$(find . -type d \( -name "adr" -o -name "decisions" \) \
   | grep -v node_modules | head -1)
-echo "ADR directory: ${ADR_DIR:-docs/adr (will be created)}"
+ADR_DIR="${ADR_DIR:-docs/adr}"
+echo "ADR directory: ${ADR_DIR} (will be created if missing)"
 ```
 
 Common locations: `docs/adr/`, `doc/adr/`, `architecture/decisions/`. If none is found, default to `docs/adr/` and create it. Use this resolved path in all subsequent steps — do not hardcode `docs/adr/`.
