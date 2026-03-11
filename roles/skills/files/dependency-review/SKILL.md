@@ -23,13 +23,13 @@ Use the merge base so the full branch diff is covered, not just the last commit:
 BASE=$(git merge-base HEAD origin/main)
 
 # Maven
-git diff "$BASE" pom.xml | grep "^\+" | grep -E "<version>|<artifactId>"
+git diff "$BASE"..HEAD pom.xml | grep "^\+" | grep -E "<version>|<artifactId>"
 
 # npm / yarn / pnpm
-git diff "$BASE" package.json package-lock.json yarn.lock | grep "^\+" | grep -E '"version":|resolved'
+git diff "$BASE"..HEAD package.json package-lock.json yarn.lock | grep "^\+" | grep -E '"version":|resolved'
 
 # Python
-git diff "$BASE" requirements*.txt pyproject.toml uv.lock | grep "^\+"
+git diff "$BASE"..HEAD requirements*.txt pyproject.toml uv.lock | grep "^\+"
 ```
 
 List every dependency that changed, with old → new version.
