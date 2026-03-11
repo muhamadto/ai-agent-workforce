@@ -43,7 +43,7 @@ Filter out non-conventional commits (chore, ci, docs) if they are not user-facin
 git log <previous-tag>..HEAD \
   --pretty=format:"%H %s" \
   --no-merges \
-  | grep -E "^[a-f0-9]+ (feat|fix|perf|refactor|revert)(\(|:)"
+  | grep -E "^[a-f0-9]+ (feat|fix|perf|refactor|revert)[(!:]"
 ```
 
 ## Step 3 — Group by type
