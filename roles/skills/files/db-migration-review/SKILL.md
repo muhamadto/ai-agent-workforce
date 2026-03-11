@@ -67,8 +67,8 @@ These acquire `ACCESS EXCLUSIVE` locks (PostgreSQL) that block reads and writes:
 **Check:**
 
 ```bash
-grep -iEn "ADD\s+COLUMN|ALTER\s+COLUMN|ADD\s+CONSTRAINT|CREATE\s+INDEX[^C]" \
-  <migration-file>
+grep -iEn "ADD\s+COLUMN|ALTER\s+COLUMN|ADD\s+CONSTRAINT|CREATE\s+INDEX" \
+  <migration-file> | grep -iv "CONCURRENTLY"
 ```
 
 For tables > 1M rows, any lock-heavy operation is a production risk.
