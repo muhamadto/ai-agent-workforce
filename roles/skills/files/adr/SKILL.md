@@ -93,7 +93,7 @@ We will use **<chosen option>**.
 ## Links
 
 - Supersedes: [ADR-XXXX](XXXX-<title>.md) *(if applicable)*
-- Superseded by: *(leave blank until deprecated)*
+- Superseded by: *(leave blank until superseded)*
 - Related: <link to RFC, issue, or PR>
 ```
 
