@@ -19,7 +19,7 @@ Document architectural decisions in a lightweight, durable format. ADRs record t
 ## Step 1 — Find the ADR directory
 
 ```bash
-ADR_DIR=$(find . -type d \( -name "adr" -o -name "decisions" \) \
+ADR_DIR=$(find . -type d \( -name "adr" -o -name "decisions" \) 2>/dev/null \
   | grep -v node_modules | head -1)
 ADR_DIR="${ADR_DIR:-docs/adr}"
 echo "ADR directory: ${ADR_DIR} (will be created if missing)"
