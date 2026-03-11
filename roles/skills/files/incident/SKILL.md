@@ -44,8 +44,15 @@ Assign a severity:
 ### 2.1 — Gather signals
 
 ```bash
-# Check recent deployments
-git log --oneline --since="2 hours ago" origin/main
+# Check recent deployments — use your CI/CD tool (primary source of truth):
+# GitHub Actions:  gh run list --limit 10
+# GitLab CI:       glab ci list
+# Argo CD:         argocd app history <app-name>
+# Jenkins:         check the deployment job history in the UI
+
+# Secondary: recent commits on main (not a substitute for deployment history —
+# a commit does not mean it deployed, and a deployment may lag by minutes/hours)
+git log --oneline -20 origin/main
 
 # Check error rates (adapt to your observability stack)
 # Prometheus / Grafana — check error rate and latency dashboards

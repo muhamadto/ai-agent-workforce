@@ -19,22 +19,24 @@ Document architectural decisions in a lightweight, durable format. ADRs record t
 ## Step 1 — Find the ADR directory
 
 ```bash
-find . -type d -name "adr" -o -type d -name "decisions" -o -type d -name "architecture" 2>/dev/null | head -5
+ADR_DIR=$(find . -type d \( -name "adr" -o -name "decisions" \) \
+  | grep -v node_modules | head -1)
+echo "ADR directory: ${ADR_DIR:-docs/adr (will be created)}"
 ```
 
-Common locations: `docs/adr/`, `doc/adr/`, `architecture/decisions/`. If none exists, create `docs/adr/`.
+Common locations: `docs/adr/`, `doc/adr/`, `architecture/decisions/`. If none is found, default to `docs/adr/` and create it. Use this resolved path in all subsequent steps — do not hardcode `docs/adr/`.
 
 ## Step 2 — Determine the next ADR number
 
 ```bash
-ls docs/adr/*.md 2>/dev/null | sort | tail -1
+ls "${ADR_DIR}"/*.md 2>/dev/null | sort | tail -1
 ```
 
 ADR filenames follow the pattern `NNNN-<title>.md` (e.g. `0001-use-postgresql.md`). Increment the highest number.
 
 ## Step 3 — Write the ADR
 
-Create `docs/adr/NNNN-<kebab-case-title>.md`:
+Create `<adr-dir>/NNNN-<kebab-case-title>.md`:
 
 ```markdown
 # ADR-NNNN: <Title>
@@ -100,10 +102,10 @@ We will use **<chosen option>**.
 ## Step 4 — Update ADR index (if one exists)
 
 ```bash
-find docs/adr -name "README.md" -o -name "index.md" 2>/dev/null | head -1
+find "${ADR_DIR}" -name "README.md" -o -name "index.md" 2>/dev/null | head -1
 ```
 
-If an index exists, append the new entry. If not, create `docs/adr/README.md`:
+If an index exists, append the new entry. If not, create `<adr-dir>/README.md`:
 
 ```markdown
 # Architecture Decision Records

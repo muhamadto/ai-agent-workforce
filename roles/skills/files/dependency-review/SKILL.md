@@ -17,15 +17,19 @@ Evaluate dependency upgrades before merging: breaking changes, security vulnerab
 
 ## Step 1 — Identify changed dependencies
 
+Use the merge base so the full branch diff is covered, not just the last commit:
+
 ```bash
+BASE=$(git merge-base HEAD origin/main)
+
 # Maven
-git diff HEAD~1 pom.xml | grep "^\+" | grep -E "<version>|<artifactId>"
+git diff "$BASE" pom.xml | grep "^\+" | grep -E "<version>|<artifactId>"
 
 # npm / yarn / pnpm
-git diff HEAD~1 package.json package-lock.json yarn.lock | grep "^\+" | grep -E '"version":|resolved'
+git diff "$BASE" package.json package-lock.json yarn.lock | grep "^\+" | grep -E '"version":|resolved'
 
 # Python
-git diff HEAD~1 requirements*.txt pyproject.toml uv.lock | grep "^\+"
+git diff "$BASE" requirements*.txt pyproject.toml uv.lock | grep "^\+"
 ```
 
 List every dependency that changed, with old → new version.
@@ -124,8 +128,15 @@ npx bundlephobia <package>@<new-version>
 ### API compatibility
 
 ```bash
-# Check if the upgrade requires code changes
-grep -r "<dependency-name>" src/ --include="*.java" --include="*.ts" | head -20
+# JVM (Java / Kotlin)
+grep -r "<dependency-name>" . --include="*.java" --include="*.kt" | head -20
+
+# Node / npm (JS / TS)
+grep -r "<dependency-name>" . --include="*.js" --include="*.ts" \
+  --include="*.jsx" --include="*.tsx" | head -20
+
+# Python
+grep -r "<dependency-name>" . --include="*.py" | head -20
 ```
 
 Review usages for any deprecated or removed APIs.

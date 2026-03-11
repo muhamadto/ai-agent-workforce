@@ -71,7 +71,7 @@ grep -iEn "ADD\s+COLUMN|ALTER\s+COLUMN|ADD\s+CONSTRAINT|CREATE\s+INDEX" \
   <migration-file> | grep -iv "CONCURRENTLY"
 ```
 
-For tables > 1M rows, any lock-heavy operation is a production risk.
+For tables > 100K rows, any lock-heavy operation is a production risk.
 
 ---
 
@@ -106,7 +106,7 @@ Recommend splitting into separate migrations.
 grep -iE "ALTER TABLE|DROP COLUMN|ADD COLUMN|CREATE INDEX" <migration-file>
 ```
 
-For any `ALTER TABLE` on a table with > 1M rows:
+For any `ALTER TABLE` on a table with > 100K rows:
 - Add column as nullable first, then backfill in batches, then add `NOT NULL`
 - Use `CREATE INDEX CONCURRENTLY` in PostgreSQL
 - Wrap batched `UPDATE` in transactions of ≤ 10,000 rows

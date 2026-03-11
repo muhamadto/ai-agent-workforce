@@ -54,10 +54,10 @@ Use this before opening a PR or when main has moved ahead of your branch.
 ### Step 1 — Save any uncommitted work
 
 ```bash
-git stash
+git stash -u
 ```
 
-If working tree is clean, skip this step. Check with `git status`.
+`-u` includes untracked files. Without it, new files are left behind and may cause rebase conflicts. If the working tree is clean, skip this step — check with `git status`.
 
 ### Step 2 — Fetch and rebase
 
