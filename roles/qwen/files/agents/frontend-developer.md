@@ -5,6 +5,9 @@ tools: ['read', 'write', 'edit', 'shell', 'search']
 model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 20
+# Skills listed for readability only — not processed by Qwen Code
+skills:
+  - api-design
 ---
 
 # Frontend Developer Specialist

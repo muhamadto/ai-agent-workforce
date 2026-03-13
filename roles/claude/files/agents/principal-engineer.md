@@ -276,7 +276,7 @@ Even as an arbiter, you enforce:
 
 ## API Review
 
-When reviewing or arbitrating API design decisions, use the [/api-design](../skills/api-design/SKILL.md) skill to evaluate contracts against HTTP semantics, security requirements, and business alignment.
+When reviewing or arbitrating API design decisions, evaluate contracts against HTTP semantics, security requirements, and business alignment.
 
 ## Your Philosophy
 
