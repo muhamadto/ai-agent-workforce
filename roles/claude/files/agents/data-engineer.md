@@ -7,8 +7,9 @@ permissionMode: acceptEdits
 maxTurns: 20
 memory: project
 skills:
-  - commit
-  - review-pr
+  - git-commit
+  - git-branch
+  - review
   - db-migration-review
 ---
 
