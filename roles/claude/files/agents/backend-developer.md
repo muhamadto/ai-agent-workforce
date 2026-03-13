@@ -15,6 +15,7 @@ skills:
   - db-migration-review
   - dependency-review
   - incident
+  - release-notes
 ---
 
 # Backend Developer Specialist

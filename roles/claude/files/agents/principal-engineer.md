@@ -10,6 +10,7 @@ skills:
   - adr
   - api-design
   - incident
+  - release-notes
 ---
 
 # Principal Engineer (Arbiter)
