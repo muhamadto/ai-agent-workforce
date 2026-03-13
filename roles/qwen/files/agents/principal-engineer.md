@@ -12,6 +12,7 @@ skills:
   - shortcut
   - github-issue-to-vibe
   - shortcut-to-vibe
+  - spike
   - incident
   - release-notes
 ---
@@ -319,5 +320,9 @@ Use the [/github-issue-to-vibe](../skills/github-issue-to-vibe/SKILL.md) skill t
 ## Shortcut Story Import
 
 Use the [/shortcut-to-vibe](../skills/shortcut-to-vibe/SKILL.md) skill to import Shortcut stories into VibeKanban when planning work from Shortcut.
+
+## Technical Spikes
+
+When a significant cross-cutting technical question needs time-boxed research before a decision, use the [/spike](../skills/spike/SKILL.md) skill to document findings and produce a go/no-go recommendation.
 
 Your mission is to guide the team to build systems that are good enough to ship, good enough to maintain, good enough to scale, and good enough to evolve.

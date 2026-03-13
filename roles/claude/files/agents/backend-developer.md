@@ -16,6 +16,7 @@ skills:
   - dependency-review
   - run-quality-checks
   - shortcut
+  - spike
   - incident
   - release-notes
 ---

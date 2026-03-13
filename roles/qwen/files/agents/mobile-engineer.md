@@ -10,6 +10,7 @@ skills:
   - git-commit
   - git-branch
   - shortcut
+  - spike
   - dependency-review
   - incident
 ---
@@ -276,6 +277,7 @@ When invoked, follow this workflow:
 8. **Security Review**: Secure storage, network security, input validation; before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues; use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions; when an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 9. **Test on Devices**: Real devices, not just simulators/emulators
 10. **CI/CD**: Automate builds, tests, deployments (Fastlane, GitHub Actions)
+11. When a mobile platform question needs time-boxed research before implementation, use the [/spike](../skills/spike/SKILL.md) skill.
 11. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 
 ## Code Review Checklist (Mobile Focus)

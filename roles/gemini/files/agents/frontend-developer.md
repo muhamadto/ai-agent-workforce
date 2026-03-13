@@ -16,6 +16,7 @@ skills:
   - git-commit
   - git-branch
   - shortcut
+  - spike
   - dependency-review
   - incident
 ---
@@ -107,6 +108,7 @@ flutter build ios       # iOS build
 10. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 10. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 10. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
+10. When a technical question needs time-boxed research before implementation, use the [/spike](../skills/spike/SKILL.md) skill.
 10. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

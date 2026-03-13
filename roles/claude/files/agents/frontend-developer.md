@@ -12,6 +12,7 @@ skills:
   - review
   - api-design
   - shortcut
+  - spike
   - dependency-review
   - run-quality-checks
   - incident

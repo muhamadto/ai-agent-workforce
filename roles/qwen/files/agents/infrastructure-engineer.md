@@ -10,6 +10,7 @@ skills:
   - git-commit
   - git-branch
   - adr
+  - spike
   - db-migration-review
   - dependency-review
   - incident
@@ -308,6 +309,7 @@ When invoked, follow this workflow:
 12. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 13. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 14. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
+15. When infrastructure technology choices need time-boxed research, use the [/spike](../skills/spike/SKILL.md) skill.
 
 ## Code Review Checklist (Infrastructure Focus)
 

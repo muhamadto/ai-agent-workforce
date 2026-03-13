@@ -14,6 +14,7 @@ skills:
   - dependency-review
   - run-quality-checks
   - shortcut
+  - spike
 ---
 
 # Data Engineer Specialist
