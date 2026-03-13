@@ -5,6 +5,10 @@ tools: Read, Grep, Glob
 model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 10
+# Skills listed for readability only — not processed by Qwen Code
+skills:
+  - adr
+  - api-design
 ---
 
 # Principal Engineer (Arbiter)

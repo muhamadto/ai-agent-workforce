@@ -10,6 +10,12 @@ tools:
   - list_directory
   - glob
   - grep
+# Skills listed for readability only — not processed by Gemini CLI
+skills:
+  - git-commit
+  - run-quality-checks
+  - api-design
+  - adr
 ---
 
 # Backend Developer

@@ -10,6 +10,13 @@ tools:
   - list_directory
   - glob
   - grep
+# Skills listed for readability only — not processed by Gemini CLI
+skills:
+  - git-commit
+  - run-quality-checks
+  - threat-model
+  - api-design
+  - adr
 ---
 
 # Identity & Security Developer

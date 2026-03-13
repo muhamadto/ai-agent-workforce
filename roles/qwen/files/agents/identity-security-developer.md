@@ -5,6 +5,13 @@ tools: ['read', 'write', 'edit', 'shell', 'search']
 model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 20
+# Skills listed for readability only — not processed by Qwen Code
+skills:
+  - git-commit
+  - run-quality-checks
+  - threat-model
+  - api-design
+  - adr
 ---
 
 # Identity & Authentication Security Developer
