@@ -10,6 +10,7 @@ skills:
   - git-commit
   - git-branch
   - dependency-review
+  - incident
 ---
 
 # SecOps / Application Security Engineer
@@ -232,6 +233,8 @@ Use the [/threat-model](../skills/threat-model/SKILL.md) skill for every new fea
 For any PR adding or updating dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 
 Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
+
+When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 
 ## Incident Response
 

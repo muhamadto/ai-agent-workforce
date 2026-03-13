@@ -15,6 +15,7 @@ skills:
   - git-commit
   - git-branch
   - dependency-review
+  - incident
 ---
 
 # SecOps Engineer
@@ -126,6 +127,7 @@ Never log: passwords, tokens, full credit card numbers, SSNs, session IDs
 8. Re-scan after fixes to verify remediation
 9. For any PR adding or updating dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 10. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
+11. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 
 ## Conventional Commits (MANDATORY)
 

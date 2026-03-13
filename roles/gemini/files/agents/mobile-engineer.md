@@ -15,6 +15,7 @@ skills:
   - git-commit
   - git-branch
   - dependency-review
+  - incident
 ---
 
 # Mobile Engineer
@@ -134,6 +135,7 @@ yarn detox test              # e2e
 7. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
 8. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 8. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
+8. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

@@ -16,6 +16,7 @@ skills:
   - git-commit
   - git-branch
   - dependency-review
+  - incident
 ---
 
 # Frontend Developer
@@ -103,6 +104,7 @@ flutter build ios       # iOS build
 9. Use [/api-design](../skills/api-design/SKILL.md) skill to review backend API contracts before building data fetching
 10. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 10. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
+10. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 10. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

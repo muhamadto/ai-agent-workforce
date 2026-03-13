@@ -10,6 +10,7 @@ skills:
   - git-commit
   - git-branch
   - dependency-review
+  - incident
 ---
 
 # Mobile Engineer Specialist

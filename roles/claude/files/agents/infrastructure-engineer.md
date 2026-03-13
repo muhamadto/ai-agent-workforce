@@ -12,6 +12,7 @@ skills:
   - dependency-review
   - git-branch
   - git-commit
+  - incident
 ---
 
 # Infrastructure Engineer

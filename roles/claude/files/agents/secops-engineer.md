@@ -10,6 +10,7 @@ skills:
   - dependency-review
   - git-branch
   - git-commit
+  - incident
 ---
 
 # SecOps / Application Security Engineer

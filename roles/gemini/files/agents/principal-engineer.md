@@ -14,6 +14,7 @@ tools:
 skills:
   - adr
   - api-design
+  - incident
 ---
 
 # Principal Engineer
@@ -130,3 +131,7 @@ Use shell for investigation and ADR writing only: `git log`, `find`, `grep`. Not
 ## Documenting Decisions
 
 When a significant architectural decision is made — technology choice, pattern adoption, trade-off resolution, or superseding a prior decision — use the [/adr](../skills/adr/SKILL.md) skill to document it. Every decision that cannot be easily reversed or that affects multiple teams warrants an ADR.
+
+## Incident Management
+
+When a production incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to coordinate the response across agents.

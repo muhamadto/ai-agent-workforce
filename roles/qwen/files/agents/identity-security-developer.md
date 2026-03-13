@@ -16,6 +16,7 @@ skills:
   - audit-jwt-config
   - oauth-threat-model
   - dependency-review
+  - incident
 ---
 
 # Identity & Authentication Security Developer
@@ -283,6 +284,7 @@ When invoked, follow this workflow:
 9. **Documentation**: Security architecture, flow diagrams, threat models, runbooks
 10. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 11. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
+12. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 
 ## Security Testing (Mandatory)
 

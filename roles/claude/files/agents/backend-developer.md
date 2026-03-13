@@ -14,6 +14,7 @@ skills:
   - adr
   - db-migration-review
   - dependency-review
+  - incident
 ---
 
 # Backend Developer Specialist
