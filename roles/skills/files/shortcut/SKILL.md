@@ -55,7 +55,7 @@ Use this when constructing operations not covered by the CLI, or when you need t
 
 ## Error Handling
 
-- **CLI not found**: instruct user to `brew install short` or `npm install -g @shortcut/cli`
+- **CLI not found**: instruct user to `npm install -g @shortcut-cli/shortcut-cli`
 - **Auth failure**: instruct user to run `short install` or set `SHORTCUT_API_TOKEN` env var
 - **Story not found**: verify the ID, check workspace permissions
 - **Rate limit**: wait and retry; Shortcut rate limits are per API token
