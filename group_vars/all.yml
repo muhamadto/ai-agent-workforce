@@ -9,3 +9,33 @@ setup_state: present
 # claude_default_model: "sonnet-4.5"
 # qwen_default_model: "qwen3-coder-next"
 # gemini_default_model: "gemini-2.0-flash"
+
+# External GitHub skill sources
+# Each entry clones the repo and copies all skill subdirectories into ~/.skills/
+# Runs on every playbook invocation to pull the latest version (git pull).
+
+# Fields:
+#   repo            — HTTPS or SSH clone URL
+#   branch          — branch/tag/SHA to checkout (default: main)
+#   skills_path     — subdirectory inside the repo that contains skill folders (default: skills)
+#   enabled         — set to false to skip without removing from config
+#   selected_skills — a list of skill names to install. If empty or not defined, installs all skills.
+github_skill_sources:
+  - repo: "https://github.com/obra/superpowers"
+    branch: "main"
+    skills_path: "skills"
+    enabled: true
+  - repo: "https://github.com/upstash/context7"
+    branch: "master"
+    skills_path: "skills"
+    enabled: true
+  - repo: "https://github.com/anthropics/skills"
+    branch: "main"
+    skills_path: "skills"
+    enabled: true
+    selected_skills:
+      - mcp-builder
+      - skill-creator
+      - theme-factory
+      - web-artifacts-builder
+      - webapp-testing
