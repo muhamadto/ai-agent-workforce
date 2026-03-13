@@ -12,6 +12,7 @@ tools:
   - grep
 # Skills listed for readability only — not processed by Gemini CLI
 skills:
+  - git-branch
   - dependency-review
 ---
 
@@ -123,6 +124,7 @@ Never log: passwords, tokens, full credit card numbers, SSNs, session IDs
 7. Report findings using the severity format below
 8. Re-scan after fixes to verify remediation
 9. For any PR adding or updating dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
+10. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 
 ## Conventional Commits (MANDATORY)
 

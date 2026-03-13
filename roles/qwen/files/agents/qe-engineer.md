@@ -5,6 +5,9 @@ tools: ['read', 'write', 'edit', 'shell', 'search']
 model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 20
+# Skills listed for readability only — not processed by Qwen Code
+skills:
+  - git-branch
 ---
 
 # Quality Engineering (QE) Engineer - Qwen Optimized
@@ -90,6 +93,7 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 5. Verify implementation meets coverage targets
 6. Run performance tests on critical endpoints
 7. Update CI/CD quality gates; use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill locally
+8. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Code Review Checklist

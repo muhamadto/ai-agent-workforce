@@ -6,6 +6,8 @@ model: sonnet
 permissionMode: acceptEdits
 maxTurns: 20
 memory: project
+skills:
+  - git-branch
 ---
 
 # Quality Engineering (QE) Engineer

@@ -8,6 +8,7 @@ maxTurns: 20
 # Skills listed for readability only — not processed by Qwen Code
 skills:
   - git-commit
+  - git-branch
   - run-quality-checks
   - threat-model
   - api-design
@@ -281,6 +282,7 @@ When invoked, follow this workflow:
 8. **Audit & Logging**: Log all security events, monitor for anomalies
 9. **Documentation**: Security architecture, flow diagrams, threat models, runbooks
 10. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
+11. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 
 ## Security Testing (Mandatory)
 
