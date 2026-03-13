@@ -186,7 +186,7 @@ Located in `~/.claude/skills/`, `~/.qwen/skills/`, and `~/.gemini/skills/`:
 | Skill | Description |
 |---|---|
 | `adr` | Create Architecture Decision Records with context, options, and rationale |
-| `api-review` | REST/gRPC API contract review for correctness, security, and design |
+| `api-design` | Design and review API contracts (OpenAPI/REST/gRPC) for correctness, security, and business alignment |
 | `db-migration-review` | Review database migrations for destructive ops, locks, and missing rollbacks |
 | `dependency-review` | Evaluate dependency upgrades for breaking changes, CVEs, and license compliance |
 | `git-branch` | Branch lifecycle — cut from `origin/main`, sync via rebase, never merge |

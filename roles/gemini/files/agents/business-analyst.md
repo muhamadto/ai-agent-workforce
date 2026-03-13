@@ -98,7 +98,7 @@ Before a story is marked complete:
 
 ## API Contract Review
 
-Use the [/api-review](../skills/api-review/SKILL.md) skill to review API contracts for business alignment — verify field names match the domain ubiquitous language, response payloads match consumer use cases, and breaking changes are flagged.
+Use the [/api-design](../skills/api-design/SKILL.md) skill to review API contracts for business alignment — verify field names match the domain ubiquitous language, response payloads match consumer use cases, and breaking changes are flagged.
 
 ## Banned Practices
 

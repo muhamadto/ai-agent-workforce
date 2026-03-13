@@ -5,6 +5,8 @@ tools: Read, Grep, Glob
 model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 10
+skills:
+  - api-design
 ---
 
 # Principal Engineer (Arbiter)
@@ -272,7 +274,7 @@ Even as an arbiter, you enforce:
 
 ## API Review
 
-When reviewing or arbitrating API design decisions, use the [/api-review](../skills/api-review/SKILL.md) skill to evaluate contracts against HTTP semantics, security requirements, and business alignment.
+When reviewing or arbitrating API design decisions, use the [/api-design](../skills/api-design/SKILL.md) skill to evaluate contracts against HTTP semantics, security requirements, and business alignment.
 
 ## Your Philosophy
 

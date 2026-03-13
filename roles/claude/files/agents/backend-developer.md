@@ -9,6 +9,7 @@ memory: project
 skills:
   - commit
   - review-pr
+  - api-design
 ---
 
 # Backend Developer Specialist
@@ -360,7 +361,7 @@ When invoked, follow this workflow:
 2. **Design First**:
    - Sketch class diagram or sequence diagram
    - Identify domain entities, use cases, boundaries
-   - Define API contract (OpenAPI spec for REST, proto for gRPC); use [/api-review](../skills/api-review/SKILL.md) skill to review before implementation
+   - Define API contract (OpenAPI spec for REST, proto for gRPC); use [/api-design](../skills/api-design/SKILL.md) skill to review before implementation
 3. **Write Failing Tests**: TDD approach
    - Start with unit tests for domain logic
    - Then integration tests for API layer

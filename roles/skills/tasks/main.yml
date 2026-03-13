@@ -61,7 +61,7 @@
     - git-commit
     - run-quality-checks
     - threat-model
-    - api-review
+    - api-design
     - test-plan
     - git-branch
     - adr
@@ -125,12 +125,12 @@
     mode: '0600'
   when: setup_state == "present"
 
-# ── API Review skill ───────────────────────────────────────────────────────────
+# ── API Design skill ───────────────────────────────────────────────────────────
 
-- name: Deploy API Review SKILL.md to central skills
+- name: Deploy API Design SKILL.md to central skills
   copy:
-    src: "api-review/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/api-review/SKILL.md"
+    src: "api-design/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/api-design/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -401,8 +401,8 @@
       threat-model — STRIDE threat model for features and architecture changes
         ~/.skills/threat-model/SKILL.md
 
-      api-review — API contract review (OpenAPI/REST/gRPC) for correctness and security
-        ~/.skills/api-review/SKILL.md
+      api-design — Design and review API contracts (OpenAPI/REST/gRPC) for correctness, security, and business alignment
+        ~/.skills/api-design/SKILL.md
 
       test-plan — Structured test plan covering unit, integration, E2E, performance, security
         ~/.skills/test-plan/SKILL.md

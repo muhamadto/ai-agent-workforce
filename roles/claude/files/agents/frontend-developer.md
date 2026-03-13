@@ -9,6 +9,7 @@ memory: project
 skills:
   - commit
   - review-pr
+  - api-design
 ---
 
 # Frontend Developer Specialist
@@ -239,7 +240,7 @@ When invoked, follow this workflow:
    - Sketch component tree and data flow
    - Identify presentational vs container components
    - Define props interfaces (TypeScript)
-   - Review backend API contracts with [/api-review](../skills/api-review/SKILL.md) skill before building data fetching
+   - Review backend API contracts with [/api-design](../skills/api-design/SKILL.md) skill before building data fetching
 3. **Write Failing Tests**: TDD approach for logic and components
    - Start with unit tests for custom hooks and utilities
    - Then integration tests for user flows

@@ -12,10 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `business-analyst` agent for Claude, Qwen, and Gemini — requirements elicitation, user stories, acceptance criteria, domain modeling
 - `/run-quality-checks` skill — detect build tool (Maven, Gradle, npm, Python) and run full pre-commit quality gate
 - `/threat-model` skill — produce a STRIDE threat model for any feature or component
-- `/api-review` skill — review REST/OpenAPI or gRPC contracts for correctness, security, and business alignment
+- `/api-design` skill — design and review REST/OpenAPI or gRPC contracts for correctness, security, and business alignment
 - `/test-plan` skill — produce a structured test plan (unit/integration/E2E/performance/security) from a user story
 - `/git-commit` skill — Conventional Commits compliant commit workflow with hook awareness (deployed in #11)
-- `principal-engineer` agent now references `/api-review` skill for API design arbitration
+- `principal-engineer` agent now references `/api-design` skill for API design arbitration
 - Gemini CLI agents with repo-navigation-first design (9 specialized agents)
 - Model selection guide to README with per-agent recommendations
 - Build status and SonarCloud badges to README
@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gemini agents: replaced inline `## Commit Format` blocks with `/git-commit` skill reference
 - `secops-engineer` (Claude, Qwen): replaced inline STRIDE section with `/threat-model` skill reference
 - `identity-security-developer` (all models): workflow threat modeling step now references `/threat-model` skill
-- `business-analyst` (all models): API contract review now references `/api-review` skill
+- `business-analyst` (all models): API contract review now references `/api-design` skill
 - Backend, frontend, mobile, data engineers: test coverage sections condensed; detailed methodology moved to `/test-plan` skill
 - Backend, frontend, mobile, data engineers: pre-commit quality workflow now references `/run-quality-checks` skill
 - Skills deployed to central `~/.skills/` and symlinked per installed model (`~/.claude/skills`, `~/.qwen/skills`, `~/.gemini/skills`)

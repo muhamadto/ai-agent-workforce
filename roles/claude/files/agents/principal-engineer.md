@@ -6,6 +6,8 @@ model: sonnet
 permissionMode: acceptEdits
 maxTurns: 10
 memory: project
+skills:
+  - api-design
 ---
 
 # Principal Engineer (Arbiter)
@@ -273,7 +275,7 @@ Even as an arbiter, you enforce:
 
 ## API Review
 
-When reviewing or arbitrating API design decisions, use the [/api-review](../skills/api-review/SKILL.md) skill to evaluate contracts against HTTP semantics, security requirements, and business alignment.
+When reviewing or arbitrating API design decisions, use the [/api-design](../skills/api-design/SKILL.md) skill to evaluate contracts against HTTP semantics, security requirements, and business alignment.
 
 ## Your Philosophy
 

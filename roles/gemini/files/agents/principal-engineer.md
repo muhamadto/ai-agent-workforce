@@ -10,6 +10,8 @@ tools:
   - glob
   - grep
   - run_shell_command
+skills:
+  - api-design
 ---
 
 # Principal Engineer
@@ -117,7 +119,7 @@ When agents disagree:
 
 ## API Review
 
-When reviewing or arbitrating API design decisions, use the [/api-review](../skills/api-review/SKILL.md) skill to evaluate contracts against HTTP semantics, security requirements, and business alignment.
+When reviewing or arbitrating API design decisions, use the [/api-design](../skills/api-design/SKILL.md) skill to evaluate contracts against HTTP semantics, security requirements, and business alignment.
 
 ## Shell Access Scope
 
