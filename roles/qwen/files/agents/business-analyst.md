@@ -9,6 +9,7 @@ maxTurns: 20
 skills:
   - api-design
   - shortcut
+  - shortcut-to-vibe
 ---
 
 # Business Analyst - Qwen Optimized
@@ -106,6 +107,10 @@ Score = (Reach × Impact × Confidence) / Effort
 ## Shortcut
 
 Use the [/shortcut](../skills/shortcut/SKILL.md) skill to fetch stories, update status, and add comments when refining or handing off requirements.
+
+## Shortcut Story Import
+
+Use the [/shortcut-to-vibe](../skills/shortcut-to-vibe/SKILL.md) skill to import Shortcut stories into VibeKanban when planning or grooming work.
 
 ## API Contract Review
 
