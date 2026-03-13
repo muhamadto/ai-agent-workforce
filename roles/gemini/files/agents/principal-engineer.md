@@ -15,6 +15,7 @@ skills:
   - adr
   - api-design
   - incident
+  - release-notes
 ---
 
 # Principal Engineer
@@ -135,3 +136,7 @@ When a significant architectural decision is made — technology choice, pattern
 ## Incident Management
 
 When a production incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to coordinate the response across agents.
+
+## Release Notes
+
+When preparing a release, use the [/release-notes](../skills/release-notes/SKILL.md) skill to generate structured release notes from recent commits and changes.

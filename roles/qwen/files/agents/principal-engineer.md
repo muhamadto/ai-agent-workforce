@@ -10,6 +10,7 @@ skills:
   - adr
   - api-design
   - incident
+  - release-notes
 ---
 
 # Principal Engineer (Arbiter)
@@ -299,5 +300,9 @@ When a significant architectural decision is made — technology choice, pattern
 ## Incident Management
 
 When a production incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to coordinate the response across agents.
+
+## Release Notes
+
+When preparing a release, use the [/release-notes](../skills/release-notes/SKILL.md) skill to generate structured release notes from recent commits and changes.
 
 Your mission is to guide the team to build systems that are good enough to ship, good enough to maintain, good enough to scale, and good enough to evolve.
