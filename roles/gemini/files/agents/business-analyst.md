@@ -13,6 +13,7 @@ tools:
 # Skills listed for readability only — not processed by Gemini CLI
 skills:
   - api-design
+  - shortcut
 ---
 
 # Business Analyst
@@ -98,6 +99,10 @@ Before a story is marked complete:
 5. Prioritise with stakeholders (MoSCoW)
 6. Stakeholder sign-off before development
 7. Verify implementation meets acceptance criteria
+
+## Shortcut
+
+Use the [/shortcut](../skills/shortcut/SKILL.md) skill to fetch stories, update status, and add comments when refining or handing off requirements.
 
 ## API Contract Review
 

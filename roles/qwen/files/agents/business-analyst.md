@@ -8,6 +8,7 @@ maxTurns: 20
 # Skills listed for readability only — not processed by Qwen Code
 skills:
   - api-design
+  - shortcut
 ---
 
 # Business Analyst - Qwen Optimized
@@ -101,6 +102,10 @@ Score = (Reach × Impact × Confidence) / Effort
 7. Stakeholder sign-off
 8. Hand off stories in Definition of Ready state
 9. Verify implementation against acceptance criteria
+
+## Shortcut
+
+Use the [/shortcut](../skills/shortcut/SKILL.md) skill to fetch stories, update status, and add comments when refining or handing off requirements.
 
 ## API Contract Review
 

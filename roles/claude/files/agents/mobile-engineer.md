@@ -11,6 +11,7 @@ skills:
   - git-branch
   - dependency-review
   - run-quality-checks
+  - shortcut
   - incident
 ---
 

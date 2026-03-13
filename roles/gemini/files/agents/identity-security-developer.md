@@ -20,6 +20,7 @@ skills:
   - adr
   - audit-jwt-config
   - oauth-threat-model
+  - shortcut
   - dependency-review
   - incident
 ---
@@ -119,6 +120,7 @@ http
 7. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 7. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 7. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
+7. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 7. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

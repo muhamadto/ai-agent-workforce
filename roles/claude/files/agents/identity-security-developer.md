@@ -13,6 +13,7 @@ skills:
   - oauth-threat-model
   - dependency-review
   - run-quality-checks
+  - shortcut
   - git-branch
   - git-commit
   - incident

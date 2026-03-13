@@ -9,6 +9,7 @@ memory: project
 skills:
   - dependency-review
   - run-quality-checks
+  - shortcut
   - git-branch
   - git-commit
   - incident

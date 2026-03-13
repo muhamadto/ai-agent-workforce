@@ -14,6 +14,7 @@ tools:
 skills:
   - adr
   - api-design
+  - shortcut
   - incident
   - release-notes
 ---
@@ -140,3 +141,7 @@ When a production incident occurs, use the [/incident](../skills/incident/SKILL.
 ## Release Notes
 
 When preparing a release, use the [/release-notes](../skills/release-notes/SKILL.md) skill to generate structured release notes from recent commits and changes.
+
+## Shortcut
+
+Use the [/shortcut](../skills/shortcut/SKILL.md) skill to fetch story context, update status, and add comments on Shortcut stories when planning or arbitrating work.

@@ -10,6 +10,7 @@ skills:
   - git-branch
   - git-commit
   - run-quality-checks
+  - shortcut
 ---
 
 # Quality Engineering (QE) Engineer

@@ -8,6 +8,7 @@ maxTurns: 20
 memory: project
 skills:
   - api-design
+  - shortcut
 ---
 # Business Analyst
 

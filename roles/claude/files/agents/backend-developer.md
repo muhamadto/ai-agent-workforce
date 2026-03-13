@@ -15,6 +15,7 @@ skills:
   - db-migration-review
   - dependency-review
   - run-quality-checks
+  - shortcut
   - incident
   - release-notes
 ---

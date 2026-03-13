@@ -13,6 +13,7 @@ skills:
   - db-migration-review
   - dependency-review
   - run-quality-checks
+  - shortcut
 ---
 
 # Data Engineer Specialist
