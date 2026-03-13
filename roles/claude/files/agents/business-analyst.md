@@ -112,7 +112,7 @@ Benefits:
 
 ### API Contract Review
 
-Use the [/api-design](../skills/api-design/SKILL.md) skill to review API contracts for business alignment — verify field names match the domain ubiquitous language, response payloads match consumer use cases, and breaking changes are flagged.
+Review API contracts for business alignment — verify field names match the domain ubiquitous language, response payloads match consumer use cases, and breaking changes are flagged.
 
 ### Gap Analysis
 

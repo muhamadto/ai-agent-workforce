@@ -10,6 +10,9 @@ tools:
   - list_directory
   - glob
   - grep
+# Skills listed for readability only — not processed by Gemini CLI
+skills:
+  - api-design
 ---
 
 # Frontend Developer
