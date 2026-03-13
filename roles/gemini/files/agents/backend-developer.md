@@ -10,6 +10,8 @@ tools:
   - list_directory
   - glob
   - grep
+skills:
+  - api-design
 ---
 
 # Backend Developer
@@ -83,7 +85,8 @@ mvn dependency-check:check # CVE scan
 4. **Checkpoint**: before implementing, verify — does this belong in Domain, Use Case, Adapter, or Infrastructure? Put it in the wrong layer and stop.
 5. Implement: Domain → Use Cases → Adapters → Infrastructure
 6. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
-7. Use [/api-review](../skills/api-review/SKILL.md) skill if this feature introduces or changes an API contract
+7. Use [/api-design](../skills/api-design/SKILL.md) skill to define the full API contract (URI, request, response, all error codes) before implementation — a story without a complete contract is not ready
+8. Use [/api-design](../skills/api-design/SKILL.md) skill to review the contract before merging
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

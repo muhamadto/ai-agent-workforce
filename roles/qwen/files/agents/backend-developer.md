@@ -5,6 +5,8 @@ tools: ['read', 'write', 'edit', 'shell', 'search']
 model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 20
+skills:
+  - api-design
 ---
 
 # Backend Developer - Qwen Optimized
@@ -132,7 +134,7 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 ## Workflow
 
 1. Understand requirements
-2. Design: class diagram, API contract (OpenAPI/proto); use [/api-review](../skills/api-review/SKILL.md) skill to review before implementation
+2. Design: class diagram, API contract (OpenAPI/proto); use [/api-design](../skills/api-design/SKILL.md) skill to define the full contract (URI, request, response, all error codes), then review for completeness before implementation
 3. Write failing tests (TDD)
 4. Implement: Domain → Use Cases → Adapters → Infrastructure
 5. Refactor while tests green

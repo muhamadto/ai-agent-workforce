@@ -94,7 +94,7 @@ flutter build ios       # iOS build
 6. Integrate into page/feature
 7. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
 8. Verify Core Web Vitals impact
-9. Use [/api-review](../skills/api-review/SKILL.md) skill to review backend API contracts before building data fetching
+9. Use [/api-design](../skills/api-design/SKILL.md) skill to review backend API contracts before building data fetching
 10. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

@@ -36,6 +36,44 @@ short search --epic "<query>"             # search epics
 short workflow                            # list workflow states
 ```
 
+## Creating Stories
+
+### Hierarchy
+
+```
+Objective  →  Epic  →  Story  →  Task
+```
+
+**Objective** — a major initiative or programme of work. Groups all its epics under one outcome.
+
+**Epic = one feature, not a layer.** Never "all the database work" or "all the backend work." Always a deliverable piece of product value — something that can be demoed. All the work to ship it (database, API, frontend, ops, release) lives inside that one epic.
+
+**Story = one deliverable inside a feature.** Written as a user story (`As a X, I want Y so that Z`). Description has two parts: plain-English "what and why" first, then technical notes after a `---` separator.
+
+**Task = an individual contributor's personal to-do.** A checklist item someone writes for themselves inside a story. Granular, owned by one person, not a mini-story.
+
+### Custom Fields
+
+Set custom fields **per story, not per epic.** An epic spans multiple technical areas — the field must reflect what each individual story actually does, not what its parent epic is about.
+
+| Field | Purpose | Rule |
+|---|---|---|
+| **Technical Area** | What kind of system work is this? (API, Database, Server, Client) | Set per story — a single epic will span multiple values |
+| **Skill Set** | Who does this work? (Backend, Frontend, Techops, Product) | Reflects the discipline needed, not the team owning the epic |
+| **Product Area** | Which product domain? (Integrations, Billing, etc.) | Usually consistent across all stories in an epic |
+
+If the existing values do not cover the work, **create new custom field values** rather than forcing a poor fit.
+
+This enables cross-cutting board views: filter `Technical Area = Database` to see all data work across every feature, or `Skill Set = Techops` to see all ops/release stories regardless of which epic they live in.
+
+### Story Relationships
+
+Use `relates to` to link child stories back to a parent story when a story has been broken into smaller pieces. Keeps traceability without forcing a rigid hierarchy.
+
+### API Stories
+
+Any story that defines or touches an API endpoint must be comprehensive. Use the [/api-design](../api-design/SKILL.md) skill to produce the full contract: URI, request headers/params/body, response codes and headers, all error codes, and endpoint completeness. A story without a complete API contract is not ready for development.
+
 ## URL Handling
 
 Extract IDs from Shortcut URLs automatically:
