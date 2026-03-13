@@ -10,6 +10,7 @@ skills:
   - adr
   - api-design
   - shortcut
+  - github-issue-to-vibe
   - incident
   - release-notes
 ---
