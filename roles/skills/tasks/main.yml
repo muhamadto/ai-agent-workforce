@@ -40,11 +40,18 @@
   changed_when: false
   when: setup_state == "present"
 
+- name: Check if antigravity is installed
+  command: which antigravity
+  register: skills_antigravity_check
+  failed_when: false
+  changed_when: false
+  when: setup_state == "present"
+
 # ── Central skills directory ───────────────────────────────────────────────────
 
 - name: Ensure central ~/.skills directory structure exists
   file:
-    path: "{{ ansible_user_dir }}/.skills/{{ item }}"
+    path: "{{ ansible_facts['user_dir'] }}/.skills/{{ item }}"
     state: directory
     mode: '0700'
   loop:
@@ -70,14 +77,14 @@
 - name: Deploy Shortcut SKILL.md to central skills
   copy:
     src: "shortcut/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/shortcut/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/shortcut/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
 - name: Download Shortcut OpenAPI spec to central skills
   get_url:
     url: "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json"
-    dest: "{{ ansible_user_dir }}/.skills/shortcut/reference/shortcut.openapi.json"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/shortcut/reference/shortcut.openapi.json"
     mode: '0644'
     timeout: 30
   when: setup_state == "present"
@@ -87,7 +94,7 @@
 - name: Deploy Shortcut-to-VibeKanban SKILL.md to central skills
   copy:
     src: "shortcut-to-vibe/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/shortcut-to-vibe/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/shortcut-to-vibe/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -96,7 +103,7 @@
 - name: Deploy Git Commit SKILL.md to central skills
   copy:
     src: "git-commit/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/git-commit/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/git-commit/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -105,7 +112,7 @@
 - name: Deploy Run Quality Checks SKILL.md to central skills
   copy:
     src: "run-quality-checks/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/run-quality-checks/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/run-quality-checks/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -114,7 +121,7 @@
 - name: Deploy Threat Model SKILL.md to central skills
   copy:
     src: "threat-model/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/threat-model/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/threat-model/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -123,7 +130,7 @@
 - name: Deploy API Review SKILL.md to central skills
   copy:
     src: "api-review/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/api-review/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/api-review/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -132,7 +139,7 @@
 - name: Deploy Test Plan SKILL.md to central skills
   copy:
     src: "test-plan/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/test-plan/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/test-plan/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -141,7 +148,7 @@
 - name: Deploy Git Branch SKILL.md to central skills
   copy:
     src: "git-branch/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/git-branch/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/git-branch/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -150,7 +157,7 @@
 - name: Deploy ADR SKILL.md to central skills
   copy:
     src: "adr/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/adr/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/adr/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -159,7 +166,7 @@
 - name: Deploy Release Notes SKILL.md to central skills
   copy:
     src: "release-notes/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/release-notes/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/release-notes/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -168,7 +175,7 @@
 - name: Deploy DB Migration Review SKILL.md to central skills
   copy:
     src: "db-migration-review/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/db-migration-review/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/db-migration-review/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -177,7 +184,7 @@
 - name: Deploy Incident SKILL.md to central skills
   copy:
     src: "incident/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/incident/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/incident/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -186,7 +193,7 @@
 - name: Deploy Dependency Review SKILL.md to central skills
   copy:
     src: "dependency-review/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/dependency-review/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/dependency-review/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -195,7 +202,7 @@
 - name: Deploy Spike SKILL.md to central skills
   copy:
     src: "spike/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/spike/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/spike/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 
@@ -204,36 +211,100 @@
 - name: Deploy GitHub-Issue-to-VibeKanban SKILL.md to central skills
   copy:
     src: "github-issue-to-vibe/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/github-issue-to-vibe/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/github-issue-to-vibe/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
+
+# ── GitHub skill sources ──────────────────────────────────────────────────────
+
+- name: Check if git is available
+  command: which git
+  register: skills_git_check
+  failed_when: false
+  changed_when: false
+  when:
+    - setup_state == "present"
+    - github_skill_sources is defined
+    - github_skill_sources | length > 0
+
+- name: Ensure GitHub skills cache directory exists
+  file:
+    path: "{{ ansible_facts['user_dir'] }}/.skills/.cache/repos"
+    state: directory
+    mode: '0700'
+  when:
+    - setup_state == "present"
+    - github_skill_sources is defined
+    - github_skill_sources | length > 0
+    - skills_git_check.rc == 0
+
+- name: Clone or update GitHub skill repos
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/.cache/repos/{{ item.repo | regex_replace('.*/', '') }}"
+    version: "{{ item.branch | default('main') }}"
+    update: true
+    force: false
+  loop: "{{ github_skill_sources | selectattr('enabled', 'equalto', true) | list }}"
+  when:
+    - setup_state == "present"
+    - github_skill_sources is defined
+    - skills_git_check.rc == 0
+
+- name: Find skill directories in GitHub repos
+  find:
+    paths: "{{ ansible_facts['user_dir'] }}/.skills/.cache/repos/{{ item.repo | regex_replace('.*/', '') }}/{{ item.skills_path | default('skills') }}"
+    file_type: directory
+    recurse: false
+  loop: "{{ github_skill_sources | selectattr('enabled', 'equalto', true) | list }}"
+  register: skills_github_dirs
+  when:
+    - setup_state == "present"
+    - github_skill_sources is defined
+    - skills_git_check.rc == 0
+
+- name: Sync GitHub skills into ~/.skills/
+  synchronize:
+    src: "{{ skill_dir.1.path }}/"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/{{ skill_dir.1.path | basename }}/"
+    delete: false
+    recursive: true
+  loop: "{{ skills_github_dirs.results | default([]) | selectattr('files', 'defined') | subelements('files') }}"
+  loop_control:
+    loop_var: skill_dir
+  when:
+    - setup_state == "present"
+    - github_skill_sources is defined
+    - skills_git_check.rc == 0
+    - (skill_dir.0.item.selected_skills is not defined) or (not skill_dir.0.item.selected_skills) or ((skill_dir.1.path | basename) in skill_dir.0.item.selected_skills)
 
 # ── Per-model symlinks ─────────────────────────────────────────────────────────
 
 - name: Stat existing skills paths for all models
   stat:
-    path: "{{ ansible_user_dir }}/{{ item }}/skills"
+    path: "{{ ansible_facts['user_dir'] }}/{{ item }}/skills"
   register: skills_stat
   loop:
     - .claude
     - .qwen
     - .gemini
+    - .gemini/antigravity
   when: setup_state == "present"
 
 - name: Remove skills path if it is not a symlink pointing to ~/.skills
   file:
-    path: "{{ ansible_user_dir }}/{{ item.item }}/skills"
+    path: "{{ ansible_facts['user_dir'] }}/{{ item.item }}/skills"
     state: absent
   loop: "{{ skills_stat.results | default([]) }}"
   when:
     - setup_state == "present"
     - item.stat is defined
     - item.stat.exists
-    - not (item.stat.islnk | default(false) and item.stat.lnk_source | default('') == ansible_user_dir + '/.skills')
+    - not (item.stat.islnk | default(false) and item.stat.lnk_source | default('') == ansible_facts['user_dir'] + '/.skills')
 
 - name: Ensure ~/.claude exists before creating skills symlink
   file:
-    path: "{{ ansible_user_dir }}/.claude"
+    path: "{{ ansible_facts['user_dir'] }}/.claude"
     state: directory
     mode: '0700'
   when:
@@ -242,8 +313,8 @@
 
 - name: Create skills symlink for Claude
   file:
-    src: "{{ ansible_user_dir }}/.skills"
-    dest: "{{ ansible_user_dir }}/.claude/skills"
+    src: "{{ ansible_facts['user_dir'] }}/.skills"
+    dest: "{{ ansible_facts['user_dir'] }}/.claude/skills"
     state: link
   when:
     - setup_state == "present"
@@ -251,7 +322,7 @@
 
 - name: Ensure ~/.qwen exists before creating skills symlink
   file:
-    path: "{{ ansible_user_dir }}/.qwen"
+    path: "{{ ansible_facts['user_dir'] }}/.qwen"
     state: directory
     mode: '0700'
   when:
@@ -260,8 +331,8 @@
 
 - name: Create skills symlink for Qwen
   file:
-    src: "{{ ansible_user_dir }}/.skills"
-    dest: "{{ ansible_user_dir }}/.qwen/skills"
+    src: "{{ ansible_facts['user_dir'] }}/.skills"
+    dest: "{{ ansible_facts['user_dir'] }}/.qwen/skills"
     state: link
   when:
     - setup_state == "present"
@@ -269,7 +340,7 @@
 
 - name: Ensure ~/.gemini exists before creating skills symlink
   file:
-    path: "{{ ansible_user_dir }}/.gemini"
+    path: "{{ ansible_facts['user_dir'] }}/.gemini"
     state: directory
     mode: '0700'
   when:
@@ -278,12 +349,30 @@
 
 - name: Create skills symlink for Gemini
   file:
-    src: "{{ ansible_user_dir }}/.skills"
-    dest: "{{ ansible_user_dir }}/.gemini/skills"
+    src: "{{ ansible_facts['user_dir'] }}/.skills"
+    dest: "{{ ansible_facts['user_dir'] }}/.gemini/skills"
     state: link
   when:
     - setup_state == "present"
     - skills_gemini_check.rc == 0
+
+- name: Ensure ~/.gemini/antigravity exists before creating skills symlink
+  file:
+    path: "{{ ansible_facts['user_dir'] }}/.gemini/antigravity"
+    state: directory
+    mode: '0700'
+  when:
+    - setup_state == "present"
+    - skills_antigravity_check.rc == 0
+
+- name: Create skills symlink for Antigravity
+  file:
+    src: "{{ ansible_facts['user_dir'] }}/.skills"
+    dest: "{{ ansible_facts['user_dir'] }}/.gemini/antigravity/skills"
+    state: link
+  when:
+    - setup_state == "present"
+    - skills_antigravity_check.rc == 0
 
 - name: Display skills installation summary
   debug:
@@ -340,6 +429,7 @@
         ~/.claude/skills  →  ~/.skills  (claude {{ 'installed' if skills_claude_check.rc == 0 else 'not found — skipped' }})
         ~/.qwen/skills    →  ~/.skills  (qwen {{ 'installed' if skills_qwen_check.rc == 0 else 'not found — skipped' }})
         ~/.gemini/skills  →  ~/.skills  (gemini {{ 'installed' if skills_gemini_check.rc == 0 else 'not found — skipped' }})
+        ~/.gemini/antigravity/skills → ~/.skills (antigravity {{ 'installed' if skills_antigravity_check.rc == 0 else 'not found — skipped' }})
 
       Requires: short CLI installed and authenticated (short install)
       Note: OpenAPI spec is bundled — update manually from developer.shortcut.com when the API changes
@@ -349,16 +439,23 @@
 
 - name: Remove skills symlinks from model directories
   file:
-    path: "{{ ansible_user_dir }}/{{ item }}/skills"
+    path: "{{ ansible_facts['user_dir'] }}/{{ item }}/skills"
     state: absent
   loop:
     - .claude
     - .qwen
     - .gemini
+    - .gemini/antigravity
+  when: setup_state == "absent"
+
+- name: Remove GitHub skills cache directory
+  file:
+    path: "{{ ansible_facts['user_dir'] }}/.skills/.cache"
+    state: absent
   when: setup_state == "absent"
 
 - name: Remove central skills directory
   file:
-    path: "{{ ansible_user_dir }}/.skills"
+    path: "{{ ansible_facts['user_dir'] }}/.skills"
     state: absent
   when: setup_state == "absent"
