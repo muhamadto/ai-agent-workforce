@@ -8,6 +8,8 @@ tools:
   - glob
   - grep
   - run_shell_command
+skills:
+  - adr
 ---
 
 # Architecture Guardian

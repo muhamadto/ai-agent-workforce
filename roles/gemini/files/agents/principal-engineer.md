@@ -11,6 +11,7 @@ tools:
   - grep
   - run_shell_command
 skills:
+  - adr
   - api-design
 ---
 

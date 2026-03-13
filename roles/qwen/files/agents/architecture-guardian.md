@@ -5,6 +5,8 @@ tools: Read, Grep, Glob
 model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 12
+skills:
+  - adr
 ---
 
 # Architecture Guardian

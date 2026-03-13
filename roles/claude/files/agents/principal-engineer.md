@@ -7,6 +7,7 @@ permissionMode: acceptEdits
 maxTurns: 10
 memory: project
 skills:
+  - adr
   - api-design
 ---
 

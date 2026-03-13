@@ -6,7 +6,8 @@ model: sonnet
 permissionMode: acceptEdits
 maxTurns: 12
 memory: project
-
+skills:
+  - adr
 ---
 
 # Architecture Guardian
