@@ -12,6 +12,7 @@ tools:
   - grep
 # Skills listed for readability only — not processed by Gemini CLI
 skills:
+  - git-commit
   - git-branch
 ---
 

@@ -13,6 +13,7 @@ tools:
 # Skills listed for readability only — not processed by Gemini CLI
 skills:
   - api-design
+  - git-commit
   - git-branch
   - dependency-review
 ---

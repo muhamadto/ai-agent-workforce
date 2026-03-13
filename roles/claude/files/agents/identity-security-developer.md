@@ -13,6 +13,7 @@ skills:
   - oauth-threat-model
   - dependency-review
   - git-branch
+  - git-commit
 ---
 
 # Identity & Authentication Security Developer

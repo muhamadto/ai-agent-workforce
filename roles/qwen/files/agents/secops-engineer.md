@@ -7,6 +7,7 @@ approvalMode: yolo
 maxTurns: 15
 # Skills listed for readability only — not processed by Qwen Code
 skills:
+  - git-commit
   - git-branch
   - dependency-review
 ---
