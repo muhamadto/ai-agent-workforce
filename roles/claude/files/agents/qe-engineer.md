@@ -8,6 +8,7 @@ maxTurns: 20
 memory: project
 skills:
   - git-branch
+  - git-commit
 ---
 
 # Quality Engineering (QE) Engineer

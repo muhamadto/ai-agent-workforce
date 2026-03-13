@@ -11,6 +11,7 @@ skills:
   - db-migration-review
   - dependency-review
   - git-branch
+  - git-commit
 ---
 
 # Infrastructure Engineer

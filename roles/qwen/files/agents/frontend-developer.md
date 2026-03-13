@@ -8,6 +8,7 @@ maxTurns: 20
 # Skills listed for readability only — not processed by Qwen Code
 skills:
   - api-design
+  - git-commit
   - git-branch
   - dependency-review
 ---

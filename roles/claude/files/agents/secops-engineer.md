@@ -9,6 +9,7 @@ memory: project
 skills:
   - dependency-review
   - git-branch
+  - git-commit
 ---
 
 # SecOps / Application Security Engineer
