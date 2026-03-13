@@ -15,6 +15,7 @@ skills:
   - git-commit
   - git-branch
   - db-migration-review
+  - shortcut
   - dependency-review
   - run-quality-checks
 ---
@@ -111,6 +112,7 @@ spark-submit job.py         # submit Spark job
 8. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
 8. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 8. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
+8. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

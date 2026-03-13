@@ -14,6 +14,7 @@ tools:
 skills:
   - git-commit
   - git-branch
+  - shortcut
 ---
 
 # Quality Engineering (QE) Engineer
@@ -107,6 +108,7 @@ All must pass before merge:
 7. Run performance tests for critical endpoints
 8. Use the [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill locally before committing
 9. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
+9. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 9. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Banned Practices

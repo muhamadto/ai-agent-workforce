@@ -19,6 +19,7 @@ skills:
   - adr
   - db-migration-review
   - dependency-review
+  - shortcut
   - incident
   - release-notes
 ---
@@ -101,6 +102,7 @@ mvn dependency-check:check # CVE scan
 8. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 8. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 8. When preparing a release, use the [/release-notes](../skills/release-notes/SKILL.md) skill to generate release notes.
+8. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

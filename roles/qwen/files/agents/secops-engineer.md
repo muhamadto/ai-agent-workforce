@@ -9,6 +9,7 @@ maxTurns: 15
 skills:
   - git-commit
   - git-branch
+  - shortcut
   - dependency-review
   - run-quality-checks
   - incident
@@ -276,6 +277,7 @@ When invoked, follow this workflow:
 8. **Manual Review**: Code review for security issues
 9. **Penetration Testing**: Manual testing for complex vulnerabilities
 10. **Documentation**: Security architecture, threat models, security controls
+11. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 
 ## Code Review Checklist (Security Focus)
 

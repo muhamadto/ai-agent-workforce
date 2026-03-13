@@ -9,6 +9,7 @@ maxTurns: 20
 skills:
   - git-commit
   - git-branch
+  - shortcut
 ---
 
 # Quality Engineering (QE) Engineer - Qwen Optimized
@@ -95,6 +96,7 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 6. Run performance tests on critical endpoints
 7. Update CI/CD quality gates; use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill locally
 8. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
+8. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Code Review Checklist

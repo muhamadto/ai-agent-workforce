@@ -14,6 +14,7 @@ tools:
 skills:
   - git-commit
   - git-branch
+  - shortcut
   - dependency-review
   - run-quality-checks
   - incident
@@ -129,6 +130,7 @@ Never log: passwords, tokens, full credit card numbers, SSNs, session IDs
 9. For any PR adding or updating dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 10. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 11. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
+12. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 
 ## Conventional Commits (MANDATORY)
 

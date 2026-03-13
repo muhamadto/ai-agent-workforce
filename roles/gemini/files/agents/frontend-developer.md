@@ -15,6 +15,7 @@ skills:
   - api-design
   - git-commit
   - git-branch
+  - shortcut
   - dependency-review
   - incident
 ---
@@ -105,6 +106,7 @@ flutter build ios       # iOS build
 10. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 10. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 10. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
+10. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 10. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

@@ -11,6 +11,7 @@ skills:
   - git-branch
   - review
   - api-design
+  - shortcut
   - dependency-review
   - run-quality-checks
   - incident
