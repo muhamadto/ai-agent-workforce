@@ -10,8 +10,6 @@ tools:
   - list_directory
   - glob
   - grep
-skills:
-  - api-design
 ---
 
 # Identity & Security Developer
@@ -120,3 +118,7 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 - `permitAll()` on sensitive endpoints
 - Rolling your own crypto
 - Logging tokens, passwords, or PII
+
+## Documenting Decisions
+
+When your security work establishes a significant pattern — auth flow selection, token strategy, zero-trust boundary, or compliance decision — use the [/adr](../skills/adr/SKILL.md) skill to document it. Security architecture decisions that affect multiple services or introduce a new pattern warrant an ADR.

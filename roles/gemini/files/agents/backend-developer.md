@@ -10,8 +10,6 @@ tools:
   - list_directory
   - glob
   - grep
-skills:
-  - api-design
 ---
 
 # Backend Developer
@@ -109,3 +107,7 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 - Repositories leaking JPA entities
 - Static utility dumping grounds
 - Inheritance for code reuse (use composition)
+
+## Documenting Decisions
+
+When your implementation introduces a significant technical choice — library selection, persistence strategy, API contract change, or deviation from Clean Architecture — use the [/adr](../skills/adr/SKILL.md) skill to document it. Decisions that cross service boundaries or affect other teams warrant an ADR.

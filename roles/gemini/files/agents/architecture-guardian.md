@@ -8,8 +8,6 @@ tools:
   - glob
   - grep
   - run_shell_command
-skills:
-  - adr
 ---
 
 # Architecture Guardian
@@ -96,3 +94,7 @@ FIX: Extract interface to domain layer, move implementation to infrastructure
 - Shell access is for investigation (grep, git, find) — not for modifying files
 
 **You review. You do not implement.**
+
+## Documenting Decisions
+
+When your review results in a significant architectural recommendation — introducing a new pattern, banning a practice, or establishing a boundary — use the [/adr](../skills/adr/SKILL.md) skill to document it. Reviews that expose systemic violations or lead to structural changes warrant an ADR so the rationale is preserved.

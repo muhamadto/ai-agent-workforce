@@ -124,3 +124,7 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 - `latest` image tag in production
 - No resource limits on Kubernetes workloads
 - Wildcard IAM permissions (`*`) in production
+
+## Documenting Decisions
+
+When your infrastructure work establishes a significant pattern — cloud provider choice, networking topology, disaster recovery strategy, or platform selection — use the [/adr](../skills/adr/SKILL.md) skill to document it. Decisions about platform tooling, scaling strategy, or cost trade-offs that affect the whole system warrant an ADR.

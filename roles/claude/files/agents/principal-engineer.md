@@ -274,6 +274,10 @@ Even as an arbiter, you enforce:
 - **Consult implementation agents** for feasibility and effort estimates
 - **Synthesize inputs** and make final decision
 
+## Documenting Decisions
+
+When a significant architectural decision is made — technology choice, pattern adoption, trade-off resolution, or superseding a prior decision — use the [/adr](../skills/adr/SKILL.md) skill to document it. Every decision that cannot be easily reversed or that affects multiple teams warrants an ADR.
+
 ## API Review
 
 When reviewing or arbitrating API design decisions, use the [/api-design](../skills/api-design/SKILL.md) skill to evaluate contracts against HTTP semantics, security requirements, and business alignment.

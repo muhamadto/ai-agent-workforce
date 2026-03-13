@@ -1,42 +1,66 @@
 # Gemini CLI Agent Role
 
-**Status**: Placeholder - Not yet implemented
+Deploys and manages Gemini CLI agent teams with auto-edit configuration.
 
-Planned support for Google's Gemini CLI with agent configurations.
+## What This Role Does
 
-## Planned Features
+- Creates `~/.gemini` directory structure
+- Deploys Gemini CLI settings with auto-edit mode enabled
+- Installs specialized agent personas
+- Skills are provided via symlink to the shared `~/.skills/` directory
 
-- Gemini CLI installation and configuration
-- Agent persona definitions
-- Integration with Google AI Studio
-- Model selection (gemini-2.0-flash, gemini-2.0-pro, etc.)
-- Skills and tool integration
+## Agent Personas
 
-## Future Structure
+All agents use gemini-2.5-pro model:
+
+- **architecture-guardian.md** - Clean Architecture enforcer
+- **backend-developer.md** - Java 24+, Spring Boot 4.x expert
+- **business-analyst.md** - Requirements, user stories, domain modeling
+- **data-engineer.md** - ETL/ELT, dbt, Spark, data quality
+- **frontend-developer.md** - React, Next.js, Flutter expert
+- **identity-security-developer.md** - OAuth2, OIDC, zero-trust specialist
+- **infrastructure-engineer.md** - AWS, GCP, Kubernetes, Terraform
+- **mobile-engineer.md** - iOS, Android, Flutter, React Native
+- **principal-engineer.md** - Strategic arbiter, cross-system view
+- **qe-engineer.md** - Test strategy, automation, BDD, performance
+- **secops-engineer.md** - OWASP, security tooling, paranoid by design
+
+## Structure
 
 ```
 ~/.gemini/
 ├── settings.json          # Gemini CLI configuration
-└── agents/                # Agent definitions
-    ├── backend-developer.md
-    ├── frontend-developer.md
-    └── ...
+├── agents/                # Agent definitions
+│   ├── architecture-guardian.md
+│   ├── backend-developer.md
+│   └── ...
+└── skills -> ~/.skills/   # Symlink to shared skills
 ```
 
-## Contributing
+## Usage
 
-If you'd like to help implement Gemini support, please:
-1. Check the [GitHub Issues](https://github.com/yourusername/ai-agent-workforce/issues)
-2. Open a PR with your implementation
-3. Follow the patterns established in Claude and Qwen roles
+### Deploy Gemini Agents
 
-## Requirements (Planned)
+```bash
+ansible-playbook playbook.yml -e setup_state=present --tags gemini
+```
+
+### Remove Gemini Agents
+
+```bash
+ansible-playbook playbook.yml -e setup_state=absent --tags gemini
+```
+
+### Invoke Agents in Gemini CLI
+
+Use `@agent-name` in Gemini CLI or configure as the default agent.
+
+## Requirements
 
 - macOS
-- Gemini CLI (when available)
-- Google AI Studio API key
+- Gemini CLI installed
+- Google AI Studio API key or OAuth configured
 
-## Variables (Planned)
+## Variables
 
-- `gemini_default_model` - Default Gemini model
-- `gemini_api_key` - API key configuration
+None currently.
