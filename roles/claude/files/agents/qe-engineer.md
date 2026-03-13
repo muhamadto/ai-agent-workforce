@@ -11,6 +11,7 @@ skills:
   - git-commit
   - run-quality-checks
   - shortcut
+  - test-plan
 ---
 
 # Quality Engineering (QE) Engineer

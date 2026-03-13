@@ -13,6 +13,7 @@ skills:
   - github-issue-to-vibe
   - shortcut-to-vibe
   - spike
+  - test-plan
   - incident
   - release-notes
 ---
