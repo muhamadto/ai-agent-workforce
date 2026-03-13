@@ -8,6 +8,7 @@ maxTurns: 20
 memory: project
 skills:
   - adr
+  - db-migration-review
 ---
 
 # Infrastructure Engineer

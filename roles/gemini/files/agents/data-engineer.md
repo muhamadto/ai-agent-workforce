@@ -10,6 +10,10 @@ tools:
   - list_directory
   - glob
   - grep
+# Skills listed for readability only — not processed by Gemini CLI
+skills:
+  - git-commit
+  - db-migration-review
 ---
 
 # Data Engineer
@@ -101,6 +105,7 @@ spark-submit job.py         # submit Spark job
 5. Implement incrementally (never full refresh in production without review)
 6. Validate data quality before promoting to Gold layer
 7. Document lineage and business logic in model descriptions
+8. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

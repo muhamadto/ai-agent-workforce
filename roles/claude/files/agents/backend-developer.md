@@ -11,6 +11,7 @@ skills:
   - review-pr
   - api-design
   - adr
+  - db-migration-review
 ---
 
 # Backend Developer Specialist

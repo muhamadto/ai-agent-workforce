@@ -16,6 +16,7 @@ skills:
   - run-quality-checks
   - api-design
   - adr
+  - db-migration-review
 ---
 
 # Backend Developer
@@ -91,6 +92,7 @@ mvn dependency-check:check # CVE scan
 6. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
 7. Use [/api-design](../skills/api-design/SKILL.md) skill to define the full API contract (URI, request, response, all error codes) before implementation — a story without a complete contract is not ready
 8. Use [/api-design](../skills/api-design/SKILL.md) skill to review the contract before merging
+8. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

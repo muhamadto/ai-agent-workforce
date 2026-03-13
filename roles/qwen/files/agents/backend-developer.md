@@ -11,6 +11,7 @@ skills:
   - run-quality-checks
   - api-design
   - adr
+  - db-migration-review
 ---
 
 # Backend Developer - Qwen Optimized
@@ -143,6 +144,7 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 4. Implement: Domain → Use Cases → Adapters → Infrastructure
 5. Refactor while tests green
 6. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill before commit
+7. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
 7. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Code Review Checklist

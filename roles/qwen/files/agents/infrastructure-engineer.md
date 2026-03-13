@@ -9,6 +9,7 @@ maxTurns: 20
 skills:
   - git-commit
   - adr
+  - db-migration-review
 ---
 
 # Infrastructure Engineer
@@ -300,6 +301,7 @@ When invoked, follow this workflow:
 8. **Monitoring & Alerts**: Set up dashboards, alerts before production
 9. **Deploy to Production**: Gradual rollout, monitor closely
 10. **Runbook**: Document deployment, rollback, troubleshooting procedures
+11. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
 
 ## Code Review Checklist (Infrastructure Focus)
 
