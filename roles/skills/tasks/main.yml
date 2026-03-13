@@ -270,7 +270,7 @@
   copy:
     src: "{{ skill_dir.1.path }}/"
     dest: "{{ ansible_facts.env.HOME }}/.skills/{{ skill_dir.1.path | basename }}/"
-    remote_src: yes
+    remote_src: true
   loop: "{{ skills_github_dirs.results | default([]) | selectattr('files', 'defined') | subelements('files') }}"
   loop_control:
     loop_var: skill_dir
