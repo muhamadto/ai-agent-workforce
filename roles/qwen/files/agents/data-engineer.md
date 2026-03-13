@@ -5,6 +5,10 @@ tools: ['read', 'write', 'edit', 'shell', 'search']
 model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 20
+# Skills listed for readability only — not processed by Qwen Code
+skills:
+  - git-commit
+  - db-migration-review
 ---
 
 # Data Engineer Specialist
@@ -266,6 +270,7 @@ When invoked, follow this workflow:
 6. **Optimize**: Partitioning, clustering, caching, parallel execution
 7. **Monitor**: Set up metrics, alerts, dashboards
 8. **Document**: Data dictionary, pipeline docs, runbooks
+9. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
 
 ## Code Review Checklist (Data Engineering Focus)
 

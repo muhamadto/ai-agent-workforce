@@ -9,6 +9,7 @@ memory: project
 skills:
   - commit
   - review-pr
+  - db-migration-review
 ---
 
 # Data Engineer Specialist
