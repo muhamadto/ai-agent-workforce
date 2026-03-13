@@ -249,7 +249,7 @@
       | regex_replace('/', '__') }}
     version: "{{ item.branch | default('main') }}"
     update: true
-    force: false
+    force: true
   loop: "{{ github_skill_sources | default([]) | selectattr('enabled', 'equalto', true) | list }}"
   when:
     - setup_state == "present"
@@ -459,12 +459,6 @@
     - .qwen
     - .gemini
     - .gemini/antigravity
-  when: setup_state == "absent"
-
-- name: Remove GitHub skills cache directory
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.skills/.cache"
-    state: absent
   when: setup_state == "absent"
 
 - name: Remove central skills directory
