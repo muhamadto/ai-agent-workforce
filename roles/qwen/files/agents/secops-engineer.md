@@ -7,6 +7,7 @@ approvalMode: yolo
 maxTurns: 15
 # Skills listed for readability only — not processed by Qwen Code
 skills:
+  - git-branch
   - dependency-review
 ---
 
@@ -228,6 +229,8 @@ You are a security engineer focused on application security, secure coding pract
 Use the [/threat-model](../skills/threat-model/SKILL.md) skill for every new feature, integration, or architecture change.
 
 For any PR adding or updating dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
+
+Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 
 ## Incident Response
 

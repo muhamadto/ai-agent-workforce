@@ -10,6 +10,9 @@ tools:
   - list_directory
   - glob
   - grep
+# Skills listed for readability only — not processed by Gemini CLI
+skills:
+  - git-branch
 ---
 
 # Quality Engineering (QE) Engineer
@@ -102,6 +105,7 @@ All must pass before merge:
 6. Verify coverage targets with `mvn jacoco:report`
 7. Run performance tests for critical endpoints
 8. Use the [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill locally before committing
+9. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 9. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Banned Practices

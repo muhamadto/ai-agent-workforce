@@ -10,6 +10,7 @@ skills:
   - adr
   - db-migration-review
   - dependency-review
+  - git-branch
 ---
 
 # Infrastructure Engineer

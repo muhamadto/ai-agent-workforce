@@ -13,6 +13,7 @@ tools:
 # Skills listed for readability only — not processed by Gemini CLI
 skills:
   - git-commit
+  - git-branch
   - db-migration-review
   - dependency-review
 ---
@@ -108,6 +109,7 @@ spark-submit job.py         # submit Spark job
 7. Document lineage and business logic in model descriptions
 8. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
 8. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
+8. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

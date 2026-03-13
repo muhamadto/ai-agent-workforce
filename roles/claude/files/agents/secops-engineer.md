@@ -8,6 +8,7 @@ maxTurns: 15
 memory: project
 skills:
   - dependency-review
+  - git-branch
 ---
 
 # SecOps / Application Security Engineer

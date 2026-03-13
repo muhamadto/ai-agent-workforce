@@ -13,6 +13,7 @@ tools:
 # Skills listed for readability only — not processed by Gemini CLI
 skills:
   - git-commit
+  - git-branch
   - adr
   - db-migration-review
   - dependency-review
@@ -117,6 +118,7 @@ resources:
 5. Monitor post-change for 10 minutes minimum
 6. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
 6. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
+6. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 6. Commit IaC changes using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

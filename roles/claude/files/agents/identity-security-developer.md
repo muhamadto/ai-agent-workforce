@@ -12,6 +12,7 @@ skills:
   - audit-jwt-config
   - oauth-threat-model
   - dependency-review
+  - git-branch
 ---
 
 # Identity & Authentication Security Developer

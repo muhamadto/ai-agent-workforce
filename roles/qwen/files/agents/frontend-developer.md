@@ -8,6 +8,7 @@ maxTurns: 20
 # Skills listed for readability only — not processed by Qwen Code
 skills:
   - api-design
+  - git-branch
   - dependency-review
 ---
 
@@ -241,6 +242,7 @@ When invoked, follow this workflow:
    - Define props interfaces (TypeScript)
    - Review backend API contracts with [/api-design](../skills/api-design/SKILL.md) skill before building data fetching
    - Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
+3. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 3. **Write Failing Tests**: TDD approach for logic and components
    - Start with unit tests for custom hooks and utilities
    - Then integration tests for user flows

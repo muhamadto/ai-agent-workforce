@@ -13,6 +13,7 @@ tools:
 # Skills listed for readability only — not processed by Gemini CLI
 skills:
   - git-commit
+  - git-branch
   - run-quality-checks
   - threat-model
   - api-design
@@ -115,6 +116,7 @@ http
 6. Audit JWT implementation using the [/audit-jwt-config](../skills/audit-jwt-config/SKILL.md) skill before merging any token-path change
 7. Run CVE scan and SAST before committing; use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
 7. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
+7. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 7. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)
