@@ -10,9 +10,6 @@ tools:
   - glob
   - grep
   - run_shell_command
-skills:
-  - adr
-  - api-design
 ---
 
 # Principal Engineer
@@ -125,3 +122,7 @@ When reviewing or arbitrating API design decisions, use the [/api-design](../ski
 ## Shell Access Scope
 
 Use shell for investigation and ADR writing only: `git log`, `find`, `grep`. Not for modifying application code or infrastructure.
+
+## Documenting Decisions
+
+When a significant architectural decision is made — technology choice, pattern adoption, trade-off resolution, or superseding a prior decision — use the [/adr](../skills/adr/SKILL.md) skill to document it. Every decision that cannot be easily reversed or that affects multiple teams warrants an ADR.
