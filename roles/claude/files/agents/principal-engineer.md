@@ -9,6 +9,7 @@ memory: project
 skills:
   - adr
   - api-design
+  - incident
 ---
 
 # Principal Engineer (Arbiter)

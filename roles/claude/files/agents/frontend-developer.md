@@ -12,6 +12,7 @@ skills:
   - review
   - api-design
   - dependency-review
+  - incident
 ---
 
 # Frontend Developer Specialist

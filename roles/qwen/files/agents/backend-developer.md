@@ -14,6 +14,7 @@ skills:
   - adr
   - db-migration-review
   - dependency-review
+  - incident
 ---
 
 # Backend Developer - Qwen Optimized
@@ -149,6 +150,7 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 7. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
 7. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 7. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
+7. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 7. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Code Review Checklist
