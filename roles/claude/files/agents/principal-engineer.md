@@ -11,6 +11,7 @@ skills:
   - api-design
   - shortcut
   - github-issue-to-vibe
+  - shortcut-to-vibe
   - incident
   - release-notes
 ---
