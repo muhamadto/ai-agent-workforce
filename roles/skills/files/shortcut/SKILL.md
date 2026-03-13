@@ -12,7 +12,7 @@ Interact with Shortcut (project management) using the `short` CLI.
 Verify the CLI is installed and authenticated before any operation:
 
 ```bash
-which short || echo "short CLI not found — install via: brew install short"
+which short || echo "short CLI not found — install via: npm install @shortcut-cli/shortcut-cli -g && short install"
 short search -o me -l 1 2>/dev/null || echo "Not authenticated — run: short install"
 ```
 
