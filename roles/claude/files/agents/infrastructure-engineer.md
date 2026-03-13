@@ -9,6 +9,7 @@ memory: project
 skills:
   - adr
   - spike
+  - threat-model
   - db-migration-review
   - dependency-review
   - git-branch

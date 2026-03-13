@@ -11,6 +11,7 @@ skills:
   - git-branch
   - shortcut
   - spike
+  - threat-model
   - dependency-review
   - incident
 ---
@@ -278,6 +279,7 @@ When invoked, follow this workflow:
 9. **Test on Devices**: Real devices, not just simulators/emulators
 10. **CI/CD**: Automate builds, tests, deployments (Fastlane, GitHub Actions)
 11. When a mobile platform question needs time-boxed research before implementation, use the [/spike](../skills/spike/SKILL.md) skill.
+11. For security-sensitive mobile features (auth, storage, biometrics), use the [/threat-model](../skills/threat-model/SKILL.md) skill.
 11. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 
 ## Code Review Checklist (Mobile Focus)

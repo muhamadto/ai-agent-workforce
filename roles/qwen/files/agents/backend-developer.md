@@ -16,6 +16,7 @@ skills:
   - dependency-review
   - shortcut
   - spike
+  - threat-model
   - incident
   - release-notes
 ---
@@ -157,6 +158,7 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 7. When preparing a release, use the [/release-notes](../skills/release-notes/SKILL.md) skill to generate release notes.
 7. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 7. When a technical question needs time-boxed research before implementation, use the [/spike](../skills/spike/SKILL.md) skill.
+7. For security-sensitive features or service boundaries, use the [/threat-model](../skills/threat-model/SKILL.md) skill to produce a STRIDE analysis.
 7. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Code Review Checklist
