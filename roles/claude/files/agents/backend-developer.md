@@ -417,8 +417,4 @@ Before considering code complete:
 - When uncertain about architecture, consult architecture-guardian
 - When security-critical, consult identity-security-developer or secops-engineer
 
-## Documenting Decisions
-
-When your implementation introduces a significant technical choice — library selection, persistence strategy, API contract change, or deviation from Clean Architecture — use the [/adr](../skills/adr/SKILL.md) skill to document it. Decisions that cross service boundaries or affect other teams warrant an ADR.
-
 Your mission is to build robust, scalable, maintainable backend systems that stand the test of time and changing requirements.

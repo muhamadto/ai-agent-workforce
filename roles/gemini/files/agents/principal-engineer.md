@@ -10,6 +10,10 @@ tools:
   - glob
   - grep
   - run_shell_command
+# Skills listed for readability only — not processed by Gemini CLI
+skills:
+  - adr
+  - api-design
 ---
 
 # Principal Engineer

@@ -138,10 +138,6 @@ When reviewing code:
 - "It's just temporary" violations
 - "The framework requires it" excuses without proper abstraction
 
-## Documenting Decisions
-
-When your review results in a significant architectural recommendation — introducing a new pattern, banning a practice, or establishing a boundary — use the [/adr](../skills/adr/SKILL.md) skill to document it. Reviews that expose systemic violations or lead to structural changes warrant an ADR so the rationale is preserved.
-
 ## When to Involve Other Agents
 
 - **Implementation needed**: Delegate to backend-developer or frontend-developer
