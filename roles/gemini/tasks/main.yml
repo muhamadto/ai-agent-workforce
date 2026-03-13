@@ -19,7 +19,7 @@
 
 - name: Ensure ~/.gemini directory exists
   file:
-    path: "{{ ansible_facts.env.HOME }}/.gemini"
+    path: "{{ ansible_facts['user_dir'] }}/.gemini"
     state: directory
     mode: '0700'
   when: setup_state == "present"
@@ -27,13 +27,13 @@
 - name: Deploy Gemini CLI settings.json
   copy:
     src: "settings.json"
-    dest: "{{ ansible_facts.env.HOME }}/.gemini/settings.json"
+    dest: "{{ ansible_facts['user_dir'] }}/.gemini/settings.json"
     mode: '0600'
   when: setup_state == "present"
 
 - name: Ensure ~/.gemini/agents directory exists
   file:
-    path: "{{ ansible_facts.env.HOME }}/.gemini/agents"
+    path: "{{ ansible_facts['user_dir'] }}/.gemini/agents"
     state: directory
     mode: '0700'
   when: setup_state == "present"
@@ -41,7 +41,7 @@
 - name: Deploy Gemini CLI agents
   copy:
     src: "agents/{{ item }}"
-    dest: "{{ ansible_facts.env.HOME }}/.gemini/agents/{{ item }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.gemini/agents/{{ item }}"
     mode: '0600'
   loop:
     - architecture-guardian.md
@@ -78,18 +78,18 @@
 
 - name: Remove Gemini CLI settings.json
   file:
-    path: "{{ ansible_facts.env.HOME }}/.gemini/settings.json"
+    path: "{{ ansible_facts['user_dir'] }}/.gemini/settings.json"
     state: absent
   when: setup_state == "absent"
 
 - name: Remove Gemini CLI agents
   file:
-    path: "{{ ansible_facts.env.HOME }}/.gemini/agents"
+    path: "{{ ansible_facts['user_dir'] }}/.gemini/agents"
     state: absent
   when: setup_state == "absent"
 
 - name: Remove Gemini configuration directory
   file:
-    path: "{{ ansible_facts.env.HOME }}/.gemini"
+    path: "{{ ansible_facts['user_dir'] }}/.gemini"
     state: absent
   when: setup_state == "absent"

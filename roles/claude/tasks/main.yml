@@ -19,7 +19,7 @@
 
 - name: Ensure ~/.claude directory exists
   file:
-    path: "{{ ansible_facts.env.HOME }}/.claude"
+    path: "{{ ansible_facts['user_dir'] }}/.claude"
     state: directory
     mode: '0700'
   when: setup_state == "present"
@@ -27,13 +27,13 @@
 - name: Deploy Claude Code settings.json
   copy:
     src: "settings.json"
-    dest: "{{ ansible_facts.env.HOME }}/.claude/settings.json"
+    dest: "{{ ansible_facts['user_dir'] }}/.claude/settings.json"
     mode: '0600'
   when: setup_state == "present"
 
 - name: Ensure ~/.claude/agents directory exists
   file:
-    path: "{{ ansible_facts.env.HOME }}/.claude/agents"
+    path: "{{ ansible_facts['user_dir'] }}/.claude/agents"
     state: directory
     mode: '0700'
   when: setup_state == "present"
@@ -41,14 +41,14 @@
 - name: Deploy Shortcut ↔ VibeKanban workflow guide
   copy:
     src: "SHORTCUT_VIBEKANBAN_WORKFLOW.md"
-    dest: "{{ ansible_facts.env.HOME }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
     mode: '0600'
   when: setup_state == "present"
 
 - name: Deploy Claude Code agents
   copy:
     src: "agents/{{ item }}"
-    dest: "{{ ansible_facts.env.HOME }}/.claude/agents/{{ item }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.claude/agents/{{ item }}"
     mode: '0600'
   loop:
     - architecture-guardian.md
@@ -85,18 +85,18 @@
 
 - name: Remove Claude Code settings.json
   file:
-    path: "{{ ansible_facts.env.HOME }}/.claude/settings.json"
+    path: "{{ ansible_facts['user_dir'] }}/.claude/settings.json"
     state: absent
   when: setup_state == "absent"
 
 - name: Remove Claude Code agents
   file:
-    path: "{{ ansible_facts.env.HOME }}/.claude/agents"
+    path: "{{ ansible_facts['user_dir'] }}/.claude/agents"
     state: absent
   when: setup_state == "absent"
 
 - name: Remove Shortcut ↔ VibeKanban workflow guide
   file:
-    path: "{{ ansible_facts.env.HOME }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
+    path: "{{ ansible_facts['user_dir'] }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
     state: absent
   when: setup_state == "absent"

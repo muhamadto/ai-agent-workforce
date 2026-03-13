@@ -19,7 +19,7 @@
 
 - name: Ensure ~/.qwen directory exists
   file:
-    path: "{{ ansible_facts.env.HOME }}/.qwen"
+    path: "{{ ansible_facts['user_dir'] }}/.qwen"
     state: directory
     mode: '0700'
   when: setup_state == "present"
@@ -27,13 +27,13 @@
 - name: Deploy Qwen Code settings.json
   copy:
     src: "settings.json"
-    dest: "{{ ansible_facts.env.HOME }}/.qwen/settings.json"
+    dest: "{{ ansible_facts['user_dir'] }}/.qwen/settings.json"
     mode: '0600'
   when: setup_state == "present"
 
 - name: Ensure ~/.qwen/agents directory exists
   file:
-    path: "{{ ansible_facts.env.HOME }}/.qwen/agents"
+    path: "{{ ansible_facts['user_dir'] }}/.qwen/agents"
     state: directory
     mode: '0700'
   when: setup_state == "present"
@@ -41,7 +41,7 @@
 - name: Deploy Qwen Code agents
   copy:
     src: "agents/{{ item }}"
-    dest: "{{ ansible_facts.env.HOME }}/.qwen/agents/{{ item }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.qwen/agents/{{ item }}"
     mode: '0600'
   loop:
     - architecture-guardian.md
@@ -79,12 +79,12 @@
 
 - name: Remove Qwen Code settings.json
   file:
-    path: "{{ ansible_facts.env.HOME }}/.qwen/settings.json"
+    path: "{{ ansible_facts['user_dir'] }}/.qwen/settings.json"
     state: absent
   when: setup_state == "absent"
 
 - name: Remove Qwen Code agents
   file:
-    path: "{{ ansible_facts.env.HOME }}/.qwen/agents"
+    path: "{{ ansible_facts['user_dir'] }}/.qwen/agents"
     state: absent
   when: setup_state == "absent"
