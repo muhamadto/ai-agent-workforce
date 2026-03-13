@@ -15,6 +15,7 @@ skills:
   - git-commit
   - git-branch
   - shortcut
+  - spike
   - dependency-review
   - incident
 ---
@@ -138,6 +139,7 @@ yarn detox test              # e2e
 8. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 8. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 8. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
+8. When a mobile platform question needs time-boxed research before implementation, use the [/spike](../skills/spike/SKILL.md) skill.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

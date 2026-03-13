@@ -8,6 +8,7 @@ maxTurns: 12
 memory: project
 skills:
   - adr
+  - spike
 ---
 
 # Architecture Guardian

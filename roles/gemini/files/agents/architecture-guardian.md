@@ -11,6 +11,7 @@ tools:
 # Skills listed for readability only — not processed by Gemini CLI
 skills:
   - adr
+  - spike
 ---
 
 # Architecture Guardian
@@ -101,3 +102,7 @@ FIX: Extract interface to domain layer, move implementation to infrastructure
 ## Documenting Decisions
 
 When your review results in a significant architectural recommendation — introducing a new pattern, banning a practice, or establishing a boundary — use the [/adr](../skills/adr/SKILL.md) skill to document it. Reviews that expose systemic violations or lead to structural changes warrant an ADR so the rationale is preserved.
+
+## Technical Spikes
+
+When an architectural question requires time-boxed research before a decision can be made, use the [/spike](../skills/spike/SKILL.md) skill to document findings, trade-offs, and a clear recommendation.

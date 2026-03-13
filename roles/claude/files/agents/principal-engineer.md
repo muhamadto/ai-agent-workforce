@@ -12,6 +12,7 @@ skills:
   - shortcut
   - github-issue-to-vibe
   - shortcut-to-vibe
+  - spike
   - incident
   - release-notes
 ---

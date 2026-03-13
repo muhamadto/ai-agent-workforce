@@ -11,6 +11,7 @@ skills:
   - git-commit
   - git-branch
   - shortcut
+  - spike
   - dependency-review
   - incident
 ---
@@ -258,6 +259,7 @@ When invoked, follow this workflow:
 7. **Performance Review**: Lighthouse audit, bundle size check, Core Web Vitals
 8. **Refactor**: Extract reusable components/hooks, improve design
 9. **Document**: PropTypes/TypeScript types, Storybook stories, usage examples
+10. When a technical question needs time-boxed research before implementation, use the [/spike](../skills/spike/SKILL.md) skill.
 10. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 
 ## Testing Best Practices

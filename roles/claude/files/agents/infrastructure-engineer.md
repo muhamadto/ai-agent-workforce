@@ -8,6 +8,7 @@ maxTurns: 20
 memory: project
 skills:
   - adr
+  - spike
   - db-migration-review
   - dependency-review
   - git-branch
