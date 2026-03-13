@@ -15,6 +15,7 @@ skills:
   - adr
   - api-design
   - shortcut
+  - github-issue-to-vibe
   - incident
   - release-notes
 ---
@@ -145,3 +146,7 @@ When preparing a release, use the [/release-notes](../skills/release-notes/SKILL
 ## Shortcut
 
 Use the [/shortcut](../skills/shortcut/SKILL.md) skill to fetch story context, update status, and add comments on Shortcut stories when planning or arbitrating work.
+
+## GitHub Issue Import
+
+Use the [/github-issue-to-vibe](../skills/github-issue-to-vibe/SKILL.md) skill to import GitHub issues into VibeKanban when triaging or planning work from GitHub.
