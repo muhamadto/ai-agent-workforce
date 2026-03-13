@@ -13,6 +13,7 @@ skills:
   - github-issue-to-vibe
   - shortcut-to-vibe
   - spike
+  - test-plan
   - incident
   - release-notes
 ---
@@ -324,5 +325,9 @@ Use the [/shortcut-to-vibe](../skills/shortcut-to-vibe/SKILL.md) skill to import
 ## Technical Spikes
 
 When a significant cross-cutting technical question needs time-boxed research before a decision, use the [/spike](../skills/spike/SKILL.md) skill to document findings and produce a go/no-go recommendation.
+
+## Test Plan
+
+When reviewing or commissioning new features, use the [/test-plan](../skills/test-plan/SKILL.md) skill to produce a structured test plan covering unit, integration, E2E, performance, and security scope.
 
 Your mission is to guide the team to build systems that are good enough to ship, good enough to maintain, good enough to scale, and good enough to evolve.
