@@ -17,6 +17,7 @@ skills:
   - run-quality-checks
   - shortcut
   - spike
+  - threat-model
   - incident
   - release-notes
 ---

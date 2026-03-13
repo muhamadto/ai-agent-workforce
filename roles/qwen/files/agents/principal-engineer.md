@@ -14,6 +14,7 @@ skills:
   - shortcut-to-vibe
   - spike
   - test-plan
+  - threat-model
   - incident
   - release-notes
 ---
@@ -329,5 +330,9 @@ When a significant cross-cutting technical question needs time-boxed research be
 ## Test Plan
 
 When reviewing or commissioning new features, use the [/test-plan](../skills/test-plan/SKILL.md) skill to produce a structured test plan covering unit, integration, E2E, performance, and security scope.
+
+## Threat Modeling
+
+When assessing cross-cutting security concerns or new service boundaries, use the [/threat-model](../skills/threat-model/SKILL.md) skill to produce a STRIDE threat model.
 
 Your mission is to guide the team to build systems that are good enough to ship, good enough to maintain, good enough to scale, and good enough to evolve.

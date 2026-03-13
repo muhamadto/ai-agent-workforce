@@ -14,6 +14,7 @@ skills:
   - shortcut-to-vibe
   - spike
   - test-plan
+  - threat-model
   - incident
   - release-notes
 ---

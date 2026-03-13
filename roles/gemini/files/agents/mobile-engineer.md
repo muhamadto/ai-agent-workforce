@@ -16,6 +16,7 @@ skills:
   - git-branch
   - shortcut
   - spike
+  - threat-model
   - dependency-review
   - incident
 ---
@@ -140,6 +141,7 @@ yarn detox test              # e2e
 8. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 8. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 8. When a mobile platform question needs time-boxed research before implementation, use the [/spike](../skills/spike/SKILL.md) skill.
+8. For security-sensitive mobile features (auth, storage, biometrics), use the [/threat-model](../skills/threat-model/SKILL.md) skill.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

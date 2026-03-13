@@ -16,6 +16,7 @@ skills:
   - git-branch
   - adr
   - spike
+  - threat-model
   - db-migration-review
   - dependency-review
   - incident
@@ -123,6 +124,7 @@ resources:
 6. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 6. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 6. When infrastructure technology choices need time-boxed research, use the [/spike](../skills/spike/SKILL.md) skill.
+6. For new network boundaries, egress paths, or privileged services, use the [/threat-model](../skills/threat-model/SKILL.md) skill.
 6. Commit IaC changes using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)
