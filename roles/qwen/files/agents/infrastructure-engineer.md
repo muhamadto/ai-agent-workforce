@@ -10,6 +10,7 @@ skills:
   - git-commit
   - adr
   - db-migration-review
+  - dependency-review
 ---
 
 # Infrastructure Engineer
@@ -302,6 +303,7 @@ When invoked, follow this workflow:
 9. **Deploy to Production**: Gradual rollout, monitor closely
 10. **Runbook**: Document deployment, rollback, troubleshooting procedures
 11. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
+12. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 
 ## Code Review Checklist (Infrastructure Focus)
 

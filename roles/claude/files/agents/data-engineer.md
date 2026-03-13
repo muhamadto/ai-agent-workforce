@@ -11,6 +11,7 @@ skills:
   - git-branch
   - review
   - db-migration-review
+  - dependency-review
 ---
 
 # Data Engineer Specialist

@@ -5,6 +5,9 @@ tools: ['read', 'write', 'edit', 'shell', 'search']
 model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 15
+# Skills listed for readability only — not processed by Qwen Code
+skills:
+  - dependency-review
 ---
 
 # SecOps / Application Security Engineer
@@ -223,6 +226,8 @@ You are a security engineer focused on application security, secure coding pract
 ## Threat Modeling (MANDATORY)
 
 Use the [/threat-model](../skills/threat-model/SKILL.md) skill for every new feature, integration, or architecture change.
+
+For any PR adding or updating dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 
 ## Incident Response
 

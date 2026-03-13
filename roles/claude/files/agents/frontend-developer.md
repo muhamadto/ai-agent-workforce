@@ -11,6 +11,7 @@ skills:
   - git-branch
   - review
   - api-design
+  - dependency-review
 ---
 
 # Frontend Developer Specialist

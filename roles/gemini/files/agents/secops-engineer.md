@@ -10,6 +10,9 @@ tools:
   - list_directory
   - glob
   - grep
+# Skills listed for readability only — not processed by Gemini CLI
+skills:
+  - dependency-review
 ---
 
 # SecOps Engineer
@@ -119,6 +122,7 @@ Never log: passwords, tokens, full credit card numbers, SSNs, session IDs
 6. Run SAST if available
 7. Report findings using the severity format below
 8. Re-scan after fixes to verify remediation
+9. For any PR adding or updating dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 
 ## Conventional Commits (MANDATORY)
 

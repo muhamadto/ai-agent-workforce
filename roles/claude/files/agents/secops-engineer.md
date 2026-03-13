@@ -6,6 +6,8 @@ model: sonnet
 permissionMode: acceptEdits
 maxTurns: 15
 memory: project
+skills:
+  - dependency-review
 ---
 
 # SecOps / Application Security Engineer
