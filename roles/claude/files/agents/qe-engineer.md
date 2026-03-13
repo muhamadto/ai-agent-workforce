@@ -9,6 +9,7 @@ memory: project
 skills:
   - git-branch
   - git-commit
+  - run-quality-checks
 ---
 
 # Quality Engineering (QE) Engineer

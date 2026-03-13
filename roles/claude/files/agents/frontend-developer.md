@@ -12,6 +12,7 @@ skills:
   - review
   - api-design
   - dependency-review
+  - run-quality-checks
   - incident
 ---
 

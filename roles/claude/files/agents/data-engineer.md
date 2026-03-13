@@ -12,6 +12,7 @@ skills:
   - review
   - db-migration-review
   - dependency-review
+  - run-quality-checks
 ---
 
 # Data Engineer Specialist

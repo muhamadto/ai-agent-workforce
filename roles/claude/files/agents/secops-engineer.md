@@ -8,6 +8,7 @@ maxTurns: 15
 memory: project
 skills:
   - dependency-review
+  - run-quality-checks
   - git-branch
   - git-commit
   - incident
