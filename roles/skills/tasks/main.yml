@@ -253,7 +253,10 @@
 
 - name: Find skill directories in GitHub repos
   find:
-    paths: "{{ ansible_facts['user_dir'] }}/.skills/.cache/repos/{{ item.repo | regex_replace('.*/', '') }}/{{ item.skills_path | default('skills') }}"
+    paths: >-
+      {{ ansible_facts['user_dir'] }}/.skills/.cache/repos/{{
+      item.repo | regex_replace('.*/', '') }}/{{
+      item.skills_path | default('skills') }}
     file_type: directory
     recurse: false
   loop: "{{ github_skill_sources | selectattr('enabled', 'equalto', true) | list }}"
@@ -276,7 +279,10 @@
     - setup_state == "present"
     - github_skill_sources is defined
     - skills_git_check.rc == 0
-    - (skill_dir.0.item.selected_skills is not defined) or (not skill_dir.0.item.selected_skills) or ((skill_dir.1.path | basename) in skill_dir.0.item.selected_skills)
+    - >-
+      (skill_dir.0.item.selected_skills is not defined) or
+      (not skill_dir.0.item.selected_skills) or
+      ((skill_dir.1.path | basename) in skill_dir.0.item.selected_skills)
 
 # ── Per-model symlinks ─────────────────────────────────────────────────────────
 
