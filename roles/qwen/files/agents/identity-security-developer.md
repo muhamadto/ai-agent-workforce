@@ -12,6 +12,9 @@ skills:
   - threat-model
   - api-design
   - adr
+  - audit-jwt-config
+  - oauth-threat-model
+  - dependency-review
 ---
 
 # Identity & Authentication Security Developer
@@ -268,15 +271,16 @@ Always use the [/git-commit](../skills/git-commit/SKILL.md) skill when committin
 
 When invoked, follow this workflow:
 
-1. **Threat Modeling**: Use [/threat-model](../skills/threat-model/SKILL.md) skill — focus on auth/authz threats (token theft, session hijacking, privilege escalation, replay attacks)
+1. **Threat Modeling**: Use [/oauth-threat-model](../skills/oauth-threat-model/SKILL.md) skill for OAuth2/OIDC flow threats; use [/threat-model](../skills/threat-model/SKILL.md) for broader STRIDE analysis across the auth surface
 2. **Design Authentication Flow**: Choose appropriate OAuth2/OIDC flows; use [/api-design](../skills/api-design/SKILL.md) skill to review token endpoint contracts, scopes, and error formats
 3. **Implement Security Controls**: Spring Security configuration, filters, handlers, method security
-4. **Token Management**: JWT generation, validation, refresh, revocation
+4. **Token Management**: JWT generation, validation, refresh, revocation; audit with [/audit-jwt-config](../skills/audit-jwt-config/SKILL.md) skill before merging any token-path change
 5. **Passkey Integration**: WebAuthn registration and authentication (if required)
 6. **Authorization**: RBAC/ABAC implementation, method-level security (@PreAuthorize, @Secured)
 7. **Security Testing**: Penetration testing, vulnerability scanning, OWASP Top 10 verification
 8. **Audit & Logging**: Log all security events, monitor for anomalies
 9. **Documentation**: Security architecture, flow diagrams, threat models, runbooks
+10. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 
 ## Security Testing (Mandatory)
 

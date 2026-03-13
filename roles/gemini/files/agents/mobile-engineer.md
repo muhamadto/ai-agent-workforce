@@ -10,6 +10,9 @@ tools:
   - list_directory
   - glob
   - grep
+# Skills listed for readability only — not processed by Gemini CLI
+skills:
+  - dependency-review
 ---
 
 # Mobile Engineer
@@ -127,6 +130,7 @@ yarn detox test              # e2e
 5. Implement feature
 6. Test on real device (not just simulator/emulator)
 7. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
+8. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 8. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

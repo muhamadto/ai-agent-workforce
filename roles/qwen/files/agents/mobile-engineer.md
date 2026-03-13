@@ -5,6 +5,9 @@ tools: ['read', 'write', 'edit', 'shell', 'search']
 model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 20
+# Skills listed for readability only — not processed by Qwen Code
+skills:
+  - dependency-review
 ---
 
 # Mobile Engineer Specialist
@@ -266,7 +269,7 @@ When invoked, follow this workflow:
 5. **Implement**: Features with platform-specific considerations
 6. **Optimize**: Performance (startup time, battery, memory)
 7. **Accessibility**: VoiceOver/TalkBack support, Dynamic Type
-8. **Security Review**: Secure storage, network security, input validation
+8. **Security Review**: Secure storage, network security, input validation; before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 9. **Test on Devices**: Real devices, not just simulators/emulators
 10. **CI/CD**: Automate builds, tests, deployments (Fastlane, GitHub Actions)
 

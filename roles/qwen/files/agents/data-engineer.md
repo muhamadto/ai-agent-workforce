@@ -9,6 +9,7 @@ maxTurns: 20
 skills:
   - git-commit
   - db-migration-review
+  - dependency-review
 ---
 
 # Data Engineer Specialist
@@ -271,6 +272,7 @@ When invoked, follow this workflow:
 7. **Monitor**: Set up metrics, alerts, dashboards
 8. **Document**: Data dictionary, pipeline docs, runbooks
 9. Before applying any database migration, use the [/db-migration-review](../skills/db-migration-review/SKILL.md) skill to check for safety, reversibility, and performance impact.
+10. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 
 ## Code Review Checklist (Data Engineering Focus)
 

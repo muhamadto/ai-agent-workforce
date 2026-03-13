@@ -9,6 +9,7 @@ memory: project
 skills:
   - git-commit
   - git-branch
+  - dependency-review
 ---
 
 # Mobile Engineer Specialist

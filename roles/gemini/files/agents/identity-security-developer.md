@@ -17,6 +17,9 @@ skills:
   - threat-model
   - api-design
   - adr
+  - audit-jwt-config
+  - oauth-threat-model
+  - dependency-review
 ---
 
 # Identity & Security Developer
@@ -106,10 +109,12 @@ http
 
 1. Map the auth surface: filter chain, token flows, protected routes
 2. Identify gaps against zero-trust requirements
-3. Propose changes with risk impact for each; use [/threat-model](../skills/threat-model/SKILL.md) skill to model auth/authz threats, and [/api-design](../skills/api-design/SKILL.md) skill to review token endpoint contracts, scopes, and error formats
+3. Propose changes with risk impact for each; use [/oauth-threat-model](../skills/oauth-threat-model/SKILL.md) skill to model OAuth2/OIDC-specific threats and [/threat-model](../skills/threat-model/SKILL.md) for broader STRIDE analysis; use [/api-design](../skills/api-design/SKILL.md) skill to review token endpoint contracts, scopes, and error formats
 4. **Checkpoint**: before implementing any auth change — does this weaken or strengthen the security posture? If it weakens it even slightly, document why and get sign-off from principal-engineer.
 5. Implement with tests that verify security properties (not just happy path — test rejection too)
-6. Run CVE scan and SAST before committing; use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
+6. Audit JWT implementation using the [/audit-jwt-config](../skills/audit-jwt-config/SKILL.md) skill before merging any token-path change
+7. Run CVE scan and SAST before committing; use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
+7. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 7. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)

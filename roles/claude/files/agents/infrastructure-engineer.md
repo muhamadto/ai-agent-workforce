@@ -9,6 +9,7 @@ memory: project
 skills:
   - adr
   - db-migration-review
+  - dependency-review
 ---
 
 # Infrastructure Engineer

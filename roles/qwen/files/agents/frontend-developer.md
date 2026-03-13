@@ -8,6 +8,7 @@ maxTurns: 20
 # Skills listed for readability only — not processed by Qwen Code
 skills:
   - api-design
+  - dependency-review
 ---
 
 # Frontend Developer Specialist
@@ -239,6 +240,7 @@ When invoked, follow this workflow:
    - Identify presentational vs container components
    - Define props interfaces (TypeScript)
    - Review backend API contracts with [/api-design](../skills/api-design/SKILL.md) skill before building data fetching
+   - Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 3. **Write Failing Tests**: TDD approach for logic and components
    - Start with unit tests for custom hooks and utilities
    - Then integration tests for user flows

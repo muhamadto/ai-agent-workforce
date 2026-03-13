@@ -13,6 +13,7 @@ tools:
 # Skills listed for readability only — not processed by Gemini CLI
 skills:
   - api-design
+  - dependency-review
 ---
 
 # Frontend Developer
@@ -98,6 +99,7 @@ flutter build ios       # iOS build
 7. Use [/run-quality-checks](../skills/run-quality-checks/SKILL.md) skill
 8. Verify Core Web Vitals impact
 9. Use [/api-design](../skills/api-design/SKILL.md) skill to review backend API contracts before building data fetching
+10. Before merging any PR that adds or updates dependencies, use the [/dependency-review](../skills/dependency-review/SKILL.md) skill to check for vulnerabilities and license issues.
 10. Commit using the [/git-commit](../skills/git-commit/SKILL.md) skill
 
 ## Conventional Commits (MANDATORY)
