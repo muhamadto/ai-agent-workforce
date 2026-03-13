@@ -2,7 +2,7 @@
   "theme": "Default",
   "selectedAuthType": "oauth-personal",
   "model": {
-    "name": "gemini-2.5-pro"
+    "name": "gemini-3.1-pro-preview"
   },
   "sandbox": true,
   "autoUpdate": true,
@@ -16,21 +16,51 @@
     "skillPath": "~/.gemini/skills"
   },
   "context": {
-    "contextFiles": ["GEMINI.md"],
-    "includePatterns": ["**/*.java", "**/*.py", "**/*.ts", "**/*.tsx", "**/*.go", "**/*.tf", "**/*.yaml", "**/*.yml"],
-    "excludePatterns": ["**/node_modules/**", "**/target/**", "**/.git/**", "**/build/**", "**/.terraform/**"]
+    "contextFiles": [
+      "GEMINI.md"
+    ],
+    "includePatterns": [
+      "**/*.java",
+      "**/*.py",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.go",
+      "**/*.tf",
+      "**/*.yaml",
+      "**/*.yml"
+    ],
+    "excludePatterns": [
+      "**/node_modules/**",
+      "**/target/**",
+      "**/.git/**",
+      "**/build/**",
+      "**/.terraform/**"
+    ]
   },
   "tools": {
     "shell": {
       "cmd": "/bin/bash"
     },
     "approvalMode": "auto_edit",
-    "allowedCommands": ["git", "mvn", "npm", "npx", "docker", "kubectl", "terraform", "gh"]
+    "allowedCommands": [
+      "git",
+      "mvn",
+      "npm",
+      "npx",
+      "docker",
+      "kubectl",
+      "terraform",
+      "gh"
+    ]
   },
   "mcpServers": {
     "vibe_kanban": {
       "command": "npx",
-      "args": ["-y", "vibe-kanban@latest", "--mcp"],
+      "args": [
+        "-y",
+        "vibe-kanban@latest",
+        "--mcp"
+      ],
       "timeout": 15000
     }
   }
