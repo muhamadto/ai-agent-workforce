@@ -6,6 +6,7 @@ model: qwen3-coder-next
 approvalMode: yolo
 maxTurns: 10
 skills:
+  - adr
   - api-design
 ---
 
