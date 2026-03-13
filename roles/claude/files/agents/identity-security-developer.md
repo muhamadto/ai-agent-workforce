@@ -12,6 +12,7 @@ skills:
   - audit-jwt-config
   - oauth-threat-model
   - dependency-review
+  - run-quality-checks
   - git-branch
   - git-commit
   - incident

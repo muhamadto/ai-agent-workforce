@@ -14,6 +14,7 @@ skills:
   - adr
   - db-migration-review
   - dependency-review
+  - run-quality-checks
   - incident
   - release-notes
 ---

@@ -10,6 +10,7 @@ skills:
   - git-commit
   - git-branch
   - dependency-review
+  - run-quality-checks
   - incident
 ---
 
