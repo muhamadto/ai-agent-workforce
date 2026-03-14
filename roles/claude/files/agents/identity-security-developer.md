@@ -11,6 +11,7 @@ skills:
   - adr
   - audit-jwt-config
   - oauth-threat-model
+  - threat-model
   - dependency-review
   - run-quality-checks
   - shortcut

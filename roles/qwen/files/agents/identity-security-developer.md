@@ -313,7 +313,7 @@ When invoked, follow this workflow:
 11. Use the [/git-branch](../skills/git-branch/SKILL.md) skill to create feature branches following naming conventions.
 12. When an incident occurs, use the [/incident](../skills/incident/SKILL.md) skill to manage the response.
 13. When an auth or identity technology question needs time-boxed research, use the [/spike](../skills/spike/SKILL.md) skill.
-13. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
+14. Use the [/shortcut](../skills/shortcut/SKILL.md) skill to update story status and log progress.
 
 ## Security Testing (Mandatory)
 
