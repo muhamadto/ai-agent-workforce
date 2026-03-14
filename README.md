@@ -302,7 +302,7 @@ description: One-sentence description shown in the skills list.
 - name: Deploy Skill Name SKILL.md to central skills
   copy:
     src: "skill-name/SKILL.md"
-    dest: "{{ ansible_user_dir }}/.skills/skill-name/SKILL.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/skill-name/SKILL.md"
     mode: '0600'
   when: setup_state == "present"
 ```
