@@ -49,37 +49,26 @@
 
 # ── Central skills directory ───────────────────────────────────────────────────
 
-- name: Ensure central ~/.skills directory structure exists
+- name: Ensure shortcut reference directory exists in ~/.skills/
   file:
-    path: "{{ ansible_facts['user_dir'] }}/.skills/{{ item }}"
+    path: "{{ ansible_facts['user_dir'] }}/.skills/shortcut/reference"
     state: directory
     mode: '0700'
-  loop:
-    - shortcut/reference
-    - shortcut-to-vibe
-    - github-issue-to-vibe
-    - git-commit
-    - run-quality-checks
-    - threat-model
-    - api-design
-    - test-plan
-    - git-branch
-    - adr
-    - release-notes
-    - db-migration-review
-    - incident
-    - dependency-review
-    - spike
   when: setup_state == "present"
 
-# ── Shortcut skill ─────────────────────────────────────────────────────────────
+# ── Deploy all local skills ────────────────────────────────────────────────────
+# Adding a new skill is automatic: drop a directory with SKILL.md under
+# roles/skills/files/ and it will be copied on the next playbook run.
 
-- name: Deploy Shortcut SKILL.md to central skills
+- name: Deploy all local skills to central skills directory
   copy:
-    src: "shortcut/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/shortcut/SKILL.md"
+    src: "{{ role_path }}/files/"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/"
     mode: '0600'
+    directory_mode: '0700'
   when: setup_state == "present"
+
+# ── Shortcut OpenAPI spec ──────────────────────────────────────────────────────
 
 - name: Download Shortcut OpenAPI spec to central skills
   get_url:
@@ -87,132 +76,6 @@
     dest: "{{ ansible_facts['user_dir'] }}/.skills/shortcut/reference/shortcut.openapi.json"
     mode: '0644'
     timeout: 30
-  when: setup_state == "present"
-
-# ── Shortcut → VibeKanban import skill ─────────────────────────────────────────
-
-- name: Deploy Shortcut-to-VibeKanban SKILL.md to central skills
-  copy:
-    src: "shortcut-to-vibe/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/shortcut-to-vibe/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── Git Commit skill ───────────────────────────────────────────────────────────
-
-- name: Deploy Git Commit SKILL.md to central skills
-  copy:
-    src: "git-commit/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/git-commit/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── Run Quality Checks skill ───────────────────────────────────────────────────
-
-- name: Deploy Run Quality Checks SKILL.md to central skills
-  copy:
-    src: "run-quality-checks/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/run-quality-checks/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── Threat Model skill ─────────────────────────────────────────────────────────
-
-- name: Deploy Threat Model SKILL.md to central skills
-  copy:
-    src: "threat-model/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/threat-model/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── API Design skill ───────────────────────────────────────────────────────────
-
-- name: Deploy API Design SKILL.md to central skills
-  copy:
-    src: "api-design/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/api-design/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── Test Plan skill ────────────────────────────────────────────────────────────
-
-- name: Deploy Test Plan SKILL.md to central skills
-  copy:
-    src: "test-plan/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/test-plan/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── Git Branch skill ───────────────────────────────────────────────────────────
-
-- name: Deploy Git Branch SKILL.md to central skills
-  copy:
-    src: "git-branch/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/git-branch/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── ADR skill ──────────────────────────────────────────────────────────────────
-
-- name: Deploy ADR SKILL.md to central skills
-  copy:
-    src: "adr/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/adr/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── Release Notes skill ────────────────────────────────────────────────────────
-
-- name: Deploy Release Notes SKILL.md to central skills
-  copy:
-    src: "release-notes/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/release-notes/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── DB Migration Review skill ──────────────────────────────────────────────────
-
-- name: Deploy DB Migration Review SKILL.md to central skills
-  copy:
-    src: "db-migration-review/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/db-migration-review/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── Incident skill ─────────────────────────────────────────────────────────────
-
-- name: Deploy Incident SKILL.md to central skills
-  copy:
-    src: "incident/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/incident/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── Dependency Review skill ────────────────────────────────────────────────────
-
-- name: Deploy Dependency Review SKILL.md to central skills
-  copy:
-    src: "dependency-review/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/dependency-review/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── Spike skill ────────────────────────────────────────────────────────────────
-
-- name: Deploy Spike SKILL.md to central skills
-  copy:
-    src: "spike/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/spike/SKILL.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-# ── GitHub Issue → VibeKanban import skill ─────────────────────────────────────
-
-- name: Deploy GitHub-Issue-to-VibeKanban SKILL.md to central skills
-  copy:
-    src: "github-issue-to-vibe/SKILL.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.skills/github-issue-to-vibe/SKILL.md"
-    mode: '0600'
   when: setup_state == "present"
 
 # ── GitHub skill sources ──────────────────────────────────────────────────────
@@ -387,65 +250,12 @@
     - setup_state == "present"
     - skills_antigravity_check.rc == 0
 
-- name: Display skills installation summary
-  debug:
-    msg: |
-      Skills deployed to ~/.skills/ (central source of truth)
-
-      git-commit — Conventional Commits compliant commits with hook awareness
-        ~/.skills/git-commit/SKILL.md
-
-      run-quality-checks — Full pre-commit quality gate (format, lint, test, SAST, SCA)
-        ~/.skills/run-quality-checks/SKILL.md
-
-      threat-model — STRIDE threat model for features and architecture changes
-        ~/.skills/threat-model/SKILL.md
-
-      api-design — Design and review API contracts (OpenAPI/REST/gRPC) for correctness, security, and business alignment
-        ~/.skills/api-design/SKILL.md
-
-      test-plan — Structured test plan covering unit, integration, E2E, performance, security
-        ~/.skills/test-plan/SKILL.md
-
-      shortcut — Shortcut project management via `short` CLI
-        ~/.skills/shortcut/SKILL.md
-        ~/.skills/shortcut/reference/shortcut.openapi.json
-
-      shortcut-to-vibe — Import Shortcut stories into VibeKanban
-        ~/.skills/shortcut-to-vibe/SKILL.md
-
-      github-issue-to-vibe — Import GitHub issues into VibeKanban
-        ~/.skills/github-issue-to-vibe/SKILL.md
-
-      git-branch — Branch lifecycle: cut from origin/main, sync via rebase
-        ~/.skills/git-branch/SKILL.md
-
-      adr — Architecture Decision Records
-        ~/.skills/adr/SKILL.md
-
-      release-notes — Generate release notes from Conventional Commits history
-        ~/.skills/release-notes/SKILL.md
-
-      db-migration-review — Review database migrations for safety and correctness
-        ~/.skills/db-migration-review/SKILL.md
-
-      incident — Incident response and blameless postmortem
-        ~/.skills/incident/SKILL.md
-
-      dependency-review — Review dependency upgrades for CVEs and breaking changes
-        ~/.skills/dependency-review/SKILL.md
-
-      spike — Time-boxed technical investigation with structured report
-        ~/.skills/spike/SKILL.md
-
-      Symlinked to:
-        ~/.claude/skills  →  ~/.skills  (claude {{ 'installed' if skills_claude_check.rc == 0 else 'not found — skipped' }})
-        ~/.qwen/skills    →  ~/.skills  (qwen {{ 'installed' if skills_qwen_check.rc == 0 else 'not found — skipped' }})
-        ~/.gemini/skills  →  ~/.skills  (gemini {{ 'installed' if skills_gemini_check.rc == 0 else 'not found — skipped' }})
-        ~/.gemini/antigravity/skills → ~/.skills (antigravity {{ 'installed' if skills_antigravity_check.rc == 0 else 'not found — skipped' }})
-
-      Requires: short CLI installed and authenticated (short install)
-      Note: OpenAPI spec is bundled — update manually from developer.shortcut.com when the API changes
+- name: Find deployed local skills
+  find:
+    paths: "{{ ansible_facts['user_dir'] }}/.skills/"
+    patterns: "SKILL.md"
+    recurse: true
+  register: skills_deployed
   when: setup_state == "present"
 
 # ── Removal ────────────────────────────────────────────────────────────────────
