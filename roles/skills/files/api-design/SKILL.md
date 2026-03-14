@@ -302,7 +302,8 @@ Hard delete only when:
     "details": [
       { "field": "email", "issue": "must be a valid email address" }
     ]
-  }
+  },
+  "meta": null
 }
 ```
 
