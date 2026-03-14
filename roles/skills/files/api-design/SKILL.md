@@ -87,7 +87,7 @@ A retry with the same key must return the original response, not create a new re
 | `GET` (list) | **200 OK** | — | paginated collection |
 | `DELETE` | **204 No Content** | — | empty |
 
-All responses use a consistent envelope:
+All responses **with a body** use a consistent envelope (`204 No Content` responses must not include a body):
 
 ```json
 {
@@ -372,7 +372,7 @@ find . -name "*.proto" 2>/dev/null | head -5
 | Status codes | 200, 201, 204, 400, 401, 403, 404, 409, 422, 429, 500 — per the table above |
 | Content-Type | `application/json` for request and response bodies |
 | Idempotency | PUT and DELETE must be idempotent; PATCH should be |
-| Versioning | URL prefix (`/v1/`) or `Accept` header — must be consistent across all endpoints |
+| Versioning | URL prefix only — `/api/v{n}/` (e.g. `/api/v1/`) — no header-based versioning |
 
 ---
 
