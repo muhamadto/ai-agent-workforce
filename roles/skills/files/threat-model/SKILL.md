@@ -93,3 +93,4 @@ Produce a document with these sections:
 - Residual risks must be explicitly accepted — not silently ignored
 - Update the threat model when the architecture changes
 - Share the threat model with secops-engineer and identity-security-developer for review
+- If the scope includes OAuth2, OIDC, or JWT flows, use [/oauth-threat-model](../oauth-threat-model/SKILL.md) instead — it has pre-populated threat tables for those attack surfaces
