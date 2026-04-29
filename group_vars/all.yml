@@ -25,10 +25,16 @@ github_skill_sources:
     branch: "main"
     skills_path: "skills"
     enabled: true
+    selected_skills:
+      - test-driven-development
+      - systematic-debugging
   - repo: "https://github.com/upstash/context7"
     branch: "master"
     skills_path: "skills"
     enabled: true
+    selected_skills:
+      - context7-cli
+      - find-docs
   - repo: "https://github.com/anthropics/skills"
     branch: "main"
     skills_path: "skills"
@@ -36,6 +42,21 @@ github_skill_sources:
     selected_skills:
       - mcp-builder
       - skill-creator
-      - theme-factory
-      - web-artifacts-builder
-      - webapp-testing
+  - repo: "https://github.com/juliusbrussee/caveman"
+    branch: "main"
+    skills_path: "skills"
+    enabled: true
+    selected_skills:
+      - caveman
+  - repo: "https://github.com/microsoft/playwright-cli"
+    branch: "main"
+    skills_path: "skills"
+    enabled: true
+    selected_skills:
+      - playwright-cli
+  - repo: "https://github.com/harshanandak/forge"
+    branch: "master"
+    skills_path: "skills"
+    enabled: true
+    selected_skills:
+      - sonarcloud-analysis
