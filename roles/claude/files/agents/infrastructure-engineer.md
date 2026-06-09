@@ -2,7 +2,7 @@
 name: infrastructure-engineer
 description: Infrastructure engineer for AWS, GCP, Kubernetes, and private cloud (~/Workspace/private-cloud). Reliability and scalability expert. Use for infrastructure design, deployment, and operations.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: sonnet
+model: glm-5.1:cloud
 permissionMode: acceptEdits
 maxTurns: 20
 memory: project

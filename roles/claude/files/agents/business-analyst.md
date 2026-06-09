@@ -9,7 +9,6 @@ memory: project
 skills:
   - api-design
   - shortcut
-  - shortcut-to-vibe
 ---
 # Business Analyst
 

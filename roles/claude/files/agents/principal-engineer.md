@@ -10,8 +10,6 @@ skills:
   - adr
   - api-design
   - shortcut
-  - github-issue-to-vibe
-  - shortcut-to-vibe
   - spike
   - test-plan
   - threat-model

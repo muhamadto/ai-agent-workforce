@@ -6,7 +6,11 @@
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
-    "excludedCommands": ["docker", "ssh", "ssh-add"],
+    "excludedCommands": [
+      "docker",
+      "ssh",
+      "ssh-add"
+    ],
     "allowUnsandboxedCommands": true,
     "network": {
       "allowedDomains": [
@@ -49,7 +53,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'if [ -f pom.xml ]; then echo \"⚠️  Pre-commit checks will run:\\n  1. Code formatting (mvn spotless:check)\\n  2. Unit tests (mvn test)\\n  3. Coverage check (≥90% required)\\n  4. Conventional commits format\\n\\nThese checks will BLOCK the commit if they fail.\"; else echo \"ℹ️  Committing (no Maven project detected)\"; fi'",
+            "command": "bash -c 'if [ -f pom.xml ]; then echo \"\u26a0\ufe0f  Pre-commit checks will run:\\n  1. Code formatting (mvn spotless:check)\\n  2. Unit tests (mvn test)\\n  3. Coverage check (\u226590% required)\\n  4. Conventional commits format\\n\\nThese checks will BLOCK the commit if they fail.\"; else echo \"\u2139\ufe0f  Committing (no Maven project detected)\"; fi'",
             "description": "Warn about blocking pre-commit checks"
           }
         ]
@@ -60,7 +64,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'if [ -f pom.xml ] && [ -n \"$SONAR_TOKEN\" ]; then echo \"⚠️  Pre-push quality gate will run:\\n  1. Full test suite (mvn verify)\\n  2. SonarQube analysis\\n  3. Quality gate enforcement (≥90% coverage)\\n\\nThis will BLOCK the push if quality gate fails.\\nThis may take several minutes...\"; elif [ -f pom.xml ]; then echo \"ℹ️  SONAR_TOKEN not set, SonarQube checks will be skipped\"; else echo \"ℹ️  Pushing (no Maven project detected)\"; fi'",
+            "command": "bash -c 'if [ -f pom.xml ] && [ -n \"$SONAR_TOKEN\" ]; then echo \"\u26a0\ufe0f  Pre-push quality gate will run:\\n  1. Full test suite (mvn verify)\\n  2. SonarQube analysis\\n  3. Quality gate enforcement (\u226590% coverage)\\n\\nThis will BLOCK the push if quality gate fails.\\nThis may take several minutes...\"; elif [ -f pom.xml ]; then echo \"\u2139\ufe0f  SONAR_TOKEN not set, SonarQube checks will be skipped\"; else echo \"\u2139\ufe0f  Pushing (no Maven project detected)\"; fi'",
             "description": "Warn about blocking pre-push quality gate"
           }
         ]
@@ -72,7 +76,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'if [ -f pom.xml ]; then echo \"💡 Reminder: Run mvn spotless:apply to format code\"; fi'",
+            "command": "bash -c 'if [ -f pom.xml ]; then echo \"\ud83d\udca1 Reminder: Run mvn spotless:apply to format code\"; fi'",
             "description": "Reminder to format code after edits",
             "continueOnError": true
           }
@@ -80,15 +84,5 @@
       }
     ]
   },
-  "commitMessageTemplate": "<type>(<scope>): <subject>\n\n<body>\n\nSigned-off-by: Name <email>",
-  "mcpServers": {
-    "vibe_kanban": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "vibe-kanban@latest",
-        "--mcp"
-      ]
-    }
-  }
+  "commitMessageTemplate": "<type>(<scope>): <subject>\n\n<body>\n\nSigned-off-by: Name <email>"
 }

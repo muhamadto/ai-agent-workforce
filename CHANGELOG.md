@@ -8,44 +8,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `qe-engineer` agent for Claude, Qwen, and Gemini — test strategy, automation, BDD, performance, and CI/CD quality gates
-- `business-analyst` agent for Claude, Qwen, and Gemini — requirements elicitation, user stories, acceptance criteria, domain modeling
+- `qe-engineer` agent — test strategy, automation, BDD, performance, and CI/CD quality gates
+- `business-analyst` agent — requirements elicitation, user stories, acceptance criteria, domain modeling
 - `/run-quality-checks` skill — detect build tool (Maven, Gradle, npm, Python) and run full pre-commit quality gate
 - `/threat-model` skill — produce a STRIDE threat model for any feature or component
 - `/api-design` skill — design and review REST/OpenAPI or gRPC contracts for correctness, security, and business alignment
 - `/test-plan` skill — produce a structured test plan (unit/integration/E2E/performance/security) from a user story
-- `/git-commit` skill — Conventional Commits compliant commit workflow with hook awareness (deployed in #11)
+- `/git-commit` skill — Conventional Commits compliant commit workflow with hook awareness
 - `principal-engineer` agent now references `/api-design` skill for API design arbitration
-- Gemini CLI agents with repo-navigation-first design (9 specialized agents)
-- Model selection guide to README with per-agent recommendations
 - Build status and SonarCloud badges to README
 - GitHub Actions workflow for Ansible linting and SonarCloud scanning
 - CodeQL advanced security scanning workflow
 - YAML linting configuration (150 char line limit)
 - Git hooks for pre-commit and pre-push quality gates
+- Per-agent model routing via LiteLLM — high-judgment agents on Sonnet, implementation agents on Ollama (kimi-k2.6:cloud, glm-5.1:cloud)
 
 ### Changed
 - All agent `## Conventional Commits` sections collapsed to single-line reference to `/git-commit` skill
-- Gemini agents: replaced inline `## Commit Format` blocks with `/git-commit` skill reference
-- `secops-engineer` (Claude, Qwen): replaced inline STRIDE section with `/threat-model` skill reference
-- `identity-security-developer` (all models): workflow threat modeling step now references `/threat-model` skill
-- `business-analyst` (all models): API contract review now references `/api-design` skill
+- `secops-engineer`: replaced inline STRIDE section with `/threat-model` skill reference
+- `identity-security-developer`: workflow threat modeling step now references `/threat-model` skill
+- `business-analyst`: API contract review now references `/api-design` skill
 - Backend, frontend, mobile, data engineers: test coverage sections condensed; detailed methodology moved to `/test-plan` skill
 - Backend, frontend, mobile, data engineers: pre-commit quality workflow now references `/run-quality-checks` skill
-- Skills deployed to central `~/.skills/` and symlinked per installed model (`~/.claude/skills`, `~/.qwen/skills`, `~/.gemini/skills`)
+- Skills deployed to central `~/.skills/` and symlinked to `~/.claude/skills`
 - Migrated SonarCloud scan to non-deprecated `sonarqube-scan-action@v5`
-- Renamed `vibe-kanban` role to `vibekanban` (ansible-lint compliance)
 - Fixed codeql.yml YAML indentation and line length violations
 - Updated build workflow for Ansible projects (Python instead of Node.js)
 - Updated sonar-project.properties for Ansible YAML analysis
 
 ### Fixed
-- Qwen settings.json: removed unsupported `subagents` and `hooks` settings
 - macOS Seatbelt compatibility for ansible-lint in git hooks
 - SonarCloud project configuration for Ansible codebase
 
 ### Removed
-- Duplicate documentation files from Qwen role (consolidated at repo root)
+- Qwen Code role and all Qwen agent configurations
+- Gemini CLI role and all Gemini agent configurations
+- VibeKanban role, MCP server integration, and related skills (`shortcut-to-vibe`, `github-issue-to-vibe`)
+- Gemini GitHub Actions code review workflow
+- `SHORTCUT_VIBEKANBAN_WORKFLOW.md` guide
 - Inline commit convention documentation from all agent files (single source of truth: `/git-commit` skill)
 - Node.js dependencies from build workflow (not applicable to Ansible)
 

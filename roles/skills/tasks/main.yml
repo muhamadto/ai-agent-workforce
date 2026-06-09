@@ -15,34 +15,13 @@
 #   limitations under the License.
 #
 ---
-# Shared AI agent skills — deployed to ~/.skills/ with per-model symlinks
+# Shared AI agent skills — deployed to ~/.skills/ with a symlink from ~/.claude/skills
 
 # ── Command detection ──────────────────────────────────────────────────────────
 
 - name: Check if claude is installed
   command: which claude
   register: skills_claude_check
-  failed_when: false
-  changed_when: false
-  when: setup_state == "present"
-
-- name: Check if qwen is installed
-  command: which qwen
-  register: skills_qwen_check
-  failed_when: false
-  changed_when: false
-  when: setup_state == "present"
-
-- name: Check if gemini is installed
-  command: which gemini
-  register: skills_gemini_check
-  failed_when: false
-  changed_when: false
-  when: setup_state == "present"
-
-- name: Check if antigravity is installed
-  command: which antigravity
-  register: skills_antigravity_check
   failed_when: false
   changed_when: false
   when: setup_state == "present"
@@ -154,29 +133,23 @@
       (not skill_dir.0.item.selected_skills) or
       ((skill_dir.1.path | basename) in skill_dir.0.item.selected_skills)
 
-# ── Per-model symlinks ─────────────────────────────────────────────────────────
+# ── Claude skills symlink ──────────────────────────────────────────────────────
 
-- name: Stat existing skills paths for all models
+- name: Stat existing skills path for Claude
   stat:
-    path: "{{ ansible_facts['user_dir'] }}/{{ item }}/skills"
+    path: "{{ ansible_facts['user_dir'] }}/.claude/skills"
   register: skills_stat
-  loop:
-    - .claude
-    - .qwen
-    - .gemini
-    - .gemini/antigravity
   when: setup_state == "present"
 
 - name: Remove skills path if it is not a symlink pointing to ~/.skills
   file:
-    path: "{{ ansible_facts['user_dir'] }}/{{ item.item }}/skills"
+    path: "{{ ansible_facts['user_dir'] }}/.claude/skills"
     state: absent
-  loop: "{{ skills_stat.results | default([]) }}"
   when:
     - setup_state == "present"
-    - item.stat is defined
-    - item.stat.exists
-    - not (item.stat.islnk | default(false) and item.stat.lnk_source | default('') == ansible_facts['user_dir'] + '/.skills')
+    - skills_stat.stat is defined
+    - skills_stat.stat.exists
+    - not (skills_stat.stat.islnk | default(false) and skills_stat.stat.lnk_source | default('') == ansible_facts['user_dir'] + '/.skills')
 
 - name: Ensure ~/.claude exists before creating skills symlink
   file:
@@ -196,60 +169,6 @@
     - setup_state == "present"
     - skills_claude_check.rc == 0
 
-- name: Ensure ~/.qwen exists before creating skills symlink
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.qwen"
-    state: directory
-    mode: '0700'
-  when:
-    - setup_state == "present"
-    - skills_qwen_check.rc == 0
-
-- name: Create skills symlink for Qwen
-  file:
-    src: "{{ ansible_facts['user_dir'] }}/.skills"
-    dest: "{{ ansible_facts['user_dir'] }}/.qwen/skills"
-    state: link
-  when:
-    - setup_state == "present"
-    - skills_qwen_check.rc == 0
-
-- name: Ensure ~/.gemini exists before creating skills symlink
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.gemini"
-    state: directory
-    mode: '0700'
-  when:
-    - setup_state == "present"
-    - skills_gemini_check.rc == 0
-
-- name: Create skills symlink for Gemini
-  file:
-    src: "{{ ansible_facts['user_dir'] }}/.skills"
-    dest: "{{ ansible_facts['user_dir'] }}/.gemini/skills"
-    state: link
-  when:
-    - setup_state == "present"
-    - skills_gemini_check.rc == 0
-
-- name: Ensure ~/.gemini/antigravity exists before creating skills symlink
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.gemini/antigravity"
-    state: directory
-    mode: '0700'
-  when:
-    - setup_state == "present"
-    - skills_antigravity_check.rc == 0
-
-- name: Create skills symlink for Antigravity
-  file:
-    src: "{{ ansible_facts['user_dir'] }}/.skills"
-    dest: "{{ ansible_facts['user_dir'] }}/.gemini/antigravity/skills"
-    state: link
-  when:
-    - setup_state == "present"
-    - skills_antigravity_check.rc == 0
-
 - name: Find deployed local skills
   find:
     paths: "{{ ansible_facts['user_dir'] }}/.skills/"
@@ -260,15 +179,10 @@
 
 # ── Removal ────────────────────────────────────────────────────────────────────
 
-- name: Remove skills symlinks from model directories
+- name: Remove skills symlink from Claude directory
   file:
-    path: "{{ ansible_facts['user_dir'] }}/{{ item }}/skills"
+    path: "{{ ansible_facts['user_dir'] }}/.claude/skills"
     state: absent
-  loop:
-    - .claude
-    - .qwen
-    - .gemini
-    - .gemini/antigravity
   when: setup_state == "absent"
 
 - name: Remove central skills directory

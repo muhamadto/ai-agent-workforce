@@ -2,7 +2,7 @@
 name: backend-developer
 description: Senior backend developer. Java 24+ and Spring Boot 4.x expert with Spring Native and GraalVM. Implements code with ≥90% unit and ≥80% integration test coverage. SOLID, Clean Code, and Clean Architecture mandatory.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: sonnet
+model: glm-5.1:cloud
 permissionMode: acceptEdits
 maxTurns: 20
 memory: project
