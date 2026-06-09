@@ -2,7 +2,7 @@
 name: data-engineer
 description: Data engineering expert. ETL/ELT pipelines, big data, data warehouses, SQL optimization, Python. Use for data pipeline design, implementation, and optimization.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: sonnet
+model: glm-5.1:cloud
 permissionMode: acceptEdits
 maxTurns: 20
 memory: project

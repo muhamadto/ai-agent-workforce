@@ -6,23 +6,23 @@ Deploys and manages Claude Code agent teams with specialized personas and workfl
 
 - Creates `~/.claude` directory structure
 - Deploys Claude Code settings and configuration
-- Installs specialized agent personas
-- Sets up workflow guides (Git, Conventional Commits, Shortcut/VibeKanban)
-- Configures Shortcut-Vibe sync helper script
+- Installs specialized agent personas with per-agent model routing via LiteLLM
 
 ## Agent Personas
 
-All agents use Claude Sonnet 4.5:
-
-- **architecture-guardian.md** - Ruthless Clean Architecture enforcer
-- **backend-developer.md** - Java 24+, Spring Boot 4.x, Spring Native expert
-- **data-engineer.md** - ETL/ELT, big data, data warehousing specialist
-- **frontend-developer.md** - React 18+, Next.js 14+, Flutter 3.x expert
-- **identity-security-developer.md** - OAuth2, OIDC, passkeys security expert
-- **infrastructure-engineer.md** - AWS, GCP, Kubernetes, private cloud specialist
-- **mobile-engineer.md** - iOS, Android, Flutter, React Native expert
-- **principal-engineer.md** - Strategic arbiter and decision-maker
-- **secops-engineer.md** - OWASP, security tooling paranoid expert
+| Agent | Model |
+|---|---|
+| **architecture-guardian** | Sonnet |
+| **backend-developer** | glm-5.1:cloud |
+| **business-analyst** | Sonnet |
+| **data-engineer** | glm-5.1:cloud |
+| **frontend-developer** | kimi-k2.6:cloud |
+| **identity-security-developer** | glm-5.1:cloud |
+| **infrastructure-engineer** | glm-5.1:cloud |
+| **mobile-engineer** | glm-5.1:cloud |
+| **principal-engineer** | Sonnet |
+| **qe-engineer** | Sonnet |
+| **secops-engineer** | Sonnet |
 
 ## Usage
 
@@ -56,23 +56,15 @@ claude "@backend-developer build a REST API"
 ### Agents
 - `~/.claude/agents/*.md` - Agent persona definitions
 
-### Workflow Guides
-- `~/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md`
-
-### Helper Scripts
-- `~/.local/bin/shortcut-vibe-sync` - Shortcut ↔ VibeKanban sync
-
 ## Requirements
 
 - macOS
 - Claude Code CLI installed
-- Anthropic API key configured
+- LiteLLM configured and running (for model routing)
 
 ## Variables
 
-None currently. Future:
-- `claude_default_model` - Default Claude model to use
-- `claude_api_key` - API key (prefer environment variables)
+- `claude_default_model` — Default Claude model (optional override)
 
 ## Tags
 

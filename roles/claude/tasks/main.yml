@@ -38,13 +38,6 @@
     mode: '0700'
   when: setup_state == "present"
 
-- name: Deploy Shortcut ↔ VibeKanban workflow guide
-  copy:
-    src: "SHORTCUT_VIBEKANBAN_WORKFLOW.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
-    mode: '0600'
-  when: setup_state == "present"
-
 - name: Deploy Claude Code agents
   copy:
     src: "agents/{{ item }}"
@@ -69,17 +62,18 @@
     msg: |
       Claude Code agents deployed to ~/.claude/agents/:
       - architecture-guardian: Clean Architecture enforcer (Sonnet)
-      - backend-developer: Java 24+, Spring Boot 4.x, Spring Native expert (Sonnet)
+      - backend-developer: Java 24+, Spring Boot 4.x, Spring Native expert (glm-5.1:cloud)
       - business-analyst: Requirements, user stories, acceptance criteria, domain modeling (Sonnet)
-      - data-engineer: ETL/ELT, big data, data warehousing expert (Sonnet)
-      - frontend-developer: React, Next.js, Flutter expert (Sonnet)
-      - identity-security-developer: OAuth2, OIDC, passkeys expert (Sonnet)
-      - infrastructure-engineer: AWS, GCP, K3S, IaC expert (Sonnet)
-      - mobile-engineer: iOS, Android, Flutter, React Native expert (Sonnet)
+      - data-engineer: ETL/ELT, big data, data warehousing expert (glm-5.1:cloud)
+      - frontend-developer: React, Next.js, Flutter expert (kimi-k2.6:cloud)
+      - identity-security-developer: OAuth2, OIDC, passkeys expert (glm-5.1:cloud)
+      - infrastructure-engineer: AWS, GCP, K3S, IaC expert (glm-5.1:cloud)
+      - mobile-engineer: iOS, Android, Flutter, React Native expert (glm-5.1:cloud)
       - principal-engineer: Strategic arbiter and decision-maker (Sonnet)
       - qe-engineer: Test strategy, automation, BDD, performance, quality gates (Sonnet)
       - secops-engineer: OWASP, security tooling expert (Sonnet)
 
+      Model routing: Claude Code → LiteLLM → Ollama (kimi/glm) or Anthropic (sonnet)
       Usage: Invoke with @agent-name in Claude Code or let Claude choose automatically
   when: setup_state == "present"
 
@@ -92,11 +86,5 @@
 - name: Remove Claude Code agents
   file:
     path: "{{ ansible_facts['user_dir'] }}/.claude/agents"
-    state: absent
-  when: setup_state == "absent"
-
-- name: Remove Shortcut ↔ VibeKanban workflow guide
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.claude/SHORTCUT_VIBEKANBAN_WORKFLOW.md"
     state: absent
   when: setup_state == "absent"

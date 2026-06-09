@@ -19,19 +19,6 @@
       tags:
         - claude
 
-    - role: qwen
-      tags:
-        - qwen
-
-    - role: gemini
-      tags:
-        - gemini
-
     - role: skills
       tags:
         - skills
-
-    - role: vibekanban
-      tags:
-        - kanban
-        - task-management
