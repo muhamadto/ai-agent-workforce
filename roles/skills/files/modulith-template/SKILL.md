@@ -1,15 +1,17 @@
 ---
 name: modulith-template
-description: Standard Maven multi-module layout for a Spring Modulith application — contracts JAR (controller interfaces + DTOs), app module (Spring Boot modulith with enforced module boundaries), and infra module (CDK for Terraform). Load when starting a new product, adding an application module to a modulith, deciding which module/package a class belongs in, or extracting a module into a standalone microservice. Maven only, never Gradle.
+description: Standard Maven multi-module layout for a Spring Modulith application — contracts JAR (controller interfaces + DTOs), app module (Spring Boot modulith with enforced module boundaries), and infra module (CDK for Terraform). Load when working on a Spring Modulith product — starting one, adding an application module, deciding which module/package a class belongs in, or extracting a module into a standalone microservice. Maven only, never Gradle.
 ---
 
 # Modulith Template — Maven Multi-Module Structure
 
-The default starting architecture for any new product is a **modular monolith built
-on Spring Modulith** — microservice-shaped boundaries, monolith-shaped deployment.
-A standalone microservice (see [/microservice-template](../microservice-template/SKILL.md))
-is the *extraction target*, not the starting point. Replace `modulith-template` with
-the actual product name (kebab-case) throughout. Maven ONLY — never Gradle.
+The layout for a product built as a **modular monolith on Spring Modulith** —
+microservice-shaped boundaries, monolith-shaped deployment. Whether a project is a
+modulith or standalone microservices is a per-project decision; when it is a
+modulith, this layout is mandatory. Modules extracted later follow
+[/microservice-template](../microservice-template/SKILL.md). Replace
+`modulith-template` with the actual product name (kebab-case) throughout.
+Maven ONLY — never Gradle.
 
 ## Module Overview
 
@@ -102,6 +104,17 @@ Placement rules:
   build another one.
 - Events that must leave the application (to a broker, to other systems) are marked
   `@Externalized("<topic>")`. Internal module-to-module events stay internal.
+- Spring Modulith ships externalizers for Kafka/AMQP/JMS/SQS only — there is no
+  NATS externalizer, so `@Externalized` alone delivers nothing. Every modulith
+  project uses the platform `NatsEventExternalizer` (built on the
+  `spring-modulith-events-core` SPI over the jnats/nats-spring `Connection` bean).
+  Semantics are non-negotiable: the publication is marked complete on `PublishAck`
+  ONLY; a failed publish leaves it incomplete for registry resubmission;
+  `Nats-Msg-Id` = the event publication ID so JetStream's duplicate window makes
+  resubmission safe. Never log-and-swallow a publish failure.
+- JetStream streams and consumers are provisioned in the infra module (CDKTF),
+  never by shell scripts or in-app code, and never with no-ack — publish acks are
+  load-bearing.
 - Event records are immutable Java records, named in past tense
   (`OrderCancelled`, not `CancelOrder`), and live in the publishing module's root
   package — they are API.

@@ -135,6 +135,13 @@ model, public APIs, events, or database schemas.**
    normal, not exceptional.
 5. **Money and personal data are modeled first-class** — Payment state, refund
    outcomes, and APIS fields are schema, not JSON blobs.
+6. **Notify-then-fetch at every boundary.** Outbound: every successful state change
+   of a stateful public resource publishes a slim notification (id, type, resource,
+   version, link — never state); consumers fetch via the linked endpoint. Inbound
+   preferred contract: the airline sends a slim doorbell to our webhook receiver and
+   hosts a pull endpoint in OUR model (provider SPI) that we call to fetch the
+   changed data; state-push with version guards and polling are per-airline
+   fallbacks. All inbound modes converge on fetch-then-reconcile.
 
 ## Glossary (quick reference)
 

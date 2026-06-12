@@ -35,11 +35,13 @@ NOT used here. Load this skill before any work that publishes, consumes, or stre
 Per the [/microservice-template](../microservice-template/SKILL.md) layout, inbound handlers
 live in the service module's `listener/` package and outbound emitters in `publisher/`.
 
-- **Outbox pattern**: write the event to an outbox table in the same DB transaction as the state change; a relay publishes from the outbox to JetStream — never publish inside a transaction directly
+- **Outbox pattern** (standalone microservices): write the event to an outbox table in the same DB transaction as the state change; a relay publishes from the outbox to JetStream — never publish to the broker inside a transaction directly. **In Spring Modulith projects the event publication registry IS the outbox** — publish application events and externalize with `@Externalized` per [/modulith-template](../modulith-template/SKILL.md); do NOT build a second outbox table
 - **Idempotent consumers**: treat every delivery as possibly-duplicate; dedupe on business key or `Nats-Msg-Id`, make handlers safe to replay
 - **Event payloads**: versioned, additive schema evolution (never repurpose fields); include event id, type, version, occurred-at, and aggregate id; JSON by default, CloudEvents envelope where interop matters
 - **Choreography vs orchestration**: prefer choreography (services react to events) for loose coupling; use an orchestrator (Temporal, or a saga in the service layer) when a flow needs central error handling and compensation
 - **Ordering**: per-subject ordering is preserved within a stream; partition by aggregate id in the subject (`orders.created.<region>`) when strict per-entity ordering matters
+- **Slim notifications at the boundary**: every feature that changes a stateful, externally visible resource publishes a slim event notification (event_id, event_type, resource_type, resource_id, resource_version, occurred_at, link — never state) on successful processing, after commit. External consumers fetch current state from the linked endpoint (notify-then-fetch); out-of-order delivery is harmless because the fetch is always current and resource_version lets consumers skip stale work
+- **Rich events inside**: within a modulith (and between platform-internal services), events are rich domain events carrying the data consumers need. Thin-event-plus-refetch is for crossing the platform boundary, not for internal choreography
 
 ## Client Usage
 
