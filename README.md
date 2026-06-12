@@ -144,6 +144,7 @@ Located in `~/.claude/skills/`:
 | Skill | Description |
 |---|---|
 | `adr` | Create Architecture Decision Records with context, options, and rationale |
+| `airline-retailing` | Domain knowledge: NDC, ONE Order, Offers & Orders, servicing flows — the order platform's ubiquitous language |
 | `api-design` | Design and review API contracts (OpenAPI/REST/gRPC) for correctness, security, and business alignment |
 | `audit-jwt-config` | Audit JWT implementations for algorithm confusion, claims gaps, and lifecycle weaknesses |
 | `auth-engineering` | Knowledge: OAuth 2.1, OIDC, passkeys, MFA, JWT security, and token handling on web/iOS/Android |
@@ -159,6 +160,7 @@ Located in `~/.claude/skills/`:
 | `java-spring-engineering` | Knowledge: Java 24+, Spring Boot 4.x, GraalVM Native, persistence, messaging, Maven toolchain |
 | `microservice-template` | Mandatory Maven multi-module microservice layout: client / service / infra (CDKTF) |
 | `mobile-engineering` | Knowledge: Swift/SwiftUI, Kotlin/Compose, Flutter, platform security, store distribution |
+| `modulith-template` | Mandatory Maven multi-module Spring Modulith layout: contracts / app / infra (CDKTF) |
 | `oauth-threat-model` | Focused threat model for OAuth2/OIDC flows: PKCE, redirect URIs, token theft vectors |
 | `quality-engineering` | Knowledge: test strategy, BDD, performance testing, CI/CD quality gates |
 | `sandpipers-platform` | The private-cloud service map — AWS equivalents (NATS not SQS, Keycloak not Cognito, MinIO not S3) |
