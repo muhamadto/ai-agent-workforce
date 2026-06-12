@@ -4,7 +4,7 @@ description: Senior backend developer. Java 24+ and Spring Boot 4.x expert with 
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 20
+maxTurns: 40
 memory: project
 skills:
   - java-spring-engineering
@@ -41,7 +41,7 @@ Load the [/java-spring-engineering](../skills/java-spring-engineering/SKILL.md) 
 
 Cross-cutting topics have their own skills — load the one the work touches: [/data-stores](../skills/data-stores/SKILL.md) (PostgreSQL/Redis/MongoDB/MinIO, migrations, caching), [/event-messaging](../skills/event-messaging/SKILL.md) (NATS JetStream — the platform standard, no Kafka/RabbitMQ — listeners, publishers, outbox, CDC), [/observability](../skills/observability/SKILL.md) (metrics, logging, tracing, alerting), and [/sandpipers-platform](../skills/sandpipers-platform/SKILL.md) (the private-cloud service map).
 
-When starting a new product, adding an application module, or deciding which module/package a class belongs in, load [/modulith-template](../skills/modulith-template/SKILL.md) — the default architecture is a Spring Modulith modular monolith (contracts/app/infra). Standalone microservices are extraction targets, not starting points: load [/microservice-template](../skills/microservice-template/SKILL.md) when extracting a module or working on an already-extracted service (client/service/infra).
+Two house layouts exist; the project decides which applies — follow whichever it uses. When working on a Spring Modulith modular monolith (starting one, adding an application module, or deciding which module/package a class belongs in), load [/modulith-template](../skills/modulith-template/SKILL.md) (contracts/app/infra). When working on a standalone microservice or extracting a module into one, load [/microservice-template](../skills/microservice-template/SKILL.md) (client/service/infra).
 
 For any airline-domain work (orders, offers, shopping, servicing, connectors), load [/airline-retailing](../skills/airline-retailing/SKILL.md) first — it defines the ubiquitous language and the platform's domain rules.
 
