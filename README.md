@@ -125,6 +125,7 @@ Located in `~/.claude/agents/`:
 - **principal-engineer** - Strategic decision-maker
 - **qe-engineer** - Test strategy, automation, BDD, performance expert
 - **secops-engineer** - OWASP, security tooling expert
+- **sre-engineer** - SLOs, alerting, incident response, capacity, DR
 
 ### Shared Skills
 
@@ -138,15 +139,19 @@ Located in `~/.claude/skills/`:
 | `auth-engineering` | Knowledge: OAuth 2.1, OIDC, passkeys, MFA, JWT security, and token handling on web/iOS/Android |
 | `business-analysis` | Knowledge: elicitation techniques, INVEST stories, Gherkin, domain modeling, prioritisation |
 | `clean-architecture` | Knowledge: layer rules, Dependency Rule, violation catalog, ArchUnit verification |
-| `data-engineering` | Knowledge: Spark/Flink/Kafka, orchestration, warehouses, data modeling, quality tooling |
+| `data-engineering` | Knowledge: Python data tooling, orchestration, PostgreSQL+MinIO analytics, data modeling, quality |
+| `data-stores` | Knowledge: PostgreSQL, Redis, MongoDB, MinIO, migrations, pooling, caching patterns |
 | `db-migration-review` | Review database migrations for destructive ops, locks, and missing rollbacks |
+| `event-messaging` | Knowledge: NATS JetStream (the platform standard), listeners/publishers, outbox, CDC, streaming |
 | `frontend-engineering` | Knowledge: React 18+, Next.js 14+, Flutter 3.x, performance, accessibility, testing stack |
-| `infrastructure-engineering` | Knowledge: AWS/GCP, Kubernetes, Terraform/CDKTF, observability, reliability principles |
+| `infrastructure-engineering` | Knowledge: AWS/GCP, Kubernetes, Terraform/CDKTF, the private-cloud stack, reliability principles |
+| `observability` | Knowledge: Micrometer/Prometheus, Loki, OpenTelemetry/Tempo, dashboards, SLO/burn-rate alerting |
 | `java-spring-engineering` | Knowledge: Java 24+, Spring Boot 4.x, GraalVM Native, persistence, messaging, Maven toolchain |
 | `microservice-template` | Mandatory Maven multi-module microservice layout: client / service / infra (CDKTF) |
 | `mobile-engineering` | Knowledge: Swift/SwiftUI, Kotlin/Compose, Flutter, platform security, store distribution |
 | `oauth-threat-model` | Focused threat model for OAuth2/OIDC flows: PKCE, redirect URIs, token theft vectors |
 | `quality-engineering` | Knowledge: test strategy, BDD, performance testing, CI/CD quality gates |
+| `sandpipers-platform` | The private-cloud service map — AWS equivalents (NATS not SQS, Keycloak not Cognito, MinIO not S3) |
 | `secops-engineering` | Knowledge: OWASP Top 10, SAST/DAST/SCA tooling, secure coding, supply chain security |
 | `dependency-review` | Evaluate dependency upgrades for breaking changes, CVEs, and license compliance |
 | `git-branch` | Branch lifecycle — cut from `origin/main`, sync via rebase, never merge |

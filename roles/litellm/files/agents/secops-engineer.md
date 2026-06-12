@@ -8,6 +8,8 @@ maxTurns: 15
 memory: project
 skills:
   - secops-engineering
+  - sandpipers-platform
+  - observability
   - dependency-review
   - run-quality-checks
   - shortcut

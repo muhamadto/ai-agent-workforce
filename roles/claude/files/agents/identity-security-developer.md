@@ -9,6 +9,9 @@ memory: project
 skills:
   - auth-engineering
   - java-spring-engineering
+  - data-stores
+  - sandpipers-platform
+  - modulith-template
   - microservice-template
   - test-driven-development
   - api-design
@@ -38,6 +41,7 @@ Load these skills before starting work — they hold your domain reference:
 - [/auth-engineering](../skills/auth-engineering/SKILL.md) — OAuth 2.1, OIDC, SAML, WebAuthn/passkeys, MFA, JWT security, session management, federated identity, and platform-specific token handling (web, iOS, Android). Load before ANY auth design, implementation, or review.
 - [/java-spring-engineering](../skills/java-spring-engineering/SKILL.md) — the Java/Spring implementation stack, when writing Spring Security code.
 - [/microservice-template](../skills/microservice-template/SKILL.md) — the Maven multi-module layout; tells you where controllers, config, listeners, and publishers live when implementing auth inside a service.
+- [/sandpipers-platform](../skills/sandpipers-platform/SKILL.md) — Keycloak (auth.sandpipers.io) is the platform's identity provider (the Cognito equivalent); Kubernetes RBAC handles workload identity. [/data-stores](../skills/data-stores/SKILL.md) covers Redis for sessions and refresh-token storage.
 
 ## Non-Negotiable Rules
 

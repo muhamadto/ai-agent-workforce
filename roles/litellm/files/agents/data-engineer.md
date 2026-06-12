@@ -8,6 +8,10 @@ maxTurns: 20
 memory: project
 skills:
   - data-engineering
+  - data-stores
+  - event-messaging
+  - observability
+  - sandpipers-platform
   - test-driven-development
   - git-commit
   - git-branch

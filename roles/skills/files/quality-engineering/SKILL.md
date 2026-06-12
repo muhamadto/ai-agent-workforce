@@ -42,7 +42,7 @@ Load this skill before planning, writing, or reviewing tests and quality gates.
 
 ## Integration Testing (Mandatory)
 
-- **Testcontainers**: Real databases (PostgreSQL, MySQL, MongoDB), real message brokers (Kafka, RabbitMQ), real caches (Redis)
+- **Testcontainers**: Real databases (PostgreSQL, MySQL, MongoDB), real message brokers (NATS JetStream), real caches (Redis)
 - **Spring test slices**: `@WebMvcTest` for controllers, `@DataJpaTest` for repositories, `@SpringBootTest` for full context
 - **Database state isolation**: Each test in its own transaction with rollback, or truncate tables in `@BeforeEach`
 - **RestAssured**: Fluent HTTP assertions for REST API integration tests

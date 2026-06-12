@@ -1,6 +1,6 @@
 ---
 name: infrastructure-engineering
-description: Reference knowledge for infrastructure engineering — AWS and GCP service catalogs, the private cloud stack at ~/Workspace/private-cloud (K3S, Traefik, Sealed Secrets, GitOps, observability), Infrastructure as Code (Terraform, Ansible, Helm, Kustomize), Kubernetes operations and security, monitoring/logging/tracing/alerting, networking and service mesh, backup and disaster recovery, security hardening, and cost optimization. Load this BEFORE designing, implementing, or reviewing any infrastructure work.
+description: Reference knowledge for infrastructure engineering — AWS and GCP service catalogs, the private cloud stack at ~/Workspace/private-cloud (K3S, Kong, Traefik, ArgoCD, MetalLB, Longhorn, Sealed Secrets), Infrastructure as Code (Terraform/CDKTF, Ansible, Helm, Kustomize), Kubernetes operations and security, networking, backup and disaster recovery, security hardening, and cost optimization. Load this BEFORE designing, implementing, or reviewing any infrastructure work. The platform service map (AWS equivalents) lives in the sandpipers-platform skill.
 ---
 
 # Infrastructure Engineering Reference
@@ -32,20 +32,21 @@ Reference knowledge for infrastructure design, deployment, and operations across
 
 ## Private Cloud Infrastructure (~/Workspace/private-cloud)
 
-The private cloud lives at `~/Workspace/private-cloud` and includes:
+The canonical AWS-equivalents service map (what to use instead of RDS, SQS, Cognito, etc.)
+lives in [/sandpipers-platform](../sandpipers-platform/SKILL.md) — load it for any work that
+targets the platform. The stack, managed as Ansible code at `~/Workspace/private-cloud`:
 
-- **Container Orchestration**: K3S (lightweight Kubernetes for edge/on-premise); high availability via multi-master setup with embedded etcd or external datastore; cluster management with kubectl, Helm charts, kustomize
-- **Networking & Load Balancing**: Traefik (ingress controller, reverse proxy, load balancer); VPC-style network isolation, subnet management, routing; dynamic DNS for dynamic IPs; CNI plugins, network policies, service mesh
-- **API Gateway & Service Mesh**: centralized API management, rate limiting, authentication; service load balancing, health checks, failover
-- **Certificate Management**: automated provisioning and renewal (Let's Encrypt); TLS termination at ingress
-- **Messaging & Event Streaming**: NATS, Kafka, RabbitMQ for async communication; pub/sub patterns, event sourcing
-- **Databases & Persistence**: PostgreSQL, MySQL, MongoDB deployments; persistent volumes and storage classes (block storage); S3-compatible object storage (MinIO)
-- **Secrets Management**: Sealed Secrets (Bitnami), external secrets operator; secrets encrypted at rest, RBAC for access control
-- **Identity & Access Management**: centralized authentication, federated access, SSO
-- **Observability**: Prometheus (metrics), Grafana (dashboards), Loki (logs), Jaeger (tracing); cluster health, resource usage, application metrics; AlertManager for notifications
-- **GitOps & CI/CD**: ArgoCD, Flux for declarative deployments; Git-based configuration management; push-based or pull-based automated deployments
-- **Serverless Functions**: OpenFaaS, Knative for serverless workloads
-- **Platform Operations**: backup, restore, disaster recovery, capacity planning; custom kernel modules for specialized workloads; Portainer container management UI (optional); secure tunnels for remote access (Cloudflare Tunnel, Tailscale)
+- **Container Orchestration**: K3S (domain `sandpipers.io`); cluster management with kubectl (read-only — changes go through the Ansible repo), Helm, Kustomize
+- **Ingress & Gateway**: Kong API gateway (public exposure ONLY via Cloudflare tunnel to `api.sandpipers.io`); Traefik ingress with cert-manager TLS (Let's Encrypt wildcard `*.sandpipers.io`); MetalLB for internal LoadBalancer IPs (Kong: 192.168.4.202); everything non-public is Tailscale-only
+- **Messaging & Event Streaming**: NATS JetStream — the only broker on the platform (see [/event-messaging](../event-messaging/SKILL.md))
+- **Databases & Persistence**: PostgreSQL, Redis, MongoDB deployments; Longhorn block storage (StorageClass for PVCs); MinIO S3-compatible object storage (see [/data-stores](../data-stores/SKILL.md))
+- **Secrets Management**: Sealed Secrets (Bitnami) committed to git; secrets encrypted at rest, RBAC for access control
+- **Identity & Access Management**: Keycloak (`auth.sandpipers.io`) for OIDC/SSO; Kubernetes RBAC + ServiceAccounts for workload identity
+- **Observability**: Prometheus, Grafana, Loki, Tempo, AlertManager (see [/observability](../observability/SKILL.md))
+- **GitOps & CI/CD**: ArgoCD for declarative pull-based deployments — no kubectl-apply deployments, no clickops
+- **Serverless Functions**: OpenFaaS (`faas.sandpipers.io`)
+- **Network Security**: NetworkPolicies enforced (deny-by-default posture); VLAN-segmented homelab network
+- **Platform Operations**: backup/restore/DR, capacity planning on constrained Pi hardware (resource requests/limits mandatory); remote access via Tailscale and Cloudflare Tunnel only
 
 ## Infrastructure as Code (IaC)
 
@@ -112,37 +113,14 @@ The private cloud lives at `~/Workspace/private-cloud` and includes:
 - **Secrets Encryption**: Encrypt secrets at rest (etcd encryption, Sealed Secrets)
 - **Image Security**: Vulnerability scanning (Trivy, Clair), signed images
 
-## Observability & Monitoring
+## Observability (cluster-level)
 
-### Metrics (Prometheus Stack)
+The full observability reference (instrumentation, logging, tracing, dashboards, alert
+discipline, SLOs) lives in [/observability](../observability/SKILL.md). Cluster-side specifics:
 
-- **Prometheus**: Time-series metrics collection, PromQL queries
-- **Grafana**: Visualization, dashboards, alerting
-- **Exporters**: Node Exporter, Kube-state-metrics, application exporters
-- **Service Monitors**: Prometheus Operator for service discovery
-- **Recording Rules**: Pre-compute expensive queries
-- **Alerting Rules**: Define alert conditions, severity levels
-
-### Logging (ELK / Loki)
-
-- **Elasticsearch / Logstash / Kibana**: search and analytics engine, log processing pipeline, log visualization (ELK stack)
-- **Loki**: Log aggregation (lightweight, Prometheus-like); **Promtail** as log shipper
-- **Fluentd/Fluent Bit**: Log collection and forwarding
-- **Structured Logging**: JSON logs with consistent fields
-
-### Tracing
-
-- **Jaeger**: Distributed tracing, trace visualization
-- **OpenTelemetry**: Vendor-neutral instrumentation (metrics, traces, logs)
-- **Zipkin**: Distributed tracing (alternative to Jaeger)
-- **Service Mesh Integration**: Istio, Linkerd for automatic tracing
-
-### Alerting
-
-- **AlertManager**: Route alerts, group, silence, inhibit
-- **Notification Channels**: Email, Slack, PagerDuty, webhooks
-- **Escalation Policies**: On-call rotations, escalation rules
-- **Runbooks**: Documented response procedures
+- **Prometheus Operator**: ServiceMonitors for scrape discovery; node-exporter and kube-state-metrics on every cluster; recording rules for expensive PromQL
+- **Log shipping**: Promtail (or Fluent Bit) → Loki; containers log to stdout only
+- **AlertManager**: routing, grouping, silencing, inhibition; every alert carries a runbook link
 
 ## Networking
 
@@ -217,7 +195,7 @@ The private cloud lives at `~/Workspace/private-cloud` and includes:
 - **Horizontal Scaling**: Add more instances, not bigger instances
 - **Stateless Applications**: Store state externally (database, cache, object storage)
 - **Caching**: Reduce load on databases (Redis, CDN)
-- **Asynchronous Processing**: Decouple with message queues (Kafka, NATS, RabbitMQ)
+- **Asynchronous Processing**: Decouple with NATS JetStream queues and streams
 - **Database Scaling**: Read replicas, sharding, caching
 - **Immutable Infrastructure**: Replace, don't modify — destroy and recreate
 
@@ -241,6 +219,8 @@ The private cloud lives at `~/Workspace/private-cloud` and includes:
 
 ## Related Skills
 
+- [/sandpipers-platform](../sandpipers-platform/SKILL.md) — the canonical AWS-equivalents service map for the private cloud
+- [/observability](../observability/SKILL.md) · [/event-messaging](../event-messaging/SKILL.md) · [/data-stores](../data-stores/SKILL.md) — cross-cutting platform topics
 - [/microservice-template](../microservice-template/SKILL.md) — the mandatory microservice layout; its infra module uses CDK for Terraform (CDKTF, Java)
 - [/threat-model](../threat-model/SKILL.md) — STRIDE threat modeling for new infrastructure or changed trust boundaries
 - [/incident](../incident/SKILL.md) — incident response and blameless postmortems

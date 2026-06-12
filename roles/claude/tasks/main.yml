@@ -55,6 +55,7 @@
     - principal-engineer.md
     - qe-engineer.md
     - secops-engineer.md
+    - sre-engineer.md
   when: setup_state == "present"
 
 - name: Display deployed agents
@@ -72,6 +73,7 @@
       - principal-engineer: Strategic arbiter and decision-maker
       - qe-engineer: Test strategy, automation, BDD, performance, quality gates
       - secops-engineer: OWASP, security tooling expert
+      - sre-engineer: SLOs, alerting, incident response, capacity, DR
 
       Model routing: all agents on Anthropic sonnet (use the litellm role for per-agent routing)
       Usage: Invoke with @agent-name in Claude Code or let Claude choose automatically

@@ -8,6 +8,10 @@ maxTurns: 20
 memory: project
 skills:
   - infrastructure-engineering
+  - sandpipers-platform
+  - event-messaging
+  - data-stores
+  - observability
   - microservice-template
   - test-driven-development
   - adr
