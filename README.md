@@ -94,9 +94,17 @@ ai-agent-workforce/
 ├── group_vars/
 │   └── all.yml              # Global variables
 └── roles/
-    ├── claude/              # Claude Code agents
+    ├── claude/              # Claude Code agents — all on Anthropic sonnet (default)
+    ├── litellm/             # Same agents with per-agent LiteLLM model routing (opt-in: --tags litellm)
     └── skills/              # Shared skills
 ```
+
+The `claude` and `litellm` roles deploy the same agent set to the same paths and are
+mutually exclusive: `claude` runs by default, `litellm` only with `--tags litellm`.
+
+Agents are slim personas (standards, workflow, posture); their domain knowledge lives
+in lazy-loaded knowledge skills (e.g. `java-spring-engineering`, `auth-engineering`)
+that agents pull in on demand via their `skills:` frontmatter.
 
 ## Agent Teams
 
@@ -126,7 +134,20 @@ Located in `~/.claude/skills/`:
 |---|---|
 | `adr` | Create Architecture Decision Records with context, options, and rationale |
 | `api-design` | Design and review API contracts (OpenAPI/REST/gRPC) for correctness, security, and business alignment |
+| `audit-jwt-config` | Audit JWT implementations for algorithm confusion, claims gaps, and lifecycle weaknesses |
+| `auth-engineering` | Knowledge: OAuth 2.1, OIDC, passkeys, MFA, JWT security, and token handling on web/iOS/Android |
+| `business-analysis` | Knowledge: elicitation techniques, INVEST stories, Gherkin, domain modeling, prioritisation |
+| `clean-architecture` | Knowledge: layer rules, Dependency Rule, violation catalog, ArchUnit verification |
+| `data-engineering` | Knowledge: Spark/Flink/Kafka, orchestration, warehouses, data modeling, quality tooling |
 | `db-migration-review` | Review database migrations for destructive ops, locks, and missing rollbacks |
+| `frontend-engineering` | Knowledge: React 18+, Next.js 14+, Flutter 3.x, performance, accessibility, testing stack |
+| `infrastructure-engineering` | Knowledge: AWS/GCP, Kubernetes, Terraform/CDKTF, observability, reliability principles |
+| `java-spring-engineering` | Knowledge: Java 24+, Spring Boot 4.x, GraalVM Native, persistence, messaging, Maven toolchain |
+| `microservice-template` | Mandatory Maven multi-module microservice layout: client / service / infra (CDKTF) |
+| `mobile-engineering` | Knowledge: Swift/SwiftUI, Kotlin/Compose, Flutter, platform security, store distribution |
+| `oauth-threat-model` | Focused threat model for OAuth2/OIDC flows: PKCE, redirect URIs, token theft vectors |
+| `quality-engineering` | Knowledge: test strategy, BDD, performance testing, CI/CD quality gates |
+| `secops-engineering` | Knowledge: OWASP Top 10, SAST/DAST/SCA tooling, secure coding, supply chain security |
 | `dependency-review` | Evaluate dependency upgrades for breaking changes, CVEs, and license compliance |
 | `git-branch` | Branch lifecycle — cut from `origin/main`, sync via rebase, never merge |
 | `git-commit` | Conventional Commits compliant commit messages with hook awareness |

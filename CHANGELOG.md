@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `litellm` role — the former `claude` role with per-agent LiteLLM model routing, now opt-in via `--tags litellm`; the new `claude` role deploys all agents on sonnet by default
+- Knowledge skills extracted from agent prompts (loaded on demand instead of always in context): `/java-spring-engineering`, `/auth-engineering`, `/frontend-engineering`, `/mobile-engineering`, `/infrastructure-engineering`, `/data-engineering`, `/quality-engineering`, `/secops-engineering`, `/clean-architecture`, `/business-analysis`
+- `/microservice-template` skill — mandatory Maven multi-module layout (client / service / infra with CDK for Terraform)
+- `test-driven-development` skill wired into all implementation agents
 - `qe-engineer` agent — test strategy, automation, BDD, performance, and CI/CD quality gates
 - `business-analyst` agent — requirements elicitation, user stories, acceptance criteria, domain modeling
 - `/run-quality-checks` skill — detect build tool (Maven, Gradle, npm, Python) and run full pre-commit quality gate
@@ -24,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Per-agent model routing via LiteLLM — high-judgment agents on Sonnet, implementation agents on Ollama (kimi-k2.6:cloud, glm-5.1:cloud)
 
 ### Changed
+- All 11 agents slimmed to persona + non-negotiable standards + workflow (~60-85 lines each); domain reference knowledge relocated to the new knowledge skills. LiteLLM-routed variants (glm/kimi) use a directive style with explicit skill-loading steps and completion checklists
+- TDD phrasing corrected across agents: red-green-refactor loop per behavior instead of "write failing tests, then implement"
 - All agent `## Conventional Commits` sections collapsed to single-line reference to `/git-commit` skill
 - `secops-engineer`: replaced inline STRIDE section with `/threat-model` skill reference
 - `identity-security-developer`: workflow threat modeling step now references `/threat-model` skill
