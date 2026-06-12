@@ -15,9 +15,19 @@
       when: ansible_facts.system != "Darwin"
 
   roles:
+    # Default: all agents on Anthropic sonnet. Mutually exclusive with the
+    # litellm role — both deploy to ~/.claude/agents/ with the same filenames.
     - role: claude
       tags:
         - claude
+
+    # Opt-in: per-agent LiteLLM model routing (glm/kimi via Ollama + sonnet).
+    # Runs only with --tags litellm, e.g.:
+    #   ansible-playbook playbook.yml -e setup_state=present --tags litellm
+    - role: litellm
+      tags:
+        - litellm
+        - never
 
     - role: skills
       tags:

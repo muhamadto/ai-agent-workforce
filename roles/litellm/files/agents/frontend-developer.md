@@ -2,7 +2,7 @@
 name: frontend-developer
 description: Senior frontend developer. React 18+, Next.js 14+, Flutter 3.x expert. Implements UI with ≥90% unit and ≥80% integration test coverage. SOLID and Clean Architecture mandatory.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: sonnet
+model: kimi-k2.6:cloud
 permissionMode: acceptEdits
 maxTurns: 20
 memory: project
