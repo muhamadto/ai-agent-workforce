@@ -1,6 +1,6 @@
 ---
 name: java-spring-engineering
-description: Reference knowledge for modern Java/Spring backend engineering — Java 24+, Spring Boot 4.x, GraalVM Native, persistence, caching, messaging, design patterns, performance tuning, observability, and the Maven toolchain. Load this BEFORE writing, reviewing, or designing any Java or Spring code.
+description: Reference knowledge for modern Java/Spring backend engineering — Java 24+, Spring Boot 4.x, GraalVM Native, API development, design patterns, JVM performance tuning, testing stack, and the Maven toolchain. Load this BEFORE writing, reviewing, or designing any Java or Spring code. Persistence, messaging, and observability details live in the data-stores, event-messaging, and observability skills.
 ---
 
 # Java & Spring Engineering Reference
@@ -46,32 +46,15 @@ Load this skill before writing, reviewing, or designing Java/Spring code.
   - Error handling with status codes and metadata
   - Load balancing, retries, deadlines
 
-## Databases
+## Cross-Cutting Topics (separate skills)
 
-- **PostgreSQL**: JSONB, CTEs, window functions, partitioning, full-text search, GIN indexes
-- **MySQL/MariaDB**: InnoDB optimization, replication, query optimization
-- **MongoDB**: Document modeling, aggregation pipeline, compound indexes, transactions
-- **Migration Tools**: Liquibase or Flyway (versioned migrations, rollback strategies)
-- **Connection Pooling**: HikariCP tuning (pool size, timeout, leak detection)
-- **Query Optimization**: EXPLAIN ANALYZE, index strategies, N+1 problem prevention
+Persistence, messaging, and observability are platform-wide concerns shared with other
+disciplines — load the topic skill when the work touches them:
 
-## Caching & Distributed Data
-
-- **Redis**:
-  - Data structures: strings, hashes, sets, sorted sets, streams, bitmaps
-  - Caching patterns: cache-aside, write-through, write-behind
-  - Distributed locks with Redisson (fair locks, read-write locks)
-  - Pub/Sub messaging; Redis Cluster and Sentinel for high availability
-  - Spring Session for distributed sessions
-  - Cache eviction strategies (LRU, LFU, TTL)
-- **Multi-level caching**: L1 local Caffeine, L2 distributed Redis
-- **Cache invalidation**: time-based, event-based; stampede prevention (locking, stale-while-revalidate)
-
-## Message Brokers & Event Streaming
-
-- **Apache Kafka**: Producers, consumers, Kafka Streams, exactly-once semantics, transactions
-- **NATS**: JetStream, key-value store, object store, request-reply, queue groups
-- **RabbitMQ**: Exchanges (direct, topic, fanout), queues, dead letter exchanges, message TTL
+- [/data-stores](../data-stores/SKILL.md) — PostgreSQL, Redis, MongoDB, MinIO, migrations, pooling, caching patterns
+- [/event-messaging](../event-messaging/SKILL.md) — NATS JetStream (the platform standard — no Kafka/RabbitMQ), listeners/publishers, outbox, CDC
+- [/observability](../observability/SKILL.md) — Micrometer/Prometheus, Loki logging, OpenTelemetry/Tempo, health checks, alerting
+- [/sandpipers-platform](../sandpipers-platform/SKILL.md) — the private-cloud service map (what to use instead of each AWS managed service)
 
 ## Design Patterns
 
@@ -87,14 +70,6 @@ Load this skill before writing, reviewing, or designing Java/Spring code.
 - **Database**: batch operations (JDBC/JPA batch), fetch joins and entity graphs against N+1, read replicas for read-heavy workloads
 - **Async Processing**: CompletableFuture, @Async with custom thread pools, virtual threads, reactive streams (WebFlux)
 - **Resilience**: Resilience4j circuit breakers, fallbacks, retries; rate limiting via token bucket or sliding window (Bucket4j)
-
-## Observability & Monitoring
-
-- **Logging**: SLF4J + Logback/Log4j2, structured JSON (Logstash encoder), correlation IDs via MDC; levels — ERROR (requires action), WARN (potential issue), INFO (significant events), DEBUG (troubleshooting)
-- **Metrics**: Micrometer with Prometheus exposition; custom business metrics; JVM and connection-pool metrics
-- **Tracing**: OpenTelemetry distributed tracing, trace context propagation across services
-- **Health Checks**: Spring Boot Actuator, custom health indicators, liveness vs readiness probes (Kubernetes)
-- **Alerting**: Prometheus AlertManager, Grafana dashboards, PagerDuty integration
 
 ## Backend Security Practices
 
@@ -144,7 +119,7 @@ mvn sonar:sonar -Dsonar.host.url=... -Dsonar.login=<token>   # SonarQube
 ### Testing Stack
 
 - **Unit (≥90%)**: JUnit 5, AssertJ, Mockito — AAA pattern, parameterized tests, edge cases; never test framework code
-- **Integration (≥80%)**: Testcontainers (real PostgreSQL/Redis/Kafka), Spring test slices (@WebMvcTest, @DataJpaTest, @SpringBootTest), WireMock/MockServer for external HTTP, RestAssured/WebTestClient
+- **Integration (≥80%)**: Testcontainers (real PostgreSQL/Redis/NATS), Spring test slices (@WebMvcTest, @DataJpaTest, @SpringBootTest), WireMock/MockServer for external HTTP, RestAssured/WebTestClient
 - **Architecture**: ArchUnit to verify Clean Architecture boundaries and forbid circular dependencies
 - **Contract**: Spring Cloud Contract or Pact between services
 - **Performance**: Gatling or JMeter for critical paths
@@ -162,3 +137,4 @@ docker build -t myapp:latest . && docker compose up -d
 ## Related Skills
 
 - [/microservice-template](../microservice-template/SKILL.md) — the mandatory Maven multi-module project layout (client/service/infra) for new microservices and module/package placement decisions
+- [/data-stores](../data-stores/SKILL.md) · [/event-messaging](../event-messaging/SKILL.md) · [/observability](../observability/SKILL.md) · [/sandpipers-platform](../sandpipers-platform/SKILL.md) — cross-cutting platform topics

@@ -8,6 +8,7 @@ maxTurns: 20
 memory: project
 skills:
   - quality-engineering
+  - observability
   - git-branch
   - git-commit
   - run-quality-checks

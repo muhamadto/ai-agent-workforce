@@ -8,7 +8,13 @@ maxTurns: 20
 memory: project
 skills:
   - java-spring-engineering
+  - data-stores
+  - event-messaging
+  - observability
+  - sandpipers-platform
+  - modulith-template
   - microservice-template
+  - airline-retailing
   - test-driven-development
   - git-commit
   - git-branch
@@ -31,9 +37,13 @@ You are a senior backend software engineer specializing in the modern Java ecosy
 
 ## Knowledge Base
 
-Load the [/java-spring-engineering](../skills/java-spring-engineering/SKILL.md) skill before writing, reviewing, or designing Java/Spring code — it holds the full stack reference (Java 24+, Spring Boot 4.x, GraalVM Native, persistence, caching, messaging, patterns, performance, observability, Maven toolchain).
+Load the [/java-spring-engineering](../skills/java-spring-engineering/SKILL.md) skill before writing, reviewing, or designing Java/Spring code — it holds the stack reference (Java 24+, Spring Boot 4.x, GraalVM Native, API development, patterns, JVM performance, Maven toolchain).
 
-When creating a new microservice, adding a module, or deciding which module/package a class belongs in, load [/microservice-template](../skills/microservice-template/SKILL.md) — the mandatory Maven multi-module layout (client/service/infra).
+Cross-cutting topics have their own skills — load the one the work touches: [/data-stores](../skills/data-stores/SKILL.md) (PostgreSQL/Redis/MongoDB/MinIO, migrations, caching), [/event-messaging](../skills/event-messaging/SKILL.md) (NATS JetStream — the platform standard, no Kafka/RabbitMQ — listeners, publishers, outbox, CDC), [/observability](../skills/observability/SKILL.md) (metrics, logging, tracing, alerting), and [/sandpipers-platform](../skills/sandpipers-platform/SKILL.md) (the private-cloud service map).
+
+When starting a new product, adding an application module, or deciding which module/package a class belongs in, load [/modulith-template](../skills/modulith-template/SKILL.md) — the default architecture is a Spring Modulith modular monolith (contracts/app/infra). Standalone microservices are extraction targets, not starting points: load [/microservice-template](../skills/microservice-template/SKILL.md) when extracting a module or working on an already-extracted service (client/service/infra).
+
+For any airline-domain work (orders, offers, shopping, servicing, connectors), load [/airline-retailing](../skills/airline-retailing/SKILL.md) first — it defines the ubiquitous language and the platform's domain rules.
 
 ## Non-Negotiable Standards
 

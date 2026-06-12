@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `sre-engineer` agent — SLOs, error budgets, alerting quality, incident response, capacity planning, and DR for the platform
+- Cross-cutting topic skills shared across agents: `/event-messaging` (NATS JetStream — the platform standard), `/data-stores` (PostgreSQL, Redis, MongoDB, MinIO), `/observability` (Prometheus/Grafana/Loki/Tempo), and `/sandpipers-platform` (the AWS-equivalents service map)
 - `litellm` role — the former `claude` role with per-agent LiteLLM model routing, now opt-in via `--tags litellm`; the new `claude` role deploys all agents on sonnet by default
 - Knowledge skills extracted from agent prompts (loaded on demand instead of always in context): `/java-spring-engineering`, `/auth-engineering`, `/frontend-engineering`, `/mobile-engineering`, `/infrastructure-engineering`, `/data-engineering`, `/quality-engineering`, `/secops-engineering`, `/clean-architecture`, `/business-analysis`
 - `/microservice-template` skill — mandatory Maven multi-module layout (client / service / infra with CDK for Terraform)
@@ -28,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Per-agent model routing via LiteLLM — high-judgment agents on Sonnet, implementation agents on Ollama (kimi-k2.6:cloud, glm-5.1:cloud)
 
 ### Changed
+- Knowledge skills aligned to the actual platform stack: NATS JetStream replaces Kafka/RabbitMQ throughout, Keycloak is the canonical IdP, MinIO the object store, PostgreSQL+MinIO the analytics substrate; persistence/messaging/observability extracted from discipline skills into the shared topic skills
 - All 11 agents slimmed to persona + non-negotiable standards + workflow (~60-85 lines each); domain reference knowledge relocated to the new knowledge skills. LiteLLM-routed variants (glm/kimi) use a directive style with explicit skill-loading steps and completion checklists
 - TDD phrasing corrected across agents: red-green-refactor loop per behavior instead of "write failing tests, then implement"
 - All agent `## Conventional Commits` sections collapsed to single-line reference to `/git-commit` skill

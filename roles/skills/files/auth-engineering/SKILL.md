@@ -94,8 +94,9 @@ Load this skill before designing, implementing, or reviewing auth code on any pl
 
 ## Federated Identity & Social Login
 
-- **Social providers**: Google, GitHub, Microsoft, Apple Sign-In
-- **Enterprise IdPs**: Okta, Auth0, Azure AD (Entra ID), Keycloak, Ping Identity
+- **Platform IdP**: Keycloak is the standard identity provider here (auth.sandpipers.io, the Cognito equivalent) — realms, clients, roles, identity brokering; integrate via OIDC discovery
+- **Social providers**: Google, GitHub, Microsoft, Apple Sign-In (brokered through Keycloak)
+- **Other enterprise IdPs** (when encountered): Okta, Auth0, Azure AD (Entra ID), Ping Identity
 - **Account linking**: merge multiple identities into one user account
 - **JIT provisioning**: auto-create users on first federated login
 

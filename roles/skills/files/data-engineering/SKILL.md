@@ -1,37 +1,23 @@
 ---
 name: data-engineering
-description: Reference knowledge for data engineering — big data processing (Spark, Flink, Kafka Streams), orchestration (Airflow, Prefect, Dagster), data warehouses (Snowflake, BigQuery, Redshift), data lakes and table formats (Delta Lake, Iceberg, Hudi), advanced SQL and query engines, Python data tooling (Pandas, Polars, dbt, Great Expectations), ingestion and CDC, data modeling (Kimball, Data Vault, OBT), performance optimization, governance and lineage, and pipeline testing. Load this BEFORE designing, implementing, or reviewing any data engineering work.
+description: Reference knowledge for data engineering on the platform stack — Python data tooling (Polars, Pandas, dbt, Great Expectations), orchestration (Airflow, Prefect, Dagster, Temporal), the PostgreSQL + MinIO analytics substrate, advanced SQL, data modeling (Kimball, Data Vault, OBT), pipeline quality standards, governance and lineage, and pipeline testing. Load this BEFORE designing, implementing, or reviewing any data pipeline, transformation, or analytics work. Streaming/CDC lives in event-messaging; storage engines in data-stores.
 ---
 
 # Data Engineering Reference
 
 Reference knowledge for building scalable, reliable data pipelines and analytics infrastructure. Load this skill before designing, implementing, or reviewing data pipelines, warehouses, or transformations.
 
-## Big Data Processing
+## Processing on the Platform
 
-### Apache Spark
+The analytics substrate is **PostgreSQL + MinIO (Parquet)** with **NATS JetStream** as the
+streaming backbone — there is no Spark/Kafka cluster here.
 
-- **PySpark**: Python API for Spark, DataFrame API, SQL, structured streaming
-- **Spark SQL**: Distributed SQL query engine, Catalyst optimizer
-- **Spark Streaming**: Micro-batch streaming, structured streaming, stateful processing
-- **Spark MLlib**: Distributed machine learning, feature engineering
-- **Optimization**: Partitioning, bucketing, caching, broadcast joins, adaptive query execution (AQE)
-- **Delta Lake**: ACID transactions, time travel, schema enforcement, upserts (merge)
+- **Batch**: Python jobs (Polars/Pandas/PyArrow) run as Kubernetes Jobs/CronJobs; transform in-warehouse with dbt against PostgreSQL wherever possible — move compute to the data
+- **Streaming**: JetStream pull consumers (`nats-py`) batch-fetch → transform → land in PostgreSQL or MinIO Parquet; checkpoint by stream sequence, watermark on event time (details: [/event-messaging](../event-messaging/SKILL.md))
+- **Stateful processing**: keep state in PostgreSQL or JetStream KV, not in process memory; design every stage replay-safe (idempotent upserts)
+- **Ad-hoc analytics on the lake**: DuckDB reads Parquet on MinIO directly (S3 endpoint override) — fast local analytics without a warehouse cluster
 
-### Apache Flink
-
-- **Stream Processing**: True streaming (not micro-batch), event time processing, watermarks
-- **State Management**: Keyed state, operator state, queryable state
-- **Exactly-Once Semantics**: Checkpointing, savepoints
-- **Table API & SQL**: Unified batch and stream processing
-- **Use Cases**: Real-time analytics, complex event processing (CEP), stateful stream processing
-
-### Kafka Streams
-
-- **Stream Processing**: Lightweight library for Kafka-native stream processing
-- **KTables & KStreams**: Changelog streams and event streams
-- **Stateful Operations**: Aggregations, joins, windowing
-- **Exactly-Once Processing**: Idempotent producers, transactional writes
+**Other ecosystems** (when working outside this platform): Spark (DataFrame API, AQE, broadcast joins), Flink (true streaming, watermarks, exactly-once checkpoints), and Kafka Streams (KTables, windowing) map onto the same batch/stream/state concepts; warehouses like Snowflake/BigQuery/Redshift replace the PostgreSQL+MinIO substrate. Translate the patterns, don't import the infrastructure.
 
 ## Data Orchestration & Workflow
 
@@ -51,48 +37,11 @@ Reference knowledge for building scalable, reliable data pipelines and analytics
 - **Dagster**: Software-defined assets, data lineage, type system
 - **Temporal**: Durable execution, workflow-as-code, long-running workflows
 
-## Data Warehousing
+## Warehouse & Lake on the Platform
 
-### Snowflake
-
-- **Architecture**: Separation of storage and compute, multi-cluster compute
-- **Features**: Zero-copy cloning, time travel, data sharing, streams, tasks
-- **Optimization**: Clustering keys, materialized views, search optimization
-- **Security**: Column-level encryption, masking, row access policies
-- **SnowSQL & Python Connector**: CLI and programmatic access
-
-### Google BigQuery
-
-- **Architecture**: Serverless, columnar storage, Dremel query engine
-- **Features**: Nested and repeated fields, partitioning, clustering
-- **BigQuery ML**: In-database machine learning
-- **Streaming Inserts**: Real-time data ingestion
-- **Cost Optimization**: Partitioning, clustering, query caching, slot reservations
-
-### Amazon Redshift
-
-- **Architecture**: Columnar storage, MPP (massively parallel processing)
-- **Features**: Distribution styles (key, all, even), sort keys, materialized views
-- **Redshift Spectrum**: Query S3 data directly
-- **Concurrency Scaling**: Auto-scale for query concurrency
-- **Optimization**: Compression, vacuum, analyze, workload management (WLM)
-
-## Data Lakes & Storage
-
-### Object Storage (S3, GCS, Azure Blob)
-
-- **Data Lake Architecture**: Raw → processed → curated zones
-- **File Formats**: Parquet (columnar, compressed), ORC, Avro (schema evolution)
-- **Partitioning**: Hive-style partitioning (year=2024/month=01/day=15)
-- **Lifecycle Policies**: Transition to cheaper storage tiers (Glacier, Nearline)
-
-### Delta Lake / Apache Iceberg / Apache Hudi
-
-- **ACID Transactions**: Atomic writes, schema enforcement, time travel
-- **Delta Lake**: Databricks-led, tight Spark integration
-- **Apache Iceberg**: Netflix-led, engine-agnostic (Spark, Flink, Trino)
-- **Apache Hudi**: Uber-led, upserts and incremental processing
-- **Use Cases**: Data lakehouse architecture, streaming + batch unification
+- **Warehouse**: PostgreSQL is the analytical store — schemas per layer (staging → marts), materialized views for expensive aggregates, partitioning for large fact tables; dbt manages the transformation DAG
+- **Lake**: MinIO with raw → processed → curated zones, Parquet (columnar) as the standard format, Avro where schema evolution matters, Hive-style partitioning (`year=2026/month=06/day=12`), lifecycle policies on transient zones — store details in [/data-stores](../data-stores/SKILL.md)
+- **Table formats** (when a lakehouse is warranted): Apache Iceberg is the engine-agnostic choice (ACID, schema evolution, time travel); Delta Lake and Hudi are Spark-ecosystem equivalents
 
 ## SQL & Query Engines
 
@@ -133,24 +82,9 @@ Reference knowledge for building scalable, reliable data pipelines and analytics
 
 ## Data Ingestion & Integration
 
-### Change Data Capture (CDC)
-
-- **Debezium**: Stream database changes to Kafka (MySQL, PostgreSQL, MongoDB)
-- **Maxwell**: MySQL binlog to Kafka
-- **Use Cases**: Replicate databases, event sourcing, real-time analytics
-
-### ETL/ELT Tools
-
-- **Apache NiFi**: Visual data flow, drag-and-drop pipelines
-- **Airbyte**: Open-source data integration, 300+ connectors
-- **Fivetran**: Managed ELT, automated schema drift handling
-- **Stitch**: Singer-based data integration
-
-### Streaming Ingestion
-
-- **Kafka Connect**: Source and sink connectors for Kafka
-- **Kinesis Data Firehose**: AWS streaming data delivery to S3, Redshift, Elasticsearch
-- **Cloud Pub/Sub to BigQuery**: GCP streaming to data warehouse
+- **Streaming ingestion and CDC** run over NATS JetStream (Debezium → JetStream, pull-consumer pipelines, replay, checkpointing) — the full reference lives in [/event-messaging](../event-messaging/SKILL.md) and is shared with backend services
+- **Batch ETL/ELT connectors**: Airbyte (open-source, 300+ connectors) for third-party sources; Apache NiFi for visual flow when warranted; managed equivalents (Fivetran, Stitch) only outside the platform
+- **Ingestion rules**: land raw data immutably (MinIO raw zone) before transforming; schema-validate at the boundary; track source watermarks for incremental loads
 
 ## Data Modeling
 
@@ -220,7 +154,7 @@ Reference knowledge for building scalable, reliable data pipelines and analytics
 
 - **Data quality dimensions**: completeness (no missing critical data), accuracy (matches source of truth), consistency (conforms to business rules), timeliness (fresh and up-to-date), validity (conforms to schema and constraints), uniqueness (no duplicates unless intentional)
 - **Idempotency**: rerunnable pipelines produce the same result; upsert/merge logic (insert if not exists, update if exists); checkpointing to resume from failure; no side effects that can't be repeated safely
-- **Monitoring & Alerting**: pipeline metrics (rows processed, duration, failures, data lag); data quality metrics (null rate, duplicate rate, schema drift); SLAs defined and monitored (e.g., data fresh within 1 hour); alert on failures, SLA violations, and data quality issues; tools — Datadog, Prometheus, CloudWatch, custom dashboards
+- **Monitoring & Alerting**: pipeline metrics (rows processed, duration, failures, data lag); data quality metrics (null rate, duplicate rate, schema drift); SLAs defined and monitored (e.g., data fresh within 1 hour); alert on failures, SLA violations, and data quality issues via Prometheus/Grafana/AlertManager (see [/observability](../observability/SKILL.md))
 - **Documentation**: data dictionary (column definitions, data types, business meaning); pipeline docs (what it does, dependencies, schedule, owner); dbt auto-generated docs with lineage; runbooks for troubleshooting and incident response
 
 ## Testing Data Pipelines
@@ -250,6 +184,10 @@ Reference knowledge for building scalable, reliable data pipelines and analytics
 
 ## Related Skills
 
+- [/event-messaging](../event-messaging/SKILL.md) — NATS JetStream streaming, CDC, ingestion pipelines (shared with backend)
+- [/data-stores](../data-stores/SKILL.md) — PostgreSQL, MinIO, Redis, MongoDB specifics
+- [/observability](../observability/SKILL.md) — pipeline metrics, freshness SLOs, alerting
+- [/sandpipers-platform](../sandpipers-platform/SKILL.md) — the platform service map
 - [/test-plan](../test-plan/SKILL.md) — produce a structured test plan before writing pipeline tests
 - [/db-migration-review](../db-migration-review/SKILL.md) — review schema migrations for safety, reversibility, and performance impact
 - [/threat-model](../threat-model/SKILL.md) — threat modeling for pipelines handling PII or sensitive data
