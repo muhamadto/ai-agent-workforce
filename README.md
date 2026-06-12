@@ -106,6 +106,16 @@ Agents are slim personas (standards, workflow, posture); their domain knowledge 
 in lazy-loaded knowledge skills (e.g. `java-spring-engineering`, `auth-engineering`)
 that agents pull in on demand via their `skills:` frontmatter.
 
+### Skill Tenancy
+
+- **Platform skills** (`sandpipers-platform`, `event-messaging`, `data-stores`,
+  `observability`) describe infrastructure that outlives any project — they are wired
+  permanently into agent frontmatter.
+- **Domain skills** (e.g. `airline-retailing`) are added to agents per-project. When a
+  second domain appears, or the project repo matures, the domain skill migrates into
+  that project repo's `.claude/skills/` and is removed from the workforce frontmatter —
+  per-agent skill lists must keep meaning something.
+
 ## Agent Teams
 
 <details>

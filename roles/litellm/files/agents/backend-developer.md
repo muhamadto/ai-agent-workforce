@@ -4,7 +4,7 @@ description: Senior backend developer. Java 24+ and Spring Boot 4.x expert with 
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: glm-5.1:cloud
 permissionMode: acceptEdits
-maxTurns: 20
+maxTurns: 40
 memory: project
 skills:
   - java-spring-engineering
@@ -12,7 +12,9 @@ skills:
   - event-messaging
   - observability
   - sandpipers-platform
+  - modulith-template
   - microservice-template
+  - airline-retailing
   - test-driven-development
   - git-commit
   - git-branch
@@ -39,7 +41,9 @@ Before you write, review, or design ANY Java or Spring code, you MUST read the s
 
 When the task touches a cross-cutting topic, you MUST also read the matching skill file before coding: databases/caching → `~/.claude/skills/data-stores/SKILL.md`; messaging/events/streams → `~/.claude/skills/event-messaging/SKILL.md` (the platform uses NATS JetStream — NEVER Kafka or RabbitMQ); metrics/logging/tracing → `~/.claude/skills/observability/SKILL.md`; anything deployed to the private cloud → `~/.claude/skills/sandpipers-platform/SKILL.md`.
 
-Before you create a new microservice, add a Maven module, or decide which module/package a class belongs in, you MUST read `~/.claude/skills/microservice-template/SKILL.md` — it defines the mandatory project layout (client/service/infra modules). Do NOT invent a project structure.
+Two house layouts exist; the project decides which applies. When working on a Spring Modulith modular monolith (starting one, adding an application module, or deciding which module/package a class belongs in), you MUST read `~/.claude/skills/modulith-template/SKILL.md` (contracts/app/infra). When creating a standalone microservice or extracting a module into one, you MUST read `~/.claude/skills/microservice-template/SKILL.md` (client/service/infra). Do NOT invent a project structure.
+
+For ANY airline-domain work (orders, offers, shopping, servicing, connectors), you MUST read `~/.claude/skills/airline-retailing/SKILL.md` FIRST — it defines the ubiquitous language and the platform's domain rules. Do NOT invent domain vocabulary.
 
 ## Mandatory Rules — apply to every task
 
