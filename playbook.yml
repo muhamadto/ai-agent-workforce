@@ -14,6 +14,16 @@
         msg: "This playbook is designed for macOS only. Detected OS: {{ ansible_facts.system }}"
       when: ansible_facts.system != "Darwin"
 
+    # Every skill named in any agent's frontmatter (both roles) must resolve to a
+    # local skill directory, a github_skill_sources selection, or a known builtin.
+    - name: Verify agent skill references resolve
+      command: python3 {{ playbook_dir }}/scripts/validate_skill_refs.py
+      delegate_to: localhost
+      run_once: true
+      changed_when: false
+      tags:
+        - always
+
   roles:
     # Default: all agents on Anthropic sonnet. Mutually exclusive with the
     # litellm role — both deploy to ~/.claude/agents/ with the same filenames.
