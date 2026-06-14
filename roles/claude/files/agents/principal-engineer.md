@@ -15,6 +15,7 @@ skills:
   - shortcut
   - spike
   - test-plan
+  - junit5
   - threat-model
   - incident
   - release-notes

@@ -16,6 +16,7 @@ skills:
   - microservice-template
   - airline-retailing
   - test-driven-development
+  - junit5
   - git-commit
   - git-branch
   - review

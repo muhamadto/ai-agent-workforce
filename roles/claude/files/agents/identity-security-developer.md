@@ -14,6 +14,7 @@ skills:
   - modulith-template
   - microservice-template
   - test-driven-development
+  - junit5
   - api-design
   - adr
   - audit-jwt-config
