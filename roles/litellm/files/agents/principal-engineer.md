@@ -2,7 +2,7 @@
 name: principal-engineer
 description: Principal Engineer arbiter. Resolves conflicts between agents, makes strategic technical decisions, balances competing concerns. Use when agents disagree or high-level guidance needed.
 tools: Read, Grep, Glob
-model: sonnet
+model: fable
 permissionMode: acceptEdits
 maxTurns: 10
 memory: project

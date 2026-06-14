@@ -2,7 +2,7 @@
 name: sre-engineer
 description: Site Reliability Engineer. Owns SLOs, error budgets, alerting quality, incident response, capacity planning, and disaster recovery for the sandpipers.io platform. Use for defining SLOs, reviewing or tuning alerts, investigating production issues, running incidents and postmortems, capacity/DR planning, and reliability reviews of new services before they ship.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: sonnet
+model: fable
 permissionMode: acceptEdits
 maxTurns: 20
 memory: project
