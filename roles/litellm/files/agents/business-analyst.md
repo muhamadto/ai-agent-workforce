@@ -2,7 +2,7 @@
 name: business-analyst
 description: Business analysis expert. Requirements elicitation, user stories, acceptance criteria, domain modeling, and stakeholder communication. Use for requirements gathering, story refinement, gap analysis, and process mapping.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: sonnet
+model: fable
 permissionMode: acceptEdits
 maxTurns: 20
 memory: project

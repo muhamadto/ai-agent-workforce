@@ -2,7 +2,7 @@
 name: architecture-guardian
 description: Enforces Clean Architecture, boundaries, and dependency rules. Ruthless about violations. Use for architecture reviews, not implementation.
 tools: Read, Grep, Glob
-model: sonnet
+model: fable
 permissionMode: acceptEdits
 maxTurns: 12
 memory: project
