@@ -21,6 +21,8 @@ skills:
   - git-branch
   - review
   - api-design
+  - openapi
+  - validation
   - adr
   - db-migration-review
   - dependency-review

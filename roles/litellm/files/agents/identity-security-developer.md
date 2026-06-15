@@ -16,6 +16,8 @@ skills:
   - test-driven-development
   - junit5
   - api-design
+  - openapi
+  - validation
   - adr
   - audit-jwt-config
   - oauth-threat-model

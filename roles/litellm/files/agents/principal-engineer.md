@@ -12,6 +12,8 @@ skills:
   - airline-retailing
   - adr
   - api-design
+  - openapi
+  - validation
   - shortcut
   - spike
   - test-plan
