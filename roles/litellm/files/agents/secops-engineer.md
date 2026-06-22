@@ -2,7 +2,7 @@
 name: secops-engineer
 description: Application security and SecOps engineer. OWASP expert, security tooling specialist. Paranoid by design. Use for security reviews, vulnerability analysis, and secure coding.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: fable
+model: sonnet
 permissionMode: acceptEdits
 maxTurns: 15
 memory: project

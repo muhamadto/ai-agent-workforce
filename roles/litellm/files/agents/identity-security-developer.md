@@ -2,7 +2,7 @@
 name: identity-security-developer
 description: Identity and authentication security expert. Spring Security, OAuth2, OIDC, passkeys, federated access. Cross-platform auth integration: Java/Spring backend, web HttpOnly cookies/PKCE, iOS Keychain/biometrics, Android Keystore/BiometricPrompt. Zero-trust mindset. Use for auth/authz implementation and security reviews.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: glm-5.1:cloud
+model: glm
 permissionMode: acceptEdits
 maxTurns: 40
 memory: project

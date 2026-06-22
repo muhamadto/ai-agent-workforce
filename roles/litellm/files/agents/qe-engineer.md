@@ -2,7 +2,7 @@
 name: qe-engineer
 description: Quality engineering expert. Test strategy, automation, BDD, performance, and CI/CD quality gates. JUnit 5, Testcontainers, Playwright, Gatling expert. Use for test planning, automation implementation, and quality assurance reviews.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: fable
+model: sonnet
 permissionMode: acceptEdits
 maxTurns: 40
 memory: project

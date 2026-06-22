@@ -2,7 +2,7 @@
 name: mobile-engineer
 description: Mobile engineering expert. iOS (Swift, SwiftUI), Android (Kotlin, Compose), Flutter, React Native. Platform-specific features, app store deployment, mobile CI/CD. Use for mobile app development.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: kimi-k2.6:cloud
+model: kimi
 permissionMode: acceptEdits
 maxTurns: 20
 memory: project
