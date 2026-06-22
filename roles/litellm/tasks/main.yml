@@ -31,6 +31,13 @@
     mode: '0600'
   when: setup_state == "present"
 
+- name: Deploy global CLAUDE.md
+  copy:
+    src: "CLAUDE.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.claude/CLAUDE.md"
+    mode: '0600'
+  when: setup_state == "present"
+
 - name: Ensure ~/.claude/agents directory exists
   file:
     path: "{{ ansible_facts['user_dir'] }}/.claude/agents"
@@ -82,6 +89,12 @@
 - name: Remove Claude Code settings.json
   file:
     path: "{{ ansible_facts['user_dir'] }}/.claude/settings.json"
+    state: absent
+  when: setup_state == "absent"
+
+- name: Remove global CLAUDE.md
+  file:
+    path: "{{ ansible_facts['user_dir'] }}/.claude/CLAUDE.md"
     state: absent
   when: setup_state == "absent"
 
