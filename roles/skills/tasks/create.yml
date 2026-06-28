@@ -32,7 +32,7 @@
   ansible.builtin.get_url:
     url: "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json"
     dest: "{{ ansible_facts['user_dir'] }}/.skills/shortcut/reference/shortcut.openapi.json"
-    mode: '0644'
+    mode: '0640'
     timeout: 30
 
 # ── GitHub skill sources ──────────────────────────────────────────────────────
