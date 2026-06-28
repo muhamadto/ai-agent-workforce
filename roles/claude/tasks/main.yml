@@ -17,89 +17,10 @@
 ---
 # Claude Code agent configuration management
 
-- name: Ensure ~/.claude directory exists
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.claude"
-    state: directory
-    mode: '0700'
+- name: Install Claude Code configuration
+  ansible.builtin.include_tasks: create.yml
   when: setup_state == "present"
 
-- name: Deploy Claude Code settings.json
-  copy:
-    src: "settings.json"
-    dest: "{{ ansible_facts['user_dir'] }}/.claude/settings.json"
-    mode: '0600'
-  when: setup_state == "present"
-
-- name: Deploy global CLAUDE.md
-  copy:
-    src: "CLAUDE.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.claude/CLAUDE.md"
-    mode: '0600'
-  when: setup_state == "present"
-
-- name: Ensure ~/.claude/agents directory exists
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.claude/agents"
-    state: directory
-    mode: '0700'
-  when: setup_state == "present"
-
-- name: Deploy Claude Code agents
-  copy:
-    src: "agents/{{ item }}"
-    dest: "{{ ansible_facts['user_dir'] }}/.claude/agents/{{ item }}"
-    mode: '0600'
-  loop:
-    - architecture-guardian.md
-    - backend-developer.md
-    - business-analyst.md
-    - data-engineer.md
-    - frontend-developer.md
-    - identity-security-developer.md
-    - infrastructure-engineer.md
-    - mobile-engineer.md
-    - principal-engineer.md
-    - qe-engineer.md
-    - secops-engineer.md
-    - sre-engineer.md
-  when: setup_state == "present"
-
-- name: Display deployed agents
-  debug:
-    msg: |
-      Claude Code agents deployed to ~/.claude/agents/:
-      - architecture-guardian: Clean Architecture enforcer
-      - backend-developer: Java 24+, Spring Boot 4.x, Spring Native expert
-      - business-analyst: Requirements, user stories, acceptance criteria, domain modeling
-      - data-engineer: ETL/ELT, big data, data warehousing expert
-      - frontend-developer: React, Next.js, Flutter expert
-      - identity-security-developer: OAuth2, OIDC, passkeys expert
-      - infrastructure-engineer: AWS, GCP, K3S, IaC expert
-      - mobile-engineer: iOS, Android, Flutter, React Native expert
-      - principal-engineer: Strategic arbiter and decision-maker
-      - qe-engineer: Test strategy, automation, BDD, performance, quality gates
-      - secops-engineer: OWASP, security tooling expert
-      - sre-engineer: SLOs, alerting, incident response, capacity, DR
-
-      Model routing: all agents on Anthropic sonnet (use the litellm role for per-agent routing)
-      Usage: Invoke with @agent-name in Claude Code or let Claude choose automatically
-  when: setup_state == "present"
-
-- name: Remove Claude Code settings.json
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.claude/settings.json"
-    state: absent
-  when: setup_state == "absent"
-
-- name: Remove global CLAUDE.md
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.claude/CLAUDE.md"
-    state: absent
-  when: setup_state == "absent"
-
-- name: Remove Claude Code agents
-  file:
-    path: "{{ ansible_facts['user_dir'] }}/.claude/agents"
-    state: absent
+- name: Remove Claude Code configuration
+  ansible.builtin.include_tasks: destroy.yml
   when: setup_state == "absent"

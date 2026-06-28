@@ -1,0 +1,15 @@
+---
+- name: Remove Claude Code settings.json
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.claude/settings.json"
+    state: absent
+
+- name: Remove global CLAUDE.md
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.claude/CLAUDE.md"
+    state: absent
+
+- name: Remove Claude Code agents
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.claude/agents"
+    state: absent

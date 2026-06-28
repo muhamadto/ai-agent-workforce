@@ -15,12 +15,12 @@
 #   limitations under the License.
 #
 ---
-# Shared AI agent skills — deployed to ~/.skills/ with a symlink from ~/.claude/skills
+# opencode configuration management
 
-- name: Install shared skills
+- name: Install opencode configuration
   ansible.builtin.include_tasks: create.yml
   when: setup_state == "present"
 
-- name: Remove shared skills
+- name: Remove opencode configuration
   ansible.builtin.include_tasks: destroy.yml
   when: setup_state == "absent"

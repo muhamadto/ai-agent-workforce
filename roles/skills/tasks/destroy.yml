@@ -1,0 +1,12 @@
+---
+# ── Removal ────────────────────────────────────────────────────────────────────
+
+- name: Remove skills symlink from Claude directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.claude/skills"
+    state: absent
+
+- name: Remove central skills directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.skills"
+    state: absent

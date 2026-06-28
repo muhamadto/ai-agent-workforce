@@ -10,33 +10,33 @@
 
   pre_tasks:
     - name: Verify macOS platform
-      fail:
+      ansible.builtin.fail:
         msg: "This playbook is designed for macOS only. Detected OS: {{ ansible_facts.system }}"
       when: ansible_facts.system != "Darwin"
 
     # Every skill named in any agent's frontmatter (both roles) must resolve to a
     # local skill directory, a github_skill_sources selection, or a known builtin.
     - name: Verify agent skill references resolve
-      command: python3 {{ playbook_dir }}/scripts/validate_skill_refs.py
+      ansible.builtin.command: python3 {{ playbook_dir }}/scripts/validate_skill_refs.py
       delegate_to: localhost
-      run_once: true
+      run_once: true  # noqa: run-once[task]
       changed_when: false
       tags:
         - always
 
   roles:
-    # Default: all agents on Anthropic sonnet. Mutually exclusive with the
-    # litellm role — both deploy to ~/.claude/agents/ with the same filenames.
+    # Default: all agents on Anthropic sonnet. Deploys to ~/.claude/agents/.
+    # For per-agent model routing via opencode, use --tags opencode instead.
     - role: claude
       tags:
         - claude
 
-    # Opt-in: per-agent LiteLLM model routing (glm/kimi via Ollama + sonnet).
-    # Runs only with --tags litellm, e.g.:
-    #   ansible-playbook playbook.yml -e setup_state=present --tags litellm
-    - role: litellm
+    # Opt-in: per-agent opencode model routing (kimi via ollama-cloud + sonnet).
+    # Runs only with --tags opencode, e.g.:
+    #   ansible-playbook playbook.yml -e setup_state=present --tags opencode
+    - role: opencode
       tags:
-        - litellm
+        - opencode
         - never
 
     - role: skills

@@ -6,20 +6,20 @@ Deploys and manages Claude Code agent teams with specialized personas and workfl
 
 - Creates `~/.claude` directory structure
 - Deploys Claude Code settings and configuration
-- Installs specialized agent personas with per-agent model routing via LiteLLM
+- Installs specialized agent personas on Anthropic Sonnet (all agents)
 
 ## Agent Personas
 
 | Agent | Model |
 |---|---|
 | **architecture-guardian** | Sonnet |
-| **backend-developer** | glm-5.1:cloud |
+| **backend-developer** | Sonnet |
 | **business-analyst** | Sonnet |
-| **data-engineer** | glm-5.1:cloud |
-| **frontend-developer** | kimi-k2.6:cloud |
-| **identity-security-developer** | glm-5.1:cloud |
-| **infrastructure-engineer** | glm-5.1:cloud |
-| **mobile-engineer** | glm-5.1:cloud |
+| **data-engineer** | Sonnet |
+| **frontend-developer** | Sonnet |
+| **identity-security-developer** | Sonnet |
+| **infrastructure-engineer** | Sonnet |
+| **mobile-engineer** | Sonnet |
 | **principal-engineer** | Sonnet |
 | **qe-engineer** | Sonnet |
 | **secops-engineer** | Sonnet |
@@ -60,7 +60,7 @@ claude "@backend-developer build a REST API"
 
 - macOS
 - Claude Code CLI installed
-- LiteLLM configured and running (for model routing)
+- `ANTHROPIC_API_KEY` set in the environment
 
 ## Variables
 

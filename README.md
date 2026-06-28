@@ -50,26 +50,14 @@ ansible-playbook playbook.yml -e setup_state=present --limit local
 3. Deploy specific components using tags:
 
 ```bash
-# Claude agents only
-ansible-playbook playbook.yml -e setup_state=present --tags claude
+# Claude agents only (all on Anthropic Sonnet)
+ansible-playbook playbook.yml -e setup_state=present --tags claude --limit local
+
+# opencode agents with per-agent model routing
+ansible-playbook playbook.yml -e setup_state=present --tags opencode --limit local
 
 # Skills only
-ansible-playbook playbook.yml -e setup_state=present --tags skills
-```
-
-### Remote Deployment
-
-Add remote hosts to `inventory.ini`:
-
-```ini
-[remote]
-my-mac ansible_host=192.168.1.100 ansible_user=username
-```
-
-Deploy remotely:
-
-```bash
-ansible-playbook playbook.yml -e setup_state=present --limit remote --ask-become-pass
+ansible-playbook playbook.yml -e setup_state=present --tags skills --limit local
 ```
 
 ### Uninstallation
@@ -95,35 +83,23 @@ ai-agent-workforce/
 │   └── all.yml              # Global variables
 └── roles/
     ├── claude/              # Claude Code agents — all on Anthropic sonnet (default)
-    ├── litellm/             # Same agents with per-agent LiteLLM model routing (opt-in: --tags litellm)
+    ├── opencode/            # opencode agents with per-agent model routing (opt-in: --tags opencode)
     └── skills/              # Shared skills
 ```
 
-The `claude` and `litellm` roles deploy the same agent set to the same paths and are
-mutually exclusive: `claude` runs by default, `litellm` only with `--tags litellm`.
+The `claude` role deploys Claude Code agents to `~/.claude/` (default). The `opencode`
+role deploys opencode configuration to `~/.config/opencode/` and is opt-in via `--tags opencode`.
 
 Agents are slim personas (standards, workflow, posture); their domain knowledge lives
 in lazy-loaded knowledge skills (e.g. `java-spring-engineering`, `auth-engineering`)
 that agents pull in on demand via their `skills:` frontmatter.
 
-### Skill Tenancy
-
-- **Platform skills** (`sandpipers-platform`, `event-messaging`, `data-stores`,
-  `observability`) describe infrastructure that outlives any project — they are wired
-  permanently into agent frontmatter.
-- **Domain skills** (e.g. `airline-retailing`) are added to agents per-project. When a
-  second domain appears, or the project repo matures, the domain skill migrates into
-  that project repo's `.claude/skills/` and is removed from the workforce frontmatter —
-  per-agent skill lists must keep meaning something.
-
-## Agent Teams
+## Agent Team
 
 <details>
-<summary>Expand</summary>
+<summary>Agents</summary>
 
-### Claude Code Agents
-
-Located in `~/.claude/agents/`:
+Located in `~/.claude/agents/` and `~/.config/opencode/agents/`:
 - **architecture-guardian** - Clean Architecture enforcer
 - **backend-developer** - Java, Spring Boot, GraalVM expert
 - **business-analyst** - Requirements elicitation, user stories, acceptance criteria
@@ -137,44 +113,80 @@ Located in `~/.claude/agents/`:
 - **secops-engineer** - OWASP, security tooling expert
 - **sre-engineer** - SLOs, alerting, incident response, capacity, DR
 
-### Shared Skills
+</details>
 
-Located in `~/.claude/skills/`:
+## Shared Skills
 
-| Skill | Description |
+### Skill Tenancy
+
+- **Platform skills** (`sandpipers-platform`, `event-messaging`, `data-stores`,
+  `observability`) describe infrastructure that outlives any project — they are wired
+  permanently into agent frontmatter.
+- **Domain skills** (e.g. `airline-retailing`) are added to agents per-project. When a
+  second domain appears, or the project repo matures, the domain skill migrates into
+  that project repo's `.claude/skills/` and is removed from the workforce frontmatter —
+  per-agent skill lists must keep meaning something.
+<details>
+<summary>Local skills (this repo)</summary>
+
+Deployed to `~/.skills/`, symlinked to `~/.claude/skills/`:
+
+| Skill | What it covers |
 |---|---|
-| `adr` | Create Architecture Decision Records with context, options, and rationale |
-| `airline-retailing` | Domain knowledge: NDC, ONE Order, Offers & Orders, servicing flows — the order platform's ubiquitous language |
-| `api-design` | Design and review API contracts (OpenAPI/REST/gRPC) for correctness, security, and business alignment |
-| `audit-jwt-config` | Audit JWT implementations for algorithm confusion, claims gaps, and lifecycle weaknesses |
-| `auth-engineering` | Knowledge: OAuth 2.1, OIDC, passkeys, MFA, JWT security, and token handling on web/iOS/Android |
-| `business-analysis` | Knowledge: elicitation techniques, INVEST stories, Gherkin, domain modeling, prioritisation |
-| `clean-architecture` | Knowledge: layer rules, Dependency Rule, violation catalog, ArchUnit verification |
-| `data-engineering` | Knowledge: Python data tooling, orchestration, PostgreSQL+MinIO analytics, data modeling, quality |
-| `data-stores` | Knowledge: PostgreSQL, Redis, MongoDB, MinIO, migrations, pooling, caching patterns |
-| `db-migration-review` | Review database migrations for destructive ops, locks, and missing rollbacks |
-| `event-messaging` | Knowledge: NATS JetStream (the platform standard), listeners/publishers, outbox, CDC, streaming |
-| `frontend-engineering` | Knowledge: React 18+, Next.js 14+, Flutter 3.x, performance, accessibility, testing stack |
-| `infrastructure-engineering` | Knowledge: AWS/GCP, Kubernetes, Terraform/CDKTF, the private-cloud stack, reliability principles |
-| `observability` | Knowledge: Micrometer/Prometheus, Loki, OpenTelemetry/Tempo, dashboards, SLO/burn-rate alerting |
-| `java-spring-engineering` | Knowledge: Java 24+, Spring Boot 4.x, GraalVM Native, persistence, messaging, Maven toolchain |
-| `microservice-template` | Mandatory Maven multi-module microservice layout: client / service / infra (CDKTF) |
-| `mobile-engineering` | Knowledge: Swift/SwiftUI, Kotlin/Compose, Flutter, platform security, store distribution |
-| `modulith-template` | Mandatory Maven multi-module Spring Modulith layout: contracts / app / infra (CDKTF) |
-| `oauth-threat-model` | Focused threat model for OAuth2/OIDC flows: PKCE, redirect URIs, token theft vectors |
-| `quality-engineering` | Knowledge: test strategy, BDD, performance testing, CI/CD quality gates |
-| `sandpipers-platform` | The private-cloud service map — AWS equivalents (NATS not SQS, Keycloak not Cognito, MinIO not S3) |
-| `secops-engineering` | Knowledge: OWASP Top 10, SAST/DAST/SCA tooling, secure coding, supply chain security |
-| `dependency-review` | Evaluate dependency upgrades for breaking changes, CVEs, and license compliance |
-| `git-branch` | Branch lifecycle — cut from `origin/main`, sync via rebase, never merge |
-| `git-commit` | Conventional Commits compliant commit messages with hook awareness |
-| `incident` | Incident response (detect → contain → resolve) and blameless postmortem |
-| `release-notes` | Generate structured changelog from Conventional Commits between two refs |
-| `run-quality-checks` | Full pre-commit quality gate — format, lint, test, SAST, SCA |
+| `adr` | Architecture Decision Records |
+| `airline-retailing` | NDC, ONE Order, Offers & Orders, servicing flows — the order platform's ubiquitous language |
+| `api-design` | OpenAPI/REST/gRPC contract design and review |
+| `audit-jwt-config` | JWT algorithm confusion, claims gaps, token lifecycle |
+| `auth-engineering` | OAuth 2.1, OIDC, passkeys, MFA, JWT, session management |
+| `business-analysis` | Elicitation, INVEST stories, Gherkin, domain modeling |
+| `clean-architecture` | Layer rules, Dependency Rule, violation catalog, ArchUnit |
+| `data-engineering` | Python data tooling, orchestration, PostgreSQL+MinIO analytics |
+| `data-stores` | PostgreSQL, Redis, MongoDB, MinIO, migrations, caching |
+| `db-migration-review` | Destructive ops, lock analysis, missing rollbacks |
+| `dependency-review` | Breaking changes, CVEs, license compliance |
+| `event-messaging` | NATS JetStream, outbox pattern, CDC, streaming |
+| `frontend-engineering` | React 18+, Next.js 14+, Flutter 3.x, testing stack |
+| `git-branch` | Branch lifecycle — cut from `origin/main`, sync via rebase |
+| `git-commit` | Conventional Commits with hook awareness |
+| `incident` | Detect → contain → resolve, blameless postmortem |
+| `infrastructure-engineering` | AWS/GCP, Kubernetes, CDKTF, private-cloud stack |
+| `java-spring-engineering` | Java 24+, Spring Boot 4.x, GraalVM Native, Maven toolchain |
+| `junit5` | JUnit 5 patterns, parameterized tests, Testcontainers |
+| `microservice-template` | Maven multi-module layout: client / service / infra (CDKTF) |
+| `mobile-engineering` | Swift/SwiftUI, Kotlin/Compose, Flutter, store distribution |
+| `modulith-template` | Maven Spring Modulith layout: contracts / app / infra (CDKTF) |
+| `oauth-threat-model` | OAuth2/OIDC flows: PKCE, redirect URIs, token theft |
+| `observability` | Micrometer/Prometheus, Loki, OpenTelemetry/Tempo, SLO alerting |
+| `openapi` | OpenAPI 3.1 spec authoring rules and HTTP status codes |
+| `quality-engineering` | Test strategy, BDD, performance, CI/CD quality gates |
+| `release-notes` | Structured changelog from Conventional Commits |
+| `run-quality-checks` | Full pre-commit gate: format, lint, test, SAST, SCA |
+| `sandpipers-platform` | Private-cloud service map (NATS not SQS, Keycloak not Cognito, MinIO not S3) |
+| `secops-engineering` | OWASP Top 10, SAST/DAST/SCA tooling, supply chain |
 | `shortcut` | Shortcut project management via `short` CLI |
-| `spike` | Time-boxed technical investigation with structured report and go/no-go outcome |
-| `test-plan` | Structured test plans covering unit, integration, E2E, performance, and security |
-| `threat-model` | STRIDE-based threat modelling for features and architecture changes |
+| `spike` | Time-boxed investigation with go/no-go outcome |
+| `test-plan` | Unit, integration, E2E, performance, and security coverage |
+| `threat-model` | STRIDE threat modelling for features and architecture |
+| `validation` | Input validation patterns at system boundaries |
+
+</details>
+
+<details>
+<summary>GitHub-sourced skills (<code>group_vars/all.yml</code>)</summary>
+
+Cloned to `~/.skills/.cache/repos/` and synced to `~/.skills/` on every playbook run:
+
+| Skill | Source repo |
+|---|---|
+| `test-driven-development` | `obra/superpowers` |
+| `systematic-debugging` | `obra/superpowers` |
+| `context7-cli` | `upstash/context7` |
+| `find-docs` | `upstash/context7` |
+| `mcp-builder` | `anthropics/skills` |
+| `skill-creator` | `anthropics/skills` |
+| `caveman` | `juliusbrussee/caveman` |
+| `playwright-cli` | `microsoft/playwright-cli` |
+| `sonarcloud-analysis` | `harshanandak/forge` |
 
 </details>
 

@@ -53,7 +53,7 @@ def main() -> int:
     allowed = local | github | BUILTINS
 
     errors = []
-    for role in ("claude", "litellm"):
+    for role in ("claude",):
         for agent in sorted((REPO / "roles" / role / "files" / "agents").glob("*.md")):
             for skill in frontmatter_skills(agent):
                 if skill not in allowed:
@@ -70,7 +70,7 @@ def main() -> int:
         return 1
 
     print(
-        f"All agent skill references resolve across roles/claude and roles/litellm "
+        f"All agent skill references resolve across roles/claude "
         f"({len(local)} local, {len(github)} github-sourced, {len(BUILTINS)} builtin)."
     )
     return 0
