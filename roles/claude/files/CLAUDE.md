@@ -10,10 +10,12 @@ Applies to every session. Project CLAUDE.md files add or override for their cont
 
 1. **Explore** (plan mode) — read files, ask questions, do not touch anything
 2. **Plan** — write a detailed implementation plan; wait for approval before building
-3. **Implement** — build against the approved plan using specialist agents from `~/.claude/agents/` (see Agent Routing below)
+3. **Implement** — build against the approved plan using specialist agents from `~/.claude/agents/` (see Agent Routing below); after each change run the build and tests, read the result, fix all failures, and iterate until green before moving to Commit
 4. **Commit** — use `/git-commit` skill, then open a PR
 
 Skip to Implement only when the change can be described in one sentence.
+
+If rate-limited or interrupted: on resume, finish the current task, complete the full DoD audit chain, then continue through remaining stories, epics, and objectives in order.
 
 ---
 
@@ -132,7 +134,7 @@ Never shortcut this loop with broad permissive rules to "just make it work."
 
 ---
 
-## Infrastructure
+## Infrastructure (CDKTF)
 
 - Java CDKTF for all Java project infrastructure changes.
 - Ansible for private/homelab infrastructure only.

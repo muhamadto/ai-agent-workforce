@@ -1,19 +1,21 @@
 # Global Operating Rules
 
-Applies to every session. Project CLAUDE.md files add or override for their context.
+Applies to every session. Project-level instruction files add or override for their context.
 
-> **Rule for maintaining this file:** If Claude can infer it from the code, do not put it here. CLAUDE.md carries rules and constraints — not documentation of what the code already says. As the codebase evolves, remove anything that is now derivable from reading the files.
+> **Rule for maintaining this file:** If opencode can infer it from the code, do not put it here. This file carries rules and constraints — not documentation of what the code already says. As the codebase evolves, remove anything that is now derivable from reading the files.
 
 ---
 
 ## Workflow — always follow this loop
 
-1. **Explore** (plan mode) — read files, ask questions, do not touch anything
+1. **Explore** — read files, ask questions, do not touch anything
 2. **Plan** — write a detailed implementation plan; wait for approval before building
-3. **Implement** — build against the approved plan using specialist agents from `~/.claude/agents/` (see Agent Routing below)
+3. **Implement** — build against the approved plan using specialist agents; after each change run the build and tests, read the result, fix all failures, and iterate until green before moving to Commit
 4. **Commit** — use `/git-commit` skill, then open a PR
 
 Skip to Implement only when the change can be described in one sentence.
+
+If rate-limited or interrupted: on resume, finish the current task, complete the full DoD audit chain, then continue through remaining stories, epics, and objectives in order.
 
 ---
 
@@ -132,30 +134,11 @@ Never shortcut this loop with broad permissive rules to "just make it work."
 
 ---
 
-## Infrastructure
+## Infrastructure (CDKTF)
 
 - Java CDKTF for all Java project infrastructure changes.
 - Ansible for private/homelab infrastructure only.
 - Infra changes: CDKTF → commit → ArgoCD. Never `kubectl` directly.
-
----
-
-## Agents
-
-Use the specialist agents defined in `~/.claude/agents/`:
-
-- **business-analyst** — story creation, acceptance criteria, domain modeling, requirements elicitation
-- **architecture-guardian** — module boundary enforcement, Clean Architecture review, dependency rule validation
-- **principal-engineer** — strategic decisions, conflict resolution, ADR authorship
-- **backend-developer** — Java/Spring implementation, ≥90% unit + ≥80% integration test coverage
-- **qe-engineer** — test strategy, automation, BDD, performance, quality gate sign-off
-- **infrastructure-engineer** — CDKTF, K3s, ArgoCD, CI/CD pipelines
-- **identity-security-developer** — auth, OAuth2, OIDC, passkeys, security hardening
-- **data-engineer** — ETL/ELT pipelines, data warehousing, SQL optimization
-- **frontend-developer** — React, Next.js, Flutter UI
-- **mobile-engineer** — iOS (Swift), Android (Kotlin), React Native
-- **secops-engineer** — OWASP, vulnerability analysis, secure coding review
-- **sre-engineer** — SLOs, alerting, incident response, capacity planning, DR
 
 ---
 

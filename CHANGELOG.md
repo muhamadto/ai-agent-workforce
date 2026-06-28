@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `opencode` role — per-agent model routing via opencode CLI; advisory agents on `anthropic/claude-sonnet-4-6` (global default), implementation agents on `kimi-k2.7-code`; no LiteLLM proxy required; deploys `opencode.jsonc` + `AGENTS.md` to `~/.config/opencode/`
+
+### Removed
+- `litellm` role — replaced by the `opencode` role; LiteLLM proxy dependency eliminated
+
+---
+
+### Added (prior)
 - `sre-engineer` agent — SLOs, error budgets, alerting quality, incident response, capacity planning, and DR for the platform
 - Cross-cutting topic skills shared across agents: `/event-messaging` (NATS JetStream — the platform standard), `/data-stores` (PostgreSQL, Redis, MongoDB, MinIO), `/observability` (Prometheus/Grafana/Loki/Tempo), and `/sandpipers-platform` (the AWS-equivalents service map)
 - `litellm` role — the former `claude` role with per-agent LiteLLM model routing, now opt-in via `--tags litellm`; the new `claude` role deploys all agents on sonnet by default

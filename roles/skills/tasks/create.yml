@@ -1,0 +1,146 @@
+---
+# ── Command detection ──────────────────────────────────────────────────────────
+
+- name: Check if claude is installed
+  ansible.builtin.command: which claude
+  register: skills_claude_check
+  failed_when: false
+  changed_when: false
+
+# ── Central skills directory ───────────────────────────────────────────────────
+
+- name: Ensure shortcut reference directory exists in ~/.skills/
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.skills/shortcut/reference"
+    state: directory
+    mode: '0700'
+
+# ── Deploy all local skills ────────────────────────────────────────────────────
+# Adding a new skill is automatic: drop a directory with SKILL.md under
+# roles/skills/files/ and it will be copied on the next playbook run.
+
+- name: Deploy all local skills to central skills directory
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/"
+    mode: '0600'
+    directory_mode: '0700'
+
+# ── Shortcut OpenAPI spec ──────────────────────────────────────────────────────
+
+- name: Download Shortcut OpenAPI spec to central skills
+  ansible.builtin.get_url:
+    url: "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/shortcut/reference/shortcut.openapi.json"
+    mode: '0644'
+    timeout: 30
+
+# ── GitHub skill sources ──────────────────────────────────────────────────────
+
+- name: Check if git is available
+  ansible.builtin.command: which git
+  register: skills_git_check
+  failed_when: false
+  changed_when: false
+  when:
+    - github_skill_sources is defined
+    - github_skill_sources | length > 0
+
+- name: Ensure GitHub skills cache directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.skills/.cache/repos"
+    state: directory
+    mode: '0700'
+  when:
+    - github_skill_sources is defined
+    - github_skill_sources | length > 0
+    - skills_git_check.rc | default(1) == 0
+
+- name: Clone or update GitHub skill repos
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: >-
+      {{ ansible_facts['user_dir'] }}/.skills/.cache/repos/{{
+      item.repo
+      | regex_replace('^.*github.com[:/]', '')
+      | regex_replace('\\.git$', '')
+      | regex_replace('/', '__') }}
+    version: "{{ item.branch | default('main') }}"
+    update: true
+    force: true
+  loop: "{{ github_skill_sources | default([]) | selectattr('enabled', 'equalto', true) | list }}"
+  when:
+    - github_skill_sources is defined
+    - skills_git_check.rc | default(1) == 0
+
+- name: Find skill directories in GitHub repos
+  ansible.builtin.find:
+    paths: >-
+      {{ ansible_facts['user_dir'] }}/.skills/.cache/repos/{{
+      item.repo
+      | regex_replace('^.*github.com[:/]', '')
+      | regex_replace('\\.git$', '')
+      | regex_replace('/', '__') }}/{{
+      item.skills_path | default('skills') }}
+    file_type: directory
+    recurse: false
+  loop: "{{ github_skill_sources | default([]) | selectattr('enabled', 'equalto', true) | list }}"
+  register: skills_github_dirs
+  when:
+    - github_skill_sources is defined
+    - skills_git_check.rc | default(1) == 0
+
+- name: Sync GitHub skills into ~/.skills/
+  ansible.builtin.copy:
+    src: "{{ skill_dir.1.path }}/"
+    dest: "{{ ansible_facts['user_dir'] }}/.skills/{{ skill_dir.1.path | basename }}/"
+    remote_src: true
+    mode: '0600'
+    directory_mode: '0700'
+  loop: "{{ skills_github_dirs.results | default([]) | selectattr('files', 'defined') | subelements('files') }}"
+  loop_control:
+    loop_var: skill_dir
+  when:
+    - github_skill_sources is defined
+    - skills_git_check.rc | default(1) == 0
+    - >-
+      (skill_dir.0.item.selected_skills is not defined) or
+      (not skill_dir.0.item.selected_skills) or
+      ((skill_dir.1.path | basename) in skill_dir.0.item.selected_skills)
+
+# ── Claude skills symlink ──────────────────────────────────────────────────────
+
+- name: Stat existing skills path for Claude
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] }}/.claude/skills"
+  register: skills_stat
+
+- name: Remove skills path if it is not a symlink pointing to ~/.skills
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.claude/skills"
+    state: absent
+  when:
+    - skills_stat.stat is defined
+    - skills_stat.stat.exists
+    - not (skills_stat.stat.islnk | default(false) and skills_stat.stat.lnk_source | default('') == ansible_facts['user_dir'] + '/.skills')
+
+- name: Ensure ~/.claude exists before creating skills symlink
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.claude"
+    state: directory
+    mode: '0700'
+  when: skills_claude_check.rc == 0
+
+- name: Create skills symlink for Claude
+  ansible.builtin.file:
+    src: "{{ ansible_facts['user_dir'] }}/.skills"
+    dest: "{{ ansible_facts['user_dir'] }}/.claude/skills"
+    state: link
+  when: skills_claude_check.rc == 0
+
+- name: Find deployed local skills
+  ansible.builtin.find:
+    paths: "{{ ansible_facts['user_dir'] }}/.skills/"
+    patterns: "SKILL.md"
+    recurse: true
+  register: skills_deployed

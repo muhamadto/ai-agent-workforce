@@ -1,0 +1,73 @@
+---
+- name: Ensure ~/.config/opencode directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.config/opencode"
+    state: directory
+    mode: '0700'
+
+- name: Deploy opencode.jsonc
+  ansible.builtin.copy:
+    src: "opencode.jsonc"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/opencode/opencode.jsonc"
+    mode: '0600'
+
+- name: Deploy global AGENTS.md
+  ansible.builtin.copy:
+    src: "AGENTS.md"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/opencode/AGENTS.md"
+    mode: '0600'
+
+- name: Ensure ~/.config/opencode/agents directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.config/opencode/agents"
+    state: directory
+    mode: '0700'
+
+- name: Deploy opencode agent markdown files
+  ansible.builtin.copy:
+    src: "agents/{{ item }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/opencode/agents/{{ item }}"
+    mode: '0600'
+  loop:
+    - architecture-guardian.md
+    - backend-developer.md
+    - business-analyst.md
+    - data-engineer.md
+    - frontend-developer.md
+    - identity-security-developer.md
+    - infrastructure-engineer.md
+    - mobile-engineer.md
+    - principal-engineer.md
+    - qe-engineer.md
+    - secops-engineer.md
+    - sre-engineer.md
+
+- name: Display deployed configuration
+  ansible.builtin.debug:
+    msg: |
+      opencode configuration deployed to ~/.config/opencode/:
+        opencode.jsonc — global defaults (model: glm-5.2:cloud)
+        AGENTS.md      — global operating rules (auto-loaded by opencode)
+        agents/*.md    — 12 agent definitions (markdown with YAML frontmatter)
+
+      Advisory agents (glm-5.2:cloud):
+        - architecture-guardian  read-only  Clean Architecture enforcer
+        - principal-engineer     read-only  Strategic arbiter and decision-maker
+        - business-analyst       full       Requirements, user stories, acceptance criteria
+        - qe-engineer            full       Test strategy, automation, BDD, quality gates
+        - secops-engineer        full       OWASP, security tooling, vulnerability review
+        - sre-engineer           full       SLOs, alerting, incident response, capacity, DR
+
+      GLM implementation agents (glm-5.2:cloud):
+        - backend-developer           full  Java 24+, Spring Boot 4.x, GraalVM
+        - data-engineer               full  ETL/ELT, data warehousing, SQL optimization
+        - identity-security-developer full  OAuth2, OIDC, passkeys, zero-trust
+        - infrastructure-engineer     full  AWS, GCP, K3S, IaC
+
+      Kimi implementation agents (kimi-k2.7-code):
+        - frontend-developer     full  React, Next.js, Flutter
+        - mobile-engineer        full  iOS, Android, Flutter, React Native
+
+      Usage: opencode run --agent backend-developer "implement the feature"
+             opencode run --agent architecture-guardian "review this PR"
+             opencode  (interactive TUI — select agent from menu)
