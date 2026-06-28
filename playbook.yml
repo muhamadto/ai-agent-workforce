@@ -25,12 +25,10 @@
         - always
 
   roles:
-    # Deploys Claude Code agents to ~/.claude/agents/.
     - role: claude
       tags:
         - claude
 
-    # Deploys opencode config to ~/.config/opencode/ (per-agent model routing).
     - role: opencode
       tags:
         - opencode
