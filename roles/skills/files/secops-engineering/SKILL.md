@@ -8,6 +8,11 @@ description: Reference knowledge for application security and SecOps — OWASP T
 Reference knowledge for application security reviews, secure coding, and CI/CD security enforcement.
 Load this skill before any security review, vulnerability analysis, or security-sensitive implementation.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## OWASP Top 10 (Web, API, Cloud)
 
 ### OWASP Top 10 Web Application Security Risks (2021)

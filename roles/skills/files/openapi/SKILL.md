@@ -9,6 +9,11 @@ The spec is generated from code; there are no hand-written YAML or JSON contract
 The controller **interface** carries all OpenAPI annotations. The `@RestController`
 implementation class is annotation-free — it only implements the interface.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## The Pattern in Three Layers
 
 ```

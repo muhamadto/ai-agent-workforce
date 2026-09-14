@@ -7,6 +7,11 @@ description: Produce a focused threat model for OAuth2/OIDC authorization flows 
 
 Produce a structured threat model specifically for OAuth2 and OIDC authorization flows. Use this skill before implementing or changing any authorization flow, client registration, or token endpoint.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## When to use
 
 - Adding or modifying an OAuth2 authorization flow (authorization code, client credentials, device flow)

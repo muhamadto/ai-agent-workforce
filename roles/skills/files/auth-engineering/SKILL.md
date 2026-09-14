@@ -8,6 +8,11 @@ description: Reference knowledge for authentication and identity engineering —
 Reference knowledge for identity, authentication, and authorization work.
 Load this skill before designing, implementing, or reviewing auth code on any platform.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Identity & Access Management Standards
 
 ### OAuth 2.1

@@ -7,6 +7,11 @@ description: Testing patterns for JUnit 5 on Spring Boot 4.x — the full-contex
 
 Testing patterns and prescriptions for the platform stack. Load this before writing or reviewing integration tests, controller ITs, or test base classes.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## The Dual-Layer Strategy
 
 Every controller gets two test classes:

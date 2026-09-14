@@ -7,6 +7,11 @@ description: Guide incident response from detection through resolution, and prod
 
 Structured incident response: detect, contain, resolve, communicate, and document. Produce a blameless postmortem when the incident is closed.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## When to use
 
 - A production issue has been detected and needs a coordinated response

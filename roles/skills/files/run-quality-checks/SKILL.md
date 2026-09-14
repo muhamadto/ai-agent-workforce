@@ -7,6 +7,11 @@ description: Detect the build tool and run the full pre-commit quality gate — 
 
 Run the full quality gate before committing. Detect the build tool, then execute checks in this order: format → lint → tests → SAST → SCA.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Step 1 — Detect the build tool
 
 ```bash

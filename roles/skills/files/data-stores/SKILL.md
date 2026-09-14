@@ -9,6 +9,11 @@ The platform's persistence layer: PostgreSQL + Redis (RDS equivalent), MongoDB (
 equivalent), and MinIO (S3 equivalent) — all internal-cluster services. Load this skill
 before schema design, query work, store selection, or caching.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## PostgreSQL (Primary Relational Store)
 
 - **Advanced features**: JSONB (with GIN indexes), CTEs and recursive queries, window functions, lateral joins, partitioning (range/list/hash), full-text search, arrays

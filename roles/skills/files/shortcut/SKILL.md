@@ -7,6 +7,11 @@ description: Interact with Shortcut project management. Fetch stories and epics,
 
 Interact with Shortcut (project management) using the `short` CLI.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Prerequisites
 
 Verify the CLI is installed and authenticated before any operation:

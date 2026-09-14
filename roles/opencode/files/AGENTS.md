@@ -6,6 +6,13 @@ Applies to every session. Project-level instruction files add or override for th
 
 ---
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
+---
+
 ## Workflow — always follow this loop
 
 1. **Explore** — read files, ask questions, do not touch anything

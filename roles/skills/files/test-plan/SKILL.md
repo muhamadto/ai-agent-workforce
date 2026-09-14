@@ -7,6 +7,11 @@ description: Given a feature or user story, produce a structured test plan cover
 
 Produce a structured test plan for a feature or user story before tests are written. Use this to align the team on what is being tested, at which layer, with what data.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Step 1 — Understand the feature
 
 Read:

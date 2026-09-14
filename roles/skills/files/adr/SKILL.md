@@ -7,6 +7,11 @@ description: Create an Architecture Decision Record (ADR) to document a signific
 
 Document architectural decisions in a lightweight, durable format. ADRs record the context, options, decision, and consequences so future team members understand why the architecture is the way it is.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## When to use
 
 - A significant technology choice is being made (framework, database, messaging system, auth approach)

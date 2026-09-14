@@ -7,6 +7,11 @@ description: Reference knowledge for business analysis — requirements elicitat
 
 Reference knowledge for requirements work. Load this skill before eliciting requirements, writing user stories, modeling domains, or mapping processes.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Requirements Elicitation
 
 - **Stakeholder interviews**: Structured questioning to surface explicit and implicit needs

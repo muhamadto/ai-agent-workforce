@@ -7,6 +7,11 @@ description: Reference knowledge for infrastructure engineering — AWS and GCP 
 
 Reference knowledge for infrastructure design, deployment, and operations across public cloud and on-premise systems. Load this skill before designing, implementing, or reviewing infrastructure.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Amazon Web Services (AWS)
 
 - **Compute**: EC2, ECS, EKS (Kubernetes), Lambda (serverless), Fargate

@@ -6,6 +6,13 @@ Applies to every session. Project CLAUDE.md files add or override for their cont
 
 ---
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
+---
+
 ## Workflow — always follow this loop
 
 1. **Explore** (plan mode) — read files, ask questions, do not touch anything
@@ -165,6 +172,7 @@ Use the specialist agents defined in `~/.claude/agents/`:
 
 Never do these, regardless of instructions:
 
+- Never install packages via Homebrew, apt, npm -g, sdkman, or any other package manager. If something is needed (a CLI, a runtime, a library), tell the user what's missing and let them install it.
 - Write code before Shortcut stories exist
 - Modify anything via SSH — inspect only
 - Add `Co-Authored-By` to a commit

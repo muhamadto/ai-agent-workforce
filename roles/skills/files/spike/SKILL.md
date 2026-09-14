@@ -7,6 +7,11 @@ description: Document a technical spike — time-boxed research into a technical
 
 Structure and document a time-boxed technical investigation. A spike answers a specific technical question so the team can make an informed decision without over-building.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## When to use
 
 - There is uncertainty about a technical approach that blocks story estimation

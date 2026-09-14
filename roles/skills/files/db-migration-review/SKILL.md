@@ -7,6 +7,11 @@ description: Review database migration scripts for safety, reversibility, perfor
 
 Review database migration scripts (Flyway, Liquibase, raw SQL) for safety, data integrity, and production readiness before they are applied.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## When to use
 
 - A new migration script has been written and needs a safety review

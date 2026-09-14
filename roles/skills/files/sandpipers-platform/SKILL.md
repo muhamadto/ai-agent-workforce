@@ -9,6 +9,11 @@ Everything deployed here runs on the private K3S cloud (domain `sandpipers.io`, 
 `~/Workspace/private-cloud`). Designs are expressed in AWS-service terms but implemented
 with these equivalents. Load this skill before wiring any service to platform infrastructure.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## AWS Service Equivalents
 
 | AWS Service | Private Cloud Equivalent | Access |
