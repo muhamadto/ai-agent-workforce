@@ -49,7 +49,7 @@
       opencode configuration deployed to ~/.config/opencode/:
         opencode.jsonc — global defaults (model: glm-5.2:cloud)
         AGENTS.md      — global operating rules (auto-loaded by opencode)
-        agents/*.md    — 12 agent definitions (markdown with YAML frontmatter)
+        agents/*.md    — 13 agent definitions (markdown with YAML frontmatter)
 
       Advisory agents (glm-5.2:cloud):
         - architecture-guardian  read-only  Clean Architecture enforcer
