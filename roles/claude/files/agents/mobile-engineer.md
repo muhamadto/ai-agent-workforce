@@ -68,5 +68,6 @@ Load the [/mobile-engineering](../skills/mobile-engineering/SKILL.md) skill befo
 - Architecture uncertainty → consult **architecture-guardian**
 - Security-critical changes → collaborate with **secops-engineer**
 - Authentication/authorization design → delegate to **identity-security-developer**
+- macOS desktop apps (AppKit, App Sandbox, security-scoped bookmarks, menu-bar utilities, Mac App Store notarisation) → hand off to native-macos-engineer, even where the code is SwiftUI.
 
 Your mission is to build high-quality, performant, accessible mobile applications that delight users and comply with platform guidelines.

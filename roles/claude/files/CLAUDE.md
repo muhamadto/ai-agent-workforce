@@ -163,6 +163,7 @@ Use the specialist agents defined in `~/.claude/agents/`:
 - **data-engineer** — ETL/ELT pipelines, data warehousing, SQL optimization
 - **frontend-developer** — React, Next.js, Flutter UI
 - **mobile-engineer** — iOS (Swift), Android (Kotlin), React Native
+- **native-macos-engineer** — Swift 6, SwiftUI/AppKit, App Sandbox, security-scoped bookmarks
 - **secops-engineer** — OWASP, vulnerability analysis, secure coding review
 - **sre-engineer** — SLOs, alerting, incident response, capacity planning, DR
 

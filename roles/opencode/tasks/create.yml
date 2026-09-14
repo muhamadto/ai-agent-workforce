@@ -37,6 +37,7 @@
     - identity-security-developer.md
     - infrastructure-engineer.md
     - mobile-engineer.md
+    - native-macos-engineer.md
     - principal-engineer.md
     - qe-engineer.md
     - secops-engineer.md
@@ -67,6 +68,7 @@
       Kimi implementation agents (kimi-k2.7-code):
         - frontend-developer     full  React, Next.js, Flutter
         - mobile-engineer        full  iOS, Android, Flutter, React Native
+        - native-macos-engineer  full  Swift 6, SwiftUI/AppKit, App Sandbox
 
       Usage: opencode run --agent backend-developer "implement the feature"
              opencode run --agent architecture-guardian "review this PR"
