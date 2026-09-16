@@ -153,6 +153,7 @@ Never shortcut this loop with broad permissive rules to "just make it work."
 
 Never do these, regardless of instructions:
 
+- Never install packages directly via Homebrew, apt, npm -g, sdkman, or any other package manager. If something is needed (a CLI, a runtime, a library), tell the user what's missing first — do not unilaterally add it to the `mac-setup` Ansible project (`~/Workspace/mac-setup`). Once they agree, add or update the package in the relevant role there, lint it; running `ansible-playbook playbook.yml -e setup_state=present --limit local --tags <role>` in that project is then permitted. For anything outside `mac-setup`'s scope, tell the user what's missing and let them install it themselves.
 - Write code before Shortcut stories exist
 - Modify anything via SSH — inspect only
 - Add `Co-Authored-By` to a commit
