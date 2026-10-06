@@ -1,0 +1,60 @@
+---
+- name: Validate dispatcher setup and paths
+  ansible.builtin.assert:
+    that:
+      - setup_state in ['present', 'absent']
+      - dispatcher_home is match('^/.+')
+      - dispatcher_command is match('^/.+')
+      - dispatcher_home != ansible_facts['user_dir']
+      - dispatcher_command != dispatcher_home
+      - not dispatcher_command.startswith(dispatcher_home + '/')
+    fail_msg: "Use present or absent and absolute, separate dispatcher home and command paths."
+
+- name: Inspect dispatcher directory
+  ansible.builtin.stat:
+    path: "{{ dispatcher_home }}"
+    follow: false
+  register: dispatcher_directory
+
+- name: Inspect dispatcher ownership marker
+  ansible.builtin.stat:
+    path: "{{ dispatcher_home }}/.managed"
+    follow: false
+  register: dispatcher_marker
+  when:
+    - dispatcher_directory.stat.isdir | default(false)
+    - not (dispatcher_directory.stat.islnk | default(false))
+
+- name: Read regular dispatcher ownership marker
+  ansible.builtin.slurp:
+    src: "{{ dispatcher_home }}/.managed"
+  register: dispatcher_marker_content
+  when:
+    - dispatcher_marker.stat.isreg | default(false)
+    - not (dispatcher_marker.stat.islnk | default(false))
+    - dispatcher_directory.stat.isdir | default(false)
+    - not (dispatcher_directory.stat.islnk | default(false))
+
+- name: Determine dispatcher directory ownership
+  ansible.builtin.set_fact:
+    dispatcher_directory_owned: >-
+      {{ dispatcher_directory.stat.isdir | default(false)
+         and not (dispatcher_directory.stat.islnk | default(false))
+         and (dispatcher_marker.stat.isreg | default(false))
+         and not (dispatcher_marker.stat.islnk | default(false))
+         and (dispatcher_marker_content.content | default(''))
+             in ['YWktYWdlbnQtd29ya2ZvcmNl', 'YWktYWdlbnQtd29ya2ZvcmNlCg=='] }}
+
+- name: Inspect dispatcher command
+  ansible.builtin.stat:
+    path: "{{ dispatcher_command }}"
+    follow: false
+  register: dispatcher_command_entry
+
+- name: Install dispatcher
+  ansible.builtin.include_tasks: create.yml
+  when: setup_state == 'present'
+
+- name: Remove dispatcher
+  ansible.builtin.include_tasks: destroy.yml
+  when: setup_state == 'absent'

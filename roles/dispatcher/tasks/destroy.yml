@@ -1,0 +1,14 @@
+---
+- name: Remove only the matching dispatcher command link
+  ansible.builtin.file:
+    path: "{{ dispatcher_command }}"
+    state: absent
+  when:
+    - dispatcher_command_entry.stat.islnk | default(false)
+    - dispatcher_command_entry.stat.lnk_target | default('') == dispatcher_home + '/bin/workforce'
+
+- name: Remove only the owned dispatcher directory
+  ansible.builtin.file:
+    path: "{{ dispatcher_home }}"
+    state: absent
+  when: dispatcher_directory_owned

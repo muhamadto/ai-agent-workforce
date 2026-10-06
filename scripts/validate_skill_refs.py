@@ -23,6 +23,8 @@ from pathlib import Path
 
 import yaml
 
+from dispatch_agent import DispatchError, routing
+
 REPO = Path(__file__).resolve().parent.parent
 
 # Claude Code built-in slash commands that agents may list as skills.
@@ -92,6 +94,12 @@ def main() -> int:
     opencode_names = {path.stem for path in (REPO / "roles" / "opencode" / "files" / "agents").glob("*.md")}
     if {path.stem for path in codex_agents} != claude_names or opencode_names != claude_names:
         errors.append("Specialist agent names must match across Claude, OpenCode and Codex.")
+    try:
+        routes = routing(REPO / "config" / "agent-routing.toml")
+        if set(routes) != claude_names:
+            errors.append("Dispatcher routing must contain exactly the shared specialist names.")
+    except DispatchError as error:
+        errors.append(f"config/agent-routing.toml: {error}")
     for agent in codex_agents:
         try:
             skills = codex_skills(agent)

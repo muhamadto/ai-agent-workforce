@@ -41,3 +41,8 @@
       tags:
         - never
         - codex
+
+    - role: dispatcher
+      tags:
+        - never
+        - dispatcher

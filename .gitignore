@@ -84,6 +84,7 @@ GEMINI.md
 AGENTS.md
 !instructions/AGENTS.md
 /.claude/
+/.context/
 .cursorrules
 .cursor/
 .github/copilot-instructions.md

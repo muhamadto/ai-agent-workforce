@@ -228,6 +228,52 @@ ls -la ~/.model-name/  # Should not exist
 - Permission issues
 - Missing dependencies
 
+### Dispatcher Offline Validation
+
+Use Python 3.11+ and existing Ansible tooling; do not install packages or invoke
+models as part of validation. These source commands inspect routing and planned
+arguments without checking native logins or calling a CLI:
+
+```sh
+python3 scripts/validate_skill_refs.py
+python3 scripts/dispatch_agent.py list
+printf 'Review module boundaries without changing files.\n' | python3 scripts/dispatch_agent.py delegate business-analyst --workspace "$PWD" --dry-run
+ansible-playbook playbook.yml --syntax-check
+ansible-lint roles/dispatcher playbook.yml
+```
+
+Keep role smoke tests and temporary homes under `.context/`, not tracked test
+files or your real home. The role requires no native CLI installation. An isolated
+deployment can use dedicated home/command overrides:
+
+```sh
+mkdir -p .context
+smoke="$(mktemp -d "$PWD/.context/dispatcher-smoke.XXXXXX")"
+dispatcher_vars="{\"dispatcher_home\":\"$smoke/home/dispatcher\",\"dispatcher_command\":\"$smoke/home/bin/workforce\"}"
+ansible-playbook playbook.yml --limit local --tags dispatcher -e setup_state=present -e "$dispatcher_vars" --check
+ansible-playbook playbook.yml --limit local --tags dispatcher -e setup_state=present -e "$dispatcher_vars"
+ansible-playbook playbook.yml --limit local --tags dispatcher -e setup_state=present -e "$dispatcher_vars"
+ansible-playbook playbook.yml --limit local --tags dispatcher -e setup_state=present -e "$dispatcher_vars"
+"$smoke/home/bin/workforce" list
+ansible-playbook playbook.yml --limit local --tags dispatcher -e setup_state=absent -e "$dispatcher_vars"
+ansible-playbook playbook.yml --limit local --tags dispatcher -e setup_state=absent -e "$dispatcher_vars"
+```
+
+Verify fresh check mode writes nothing into the temporary home, both reinstalls
+report `changed=0`, all 13 Codex personas retain their repository-relative
+layout, and repeated removal reports `changed=0`. Check `0700` directories/wrapper
+and `0600` script/routing/personas, exact command symlink targets, and routing
+backups. Exercise unmarked roots, symlinked roots/markers/payloads, unrelated or
+dangling command links, replacement commands, and unowned replacement directories;
+installation must fail before mutation and removal must preserve replacements,
+shared directories, native settings/authentication and instruction links.
+
+Do not treat offline success as subscription verification. OpenCode read-only
+handoffs must fail closed; write handoffs must reject missing subscription
+attestation, mismatched provider/credential metadata and unqualified model IDs.
+Attestation does not establish billing entitlement or remaining quota. See
+[dispatcher deployment and preservation](roles/dispatcher/README.md).
+
 ## Questions?
 
 - Open a [Discussion](https://github.com/muhamadto/ai-agent-workforce/discussions)
