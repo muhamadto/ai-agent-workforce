@@ -213,7 +213,7 @@ def command_for(binary, name, route, write):
                    "-c", 'forced_login_method="chatgpt"', "-c", 'model_provider="openai"']
     elif harness == "claude":
         command = [binary, "--print", "--agent", name, "--output-format", "json",
-                   "--permission-mode", "manual" if write else "plan",
+                   "--permission-mode", "default" if write else "plan",
                    "--disallowedTools", "Agent,Task", "--settings",
                    json.dumps({"env": dict.fromkeys(API_OVERRIDES["claude"], ""),
                                "forceLoginMethod": "claudeai"})]
