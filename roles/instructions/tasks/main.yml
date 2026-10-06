@@ -120,6 +120,63 @@
     loop_var: instructions_timestamp_backup
     label: "{{ instructions_timestamp_backup.path }}"
 
+- name: Inspect the guarded client migration backup checksum
+  ansible.builtin.stat:
+    path: "{{ instructions_destination }}.before-ai-agent-workforce"
+    follow: false
+    checksum_algorithm: sha256
+  register: instructions_client_backup
+  when: instructions_entry.stat.isreg | default(false)
+
+- name: Select a migration backup without replacing prior revisions
+  ansible.builtin.set_fact:
+    instructions_migration_checksum: "{{ instructions_existing.content | b64decode | hash('sha256') }}"
+    instructions_migration_backup: >-
+      {{ instructions_destination + '.before-ai-agent-workforce' +
+         ('.' + (instructions_existing.content | b64decode | hash('sha256'))
+          if instructions_client_backup.stat.exists and
+             instructions_client_backup.stat.checksum != (instructions_existing.content | b64decode | hash('sha256'))
+          else '') }}
+  when: instructions_entry.stat.isreg | default(false)
+  no_log: true
+
+- name: Inspect the selected migration backup without following links
+  ansible.builtin.stat:
+    path: "{{ instructions_migration_backup }}"
+    follow: false
+    get_checksum: false
+    get_mime: false
+  register: instructions_selected_backup
+  when: instructions_entry.stat.isreg | default(false)
+
+- name: Refuse redirected or multiply linked migration backups
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_selected_backup.stat.exists or
+        (instructions_selected_backup.stat.isreg | default(false) and
+         instructions_selected_backup.stat.nlink | default(0) == 1)
+    fail_msg: "The selected migration backup must be a single-link regular file; nothing has been changed."
+  when: instructions_entry.stat.isreg | default(false)
+
+- name: Read an existing selected migration backup privately
+  ansible.builtin.slurp:
+    src: "{{ instructions_migration_backup }}"
+  register: instructions_selected_backup_content
+  when:
+    - instructions_entry.stat.isreg | default(false)
+    - instructions_selected_backup.stat.isreg | default(false)
+  no_log: true
+
+- name: Refuse a migration that cannot preserve the outgoing revision
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_selected_backup.stat.exists or
+        (instructions_selected_backup_content.content | b64decode | hash('sha256')) == instructions_migration_checksum
+    fail_msg: "The selected backup already contains a different revision; nothing has been changed."
+  when: instructions_entry.stat.isreg | default(false)
+
 - name: Ensure shared instructions directory exists
   ansible.builtin.file:
     path: "{{ instructions_home }}"
@@ -149,11 +206,13 @@
 - name: Back up recognised instructions before migration
   ansible.builtin.copy:
     src: "{{ instructions_destination }}"
-    dest: "{{ instructions_destination }}.before-ai-agent-workforce"
+    dest: "{{ instructions_migration_backup }}"
     remote_src: true
     force: false
     mode: '0600'
-  when: instructions_entry.stat.isreg | default(false)
+  when:
+    - instructions_entry.stat.isreg | default(false)
+    - not instructions_selected_backup.stat.exists
   no_log: true
 
 - name: Link client to canonical shared instructions

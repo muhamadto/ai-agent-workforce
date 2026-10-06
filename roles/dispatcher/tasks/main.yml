@@ -8,6 +8,10 @@
       - dispatcher_home != ansible_facts['user_dir']
       - dispatcher_command != dispatcher_home
       - not dispatcher_command.startswith(dispatcher_home + '/')
+      - "'..' not in dispatcher_home.split('/')"
+      - "'.' not in dispatcher_home.split('/')"
+      - "'..' not in dispatcher_command.split('/')"
+      - "'.' not in dispatcher_command.split('/')"
     fail_msg: "Use present or absent and absolute, separate dispatcher home and command paths."
 
 - name: Guard dispatcher directory and command ancestors before inspection

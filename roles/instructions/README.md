@@ -18,11 +18,13 @@ Claude Cowork skips user-scope instruction symlinks pointing outside its working
 ## Migration and safety
 
 Recognised existing files are copied to `<entry-point>.before-ai-agent-workforce` before becoming links.
-An existing backup is never overwritten. Recognition uses whole-payload SHA256: the exact current
+An existing backup is never overwritten. If it preserves another revision, the outgoing file is
+saved to `<entry-point>.before-ai-agent-workforce.<sha256>` instead; an existing selected backup
+must contain exactly that outgoing revision. All backup guards run before mutation.
+Recognition uses whole-payload SHA256: the exact current
 repository source or a shipped historical payload in `files/legacy-fingerprints.json`. Each historical
 digest records its source path and full Git commit, researched across this branch and `origin/main`.
-The earlier research in `.context/pr27-legacy-fingerprints.json` used trimmed text; these digests instead
-cover the complete original bytes, including the final newline and maintenance note. To verify provenance,
+Digests cover the complete original bytes, including the final newline and maintenance note. To verify provenance,
 hash `git show <commit>:<path>` with SHA256. Only a single complete pair of exact outer
 `<!-- BEGIN AI AGENT WORKFORCE -->` / `<!-- END AI AGENT WORKFORCE -->` lines may be removed;
 both markers require their final newline. No whitespace trimming, maintenance-note removal, internal
