@@ -129,7 +129,7 @@ Located in `~/.claude/agents/` and `~/.config/opencode/agents/`:
 <details>
 <summary>Local skills (this repo)</summary>
 
-Deployed to `~/.skills/`, symlinked to `~/.claude/skills/`:
+Deployed to `~/.skills/`, symlinked to both `~/.claude/skills/` and `~/.config/opencode/skills/`:
 
 | Skill | What it covers |
 |---|---|
@@ -187,6 +187,7 @@ Cloned to `~/.skills/.cache/repos/` and synced to `~/.skills/` on every playbook
 | `caveman` | `juliusbrussee/caveman` |
 | `playwright-cli` | `microsoft/playwright-cli` |
 | `sonarcloud-analysis` | `harshanandak/forge` |
+| `grill-me` | `mattpocock/skills` |
 
 </details>
 

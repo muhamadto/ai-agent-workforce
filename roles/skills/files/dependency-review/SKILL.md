@@ -7,6 +7,11 @@ description: Review dependency upgrades for breaking changes, CVEs, license comp
 
 Evaluate dependency upgrades before merging: breaking changes, security vulnerabilities, license compliance, and runtime impact.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## When to use
 
 - A PR bumps one or more dependencies

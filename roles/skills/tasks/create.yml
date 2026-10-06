@@ -7,6 +7,12 @@
   failed_when: false
   changed_when: false
 
+- name: Check if opencode is installed
+  ansible.builtin.command: which opencode
+  register: skills_opencode_check
+  failed_when: false
+  changed_when: false
+
 # ── Central skills directory ───────────────────────────────────────────────────
 
 - name: Ensure shortcut reference directory exists in ~/.skills/
@@ -137,6 +143,40 @@
     dest: "{{ ansible_facts['user_dir'] }}/.claude/skills"
     state: link
   when: skills_claude_check.rc == 0
+
+# ── opencode skills symlink ────────────────────────────────────────────────────
+# opencode discovers skills from ~/.config/opencode/skills/*/SKILL.md (and also
+# ~/.claude/skills/*/SKILL.md). Mirror the central ~/.skills directory so every
+# github-sourced and local skill is reachable from opencode without duplication.
+
+- name: Stat existing skills path for opencode
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] }}/.config/opencode/skills"
+  register: skills_opencode_stat
+
+- name: Remove opencode skills path if it is not a symlink pointing to ~/.skills
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.config/opencode/skills"
+    state: absent
+  when:
+    - skills_opencode_stat.stat is defined
+    - skills_opencode_stat.stat.exists
+    - not (skills_opencode_stat.stat.islnk | default(false) and
+      skills_opencode_stat.stat.lnk_source | default('') == ansible_facts['user_dir'] + '/.skills')
+
+- name: Ensure ~/.config/opencode exists before creating skills symlink
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.config/opencode"
+    state: directory
+    mode: '0700'
+  when: skills_opencode_check.rc == 0
+
+- name: Create skills symlink for opencode
+  ansible.builtin.file:
+    src: "{{ ansible_facts['user_dir'] }}/.skills"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/opencode/skills"
+    state: link
+  when: skills_opencode_check.rc == 0
 
 - name: Find deployed local skills
   ansible.builtin.find:

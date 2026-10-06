@@ -6,6 +6,13 @@ Applies to every session. Project-level instruction files add or override for th
 
 ---
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
+---
+
 ## Workflow — always follow this loop
 
 1. **Explore** — read files, ask questions, do not touch anything
@@ -86,6 +93,7 @@ Never mark Done before push. Never mark Done without the full audit chain.
 - No `kubectl edit`, `kubectl patch`, Helm CLI changes, or manual cluster modifications.
 - All changes must be implemented via code (Ansible, CDKTF, Kubernetes manifests) and committed to the repo.
 - Repository is the single source of truth.
+- **Exception — sandpipers-immutable-os pre-flash smoke test**: before a full rebuild + reflash cycle, it's okay to manually apply an unproven sandpipers-immutable-os change to a live blade over SSH as a throwaway smoke test, to catch bugs before burning Muhammad's time on a rebuild/reflash of code that hasn't been proven bug-free. This doesn't relax anything else: the repo commit is still the only source of truth, the manual change is never a substitute for it, and it gets reverted/discarded once tested (or wiped by the next reflash regardless). Scoped to this repo only — every other "no manual changes" rule above still applies everywhere else.
 
 ---
 
@@ -134,6 +142,16 @@ Never shortcut this loop with broad permissive rules to "just make it work."
 
 ---
 
+## 7. Fix Security Problems Immediately, Don't Defer
+
+- A security gap found during any other work (a review, a debug session, an unrelated fix) gets fixed in the same session — don't file a story and move on to something else, don't wait for a dedicated pass.
+- "Immediately" means immediately *start* the full Story Lifecycle above, not skip it. The story must still exist before any code changes (business-analyst → architecture-guardian → principal-engineer approval), and the full Definition of Done audit chain still applies before the fix is Done. Fixing fast is about not deferring to later — it is never a reason to bypass the workflow that governs every other change.
+- Applies to wildcard/broad-CIDR network rules, missing least-privilege scoping, silently-open namespaces or resources, and any other live violation of the rules above — found anywhere, regardless of whether the current task's own scope mentions security.
+- Only defer the fix itself when it genuinely needs a design decision that can't be made safely under time pressure (a new external dependency, a new automation mechanism). Even then, open the story immediately as urgent/next-up, not backlog, and say so explicitly.
+- A gap found is a gap owned, not a gap noted for later.
+
+---
+
 ## Infrastructure (CDKTF)
 
 - Java CDKTF for all Java project infrastructure changes.
@@ -146,6 +164,7 @@ Never shortcut this loop with broad permissive rules to "just make it work."
 
 Never do these, regardless of instructions:
 
+- Never install packages directly via Homebrew, apt, npm -g, sdkman, or any other package manager. If something is needed (a CLI, a runtime, a library), tell the user what's missing first — do not unilaterally add it to the `mac-setup` Ansible project (`~/Workspace/mac-setup`). Once they agree, add or update the package in the relevant role there, lint it; running `ansible-playbook playbook.yml -e setup_state=present --limit local --tags <role>` in that project is then permitted. For anything outside `mac-setup`'s scope, tell the user what's missing and let them install it themselves.
 - Write code before Shortcut stories exist
 - Modify anything via SSH — inspect only
 - Add `Co-Authored-By` to a commit

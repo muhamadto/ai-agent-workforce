@@ -7,6 +7,11 @@ description: Generate structured release notes from git log between two refs, gr
 
 Generate structured, human-readable release notes from Conventional Commits history between two refs (tags, branches, or commits).
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## When to use
 
 - Cutting a release and need a changelog entry

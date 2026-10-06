@@ -5,6 +5,11 @@ description: Bean Validation (Jakarta Validation 3.x) patterns for Spring Boot 4
 
 # Bean Validation — Spring Boot 4.x
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Setup
 
 ```xml

@@ -58,3 +58,9 @@ github_skill_sources:
     enabled: true
     selected_skills:
       - sonarcloud-analysis
+  - repo: "https://github.com/mattpocock/skills"
+    branch: "main"
+    skills_path: "skills/productivity"
+    enabled: true
+    selected_skills:
+      - grill-me

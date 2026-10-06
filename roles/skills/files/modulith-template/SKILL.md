@@ -13,6 +13,11 @@ modulith, this layout is mandatory. Modules extracted later follow
 `modulith-template` with the actual product name (kebab-case) throughout.
 Maven ONLY — never Gradle.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Module Overview
 
 ```

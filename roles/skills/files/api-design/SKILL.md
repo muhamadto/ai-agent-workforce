@@ -9,6 +9,11 @@ Use this skill when designing a new API contract or reviewing an existing one be
 
 ---
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Part 1 — Design
 
 ### URI Structure

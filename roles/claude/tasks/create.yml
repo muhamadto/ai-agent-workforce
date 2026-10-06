@@ -37,6 +37,7 @@
     - identity-security-developer.md
     - infrastructure-engineer.md
     - mobile-engineer.md
+    - native-macos-engineer.md
     - principal-engineer.md
     - qe-engineer.md
     - secops-engineer.md
@@ -54,6 +55,7 @@
       - identity-security-developer: OAuth2, OIDC, passkeys expert
       - infrastructure-engineer: AWS, GCP, K3S, IaC expert
       - mobile-engineer: iOS, Android, Flutter, React Native expert
+      - native-macos-engineer: Swift 6, SwiftUI/AppKit, App Sandbox expert
       - principal-engineer: Strategic arbiter and decision-maker
       - qe-engineer: Test strategy, automation, BDD, performance, quality gates
       - secops-engineer: OWASP, security tooling expert

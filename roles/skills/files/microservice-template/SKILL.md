@@ -8,11 +8,16 @@ description: Standard Maven multi-module layout for a Spring Boot microservice �
 Every microservice follows this three-module Maven layout. Replace `microservice-template`
 with the actual service name (kebab-case) throughout. Maven ONLY — never Gradle.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Module Overview
 
 ```
 microservice-template-project/              # Parent (packaging: pom)
-├── pom.xml                                  # modules, dependencyManagement, pluginManagement
+├── pom.xml                                  # modules + <parent> sandpipers-microservice-parent
 ├── microservice-template-client/            # Published client JAR — the API contract
 ├── microservice-template-service/           # Spring Boot application — the implementation
 └── microservice-template-infra/             # CDK for Terraform (CDKTF, Java) — the infrastructure
@@ -20,6 +25,12 @@ microservice-template-project/              # Parent (packaging: pom)
 
 Dependency direction: `service` depends on `client`. `client` depends on nothing internal.
 `infra` is independent of both (it describes infrastructure, not application code).
+
+The project's parent POM extends `io.sandpipers:sandpipers-microservice-parent`, which itself
+extends `io.sandpipers:sandpipers-parent` (JDK 25/GraalVM build conventions) and, transitively,
+imports `io.sandpipers:sandpipers-dependencies` (the Sandpipers BOM). Don't redeclare compiler,
+enforcer, Spotless, surefire/failsafe, or `spring-boot-maven-plugin` config locally — it's already
+there, including the unit/IT split (`*Test` vs `*IT`) and the JDK 25 Mockito `argLine` fix.
 
 ## microservice-template-client
 
@@ -55,6 +66,12 @@ microservice-template-service/
     └── publisher/         # Event publishers (producing events)
 ```
 
+Add `io.sandpipers:sandpipers-microservice-starter` as a dependency (web, actuator, validation, and
+the Sandpipers shared libraries in one) and `io.sandpipers:sandpipers-test-starter` with
+`<scope>test</scope>` (JUnit 5, MockMvc/MockMvcTester, Testcontainers Postgres — no version needed
+on either, both come from the BOM). Don't add `spring-boot-starter-web`/`-actuator`/`-validation` or
+`spring-boot-starter-test`/Testcontainers individually — that's what the two starters are for.
+
 Placement rules:
 
 - Controllers implement an interface from the client module — never define an endpoint
@@ -86,7 +103,12 @@ microservice-template-infra/
 ## Parent POM
 
 ```xml
-<groupId>com.example</groupId>
+<parent>
+  <groupId>io.sandpipers</groupId>
+  <artifactId>sandpipers-microservice-parent</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+</parent>
+
 <artifactId>microservice-template-project</artifactId>
 <packaging>pom</packaging>
 
@@ -97,10 +119,12 @@ microservice-template-infra/
 </modules>
 ```
 
-- All dependency versions are managed in the parent's `<dependencyManagement>`;
-  child POMs declare dependencies without versions.
-- Plugin configuration (compiler, surefire, failsafe, spotless) is centralized in
-  `<pluginManagement>`.
+- No local `<dependencyManagement>` or plugin config — `sandpipers-microservice-parent` already
+  supplies the managed versions (via `sandpipers-dependencies`) and the compiler/enforcer/Spotless/
+  surefire/failsafe/`spring-boot-maven-plugin` setup. Child POMs declare dependencies without
+  versions.
+- A `-DskipTests -Pnative` build (or the `native` profile alone) produces a GraalVM native
+  executable via the parent's `native-maven-plugin` wiring — no extra setup needed per service.
 
 ## Scaffolding a New Service
 
@@ -116,5 +140,12 @@ microservice-template-infra/
 ## Related Skills
 
 - [/java-spring-engineering](../java-spring-engineering/SKILL.md) — the stack reference for everything inside the service module
+- [/junit5](../junit5/SKILL.md) — the `ApplicationIT` pattern and test slices that `sandpipers-test-starter` supports
 - [/api-design](../api-design/SKILL.md) — designing the client module's contract
 - [/db-migration-review](../db-migration-review/SKILL.md) — reviewing schema changes that accompany entity changes
+
+All of this lives in the `sandpipers-foundation` monorepo (`~/Workspace/sandpipers-foundation`):
+`sandpipers-dependencies` (BOM, no parent), `sandpipers-parent` (build conventions, extends the BOM),
+`sandpipers-commons` (reactor for `sandpipers-lang`, `sandpipers-problems`, `sandpipers-logging`,
+`sandpipers-microservice-starter`, and `sandpipers-test-starter`), and `sandpipers-microservice-parent`
+(extends `sandpipers-parent`) as four top-level directories under that one root.

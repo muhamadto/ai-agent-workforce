@@ -8,6 +8,11 @@ description: Reference knowledge for Clean Architecture enforcement — layer de
 Reference knowledge for enforcing Clean Architecture as defined by Robert C. Martin (Uncle Bob).
 Load this skill before any architecture review or boundary judgment.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## The Layers
 
 - **Entities**: Enterprise business rules

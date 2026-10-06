@@ -9,6 +9,11 @@ NATS JetStream is the standard messaging and event-streaming backbone on this pl
 (the SQS/SNS/EventBridge equivalent — internal cluster only). Kafka and RabbitMQ are
 NOT used here. Load this skill before any work that publishes, consumes, or streams events.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Core NATS
 
 - **Subjects**: hierarchical, dot-separated (`orders.created`, `orders.*`, `orders.>`); design subject taxonomies up front — they are the API

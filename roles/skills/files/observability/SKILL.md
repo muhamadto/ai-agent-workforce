@@ -9,6 +9,11 @@ The platform observability stack: Prometheus + Grafana (metrics, `prometheus.san
 `grafana.sandpipers.io`), Loki (logs), Tempo (traces), AlertManager (alerting) — all
 Tailscale-only. Load this skill before instrumenting, alerting, or debugging anything in production.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Structured Logging → Loki
 
 - **SLF4J + Logback** with JSON encoder (Logstash encoder) — structured fields, never string-interpolated prose

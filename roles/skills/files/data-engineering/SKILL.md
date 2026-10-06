@@ -7,6 +7,11 @@ description: Reference knowledge for data engineering on the platform stack — 
 
 Reference knowledge for building scalable, reliable data pipelines and analytics infrastructure. Load this skill before designing, implementing, or reviewing data pipelines, warehouses, or transformations.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Processing on the Platform
 
 The analytics substrate is **PostgreSQL + MinIO (Parquet)** with **NATS JetStream** as the

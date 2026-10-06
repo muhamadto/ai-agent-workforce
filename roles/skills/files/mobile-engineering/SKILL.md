@@ -8,6 +8,11 @@ description: Reference knowledge for mobile engineering — iOS (Swift 6+, Swift
 Reference knowledge for native iOS, Android, and cross-platform mobile implementation work.
 Load this skill before writing, reviewing, or designing mobile code.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## iOS Development
 
 ### Swift & SwiftUI

@@ -37,6 +37,7 @@
     - identity-security-developer.md
     - infrastructure-engineer.md
     - mobile-engineer.md
+    - native-macos-engineer.md
     - principal-engineer.md
     - qe-engineer.md
     - secops-engineer.md
@@ -48,7 +49,7 @@
       opencode configuration deployed to ~/.config/opencode/:
         opencode.jsonc — global defaults (model: glm-5.2:cloud)
         AGENTS.md      — global operating rules (auto-loaded by opencode)
-        agents/*.md    — 12 agent definitions (markdown with YAML frontmatter)
+        agents/*.md    — 13 agent definitions (markdown with YAML frontmatter)
 
       Advisory agents (glm-5.2:cloud):
         - architecture-guardian  read-only  Clean Architecture enforcer
@@ -67,6 +68,7 @@
       Kimi implementation agents (kimi-k2.7-code):
         - frontend-developer     full  React, Next.js, Flutter
         - mobile-engineer        full  iOS, Android, Flutter, React Native
+        - native-macos-engineer  full  Swift 6, SwiftUI/AppKit, App Sandbox
 
       Usage: opencode run --agent backend-developer "implement the feature"
              opencode run --agent architecture-guardian "review this PR"

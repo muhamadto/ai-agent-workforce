@@ -7,6 +7,11 @@ description: Create a branch from latest main, or sync an existing branch with m
 
 Manage branch lifecycle correctly: always cut from `origin/main`, always sync via rebase, never merge.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## When to use
 
 - **Creating a new branch**: ensures you start from the latest main, not a stale local copy

@@ -7,6 +7,11 @@ description: Stage changes and create a Conventional Commits compliant commit me
 
 Analyse staged (or unstaged) changes, craft a Conventional Commits message, and commit — respecting whatever hooks are active in this repository.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Step 1 — Discover active hooks
 
 ```bash

@@ -8,6 +8,11 @@ description: Reference knowledge for modern frontend engineering — React 18+, 
 Reference knowledge for frontend implementation work on web and cross-platform UI stacks.
 Load this skill before writing, reviewing, or designing frontend code.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## React 18+ & TypeScript 5+
 
 - **React 18+**: Server Components, Suspense, Concurrent Rendering, Transitions, useOptimistic

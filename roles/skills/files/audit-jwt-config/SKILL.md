@@ -7,6 +7,11 @@ description: Audit a JWT implementation for algorithm confusion, claims validati
 
 Audit an existing JWT implementation against known attack vectors and RFC best practices. Use this before merging any auth change that touches token issuance, validation, or storage.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## When to use
 
 - Reviewing a JWT decoder/encoder configuration before merge

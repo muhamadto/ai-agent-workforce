@@ -8,6 +8,11 @@ description: Reference knowledge for quality engineering — test strategy and t
 Reference knowledge for test strategy, test automation, and quality gate enforcement.
 Load this skill before planning, writing, or reviewing tests and quality gates.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Test Strategy
 
 - **Test pyramid**: Unit → Integration → E2E — heavy base, light top

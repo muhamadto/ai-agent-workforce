@@ -9,6 +9,11 @@ Load this before touching anything airline-shaped. The domain is full of overloa
 terms and 1960s legacy concepts; this skill defines what we mean and which concepts
 are allowed inside our platform.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Industry Map — Who Is Who
 
 - **Airline** — owns inventory (seats) and, in modern retailing, computes its own

@@ -8,6 +8,11 @@ description: Reference knowledge for modern Java/Spring backend engineering — 
 Reference knowledge for backend implementation work on the modern Java stack.
 Load this skill before writing, reviewing, or designing Java/Spring code.
 
+## Language and Tone
+
+- Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
+- No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+
 ## Java & JVM (Latest Stable)
 
 - **Java 24+**: Virtual threads (Project Loom), structured concurrency, pattern matching, records, sealed classes, switch expressions, sequenced collections, string templates, unnamed patterns and variables
@@ -55,6 +60,11 @@ disciplines — load the topic skill when the work touches them:
 - [/event-messaging](../event-messaging/SKILL.md) — NATS JetStream (the platform standard — no Kafka/RabbitMQ), listeners/publishers, outbox, CDC
 - [/observability](../observability/SKILL.md) — Micrometer/Prometheus, Loki logging, OpenTelemetry/Tempo, health checks, alerting
 - [/sandpipers-platform](../sandpipers-platform/SKILL.md) — the private-cloud service map (what to use instead of each AWS managed service)
+
+## Code Style
+
+- **`final` by default**: declare local variables, parameters, and fields `final` when they are defined. Only omit it when the variable is genuinely reassigned (a loop accumulator, a builder-style local reused across branches).
+- **Records before classes for DAOs/DTOs**: a plain data carrier (DTO, JPA projection, DAO row mapping) defaults to a `record`, not a class. Reach for a class only when the type needs mutability, JPA entity semantics (`@Entity` requires a no-arg constructor and mutable fields), or inheritance.
 
 ## Design Patterns
 
