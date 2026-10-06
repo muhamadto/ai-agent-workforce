@@ -67,10 +67,12 @@ live authentication or model availability.
 ## Preservation and removal
 
 Installation refuses unmarked directories, symlinked ownership markers or
-managed directories/files, and unrelated command collisions before mutation.
+managed directories/files, hardlinked markers or payloads, and unrelated command
+collisions before mutation. Existing managed files must be regular files with
+exactly one hard link.
 Routing updates create Ansible backups within the owned configuration directory.
-An ownership marker must be a regular file containing exactly
-`ai-agent-workforce` (with an optional final newline).
+An ownership marker must be a regular file with exactly one hard link containing
+exactly `ai-agent-workforce` (with an optional final newline).
 
 Removal deletes only a matching command symlink and a marked, real dispatcher
 directory. Replacement commands and unowned/replaced dispatcher directories

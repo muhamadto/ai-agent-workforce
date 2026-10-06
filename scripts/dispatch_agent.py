@@ -6,8 +6,10 @@ import fcntl
 import json
 import os
 import re
+import selectors
 import shutil
 import signal
+import stat
 import subprocess
 import sys
 import tempfile
@@ -26,12 +28,37 @@ API_OVERRIDES = {
 }
 MAX_OUTPUT = 2 * 1024 * 1024
 MAX_TASK = 64 * 1024
+CLAUDE_DIRECTORY = ".claude"
+TASK_TIMEOUT_MESSAGE = "Native CLI task timed out; its process group was stopped."
 
 
 class DispatchError(Exception):
     def __init__(self, message, code=1):
         super().__init__(message)
         self.code = code
+
+
+def validate_route(name, route):
+    if not re.fullmatch(r"[a-z][a-z0-9-]*", name) or not isinstance(route, dict):
+        raise DispatchError("Routing contains an invalid specialist definition.")
+    if route.get("harness") not in ("codex", "claude", "opencode"):
+        raise DispatchError("Routing harness must be codex, claude or opencode.")
+    model = route.get("model", "")
+    if not isinstance(model, str) or (model and not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_./:#-]*", model)):
+        raise DispatchError("Routing model must be a native model identifier, not command arguments.")
+    if set(route) - {"harness", "model", "subscription_confirmed", "credential_id"}:
+        raise DispatchError("Routing contains unsupported specialist settings.")
+    validate_attestation(route)
+
+
+def validate_attestation(route):
+    if "subscription_confirmed" in route and type(route["subscription_confirmed"]) is not bool:
+        raise DispatchError("Subscription confirmation must be a boolean.")
+    credential = route.get("credential_id")
+    if credential is not None and (not isinstance(credential, str) or not re.fullmatch(r"[a-zA-Z0-9_-]+", credential)):
+        raise DispatchError("Credential ID must be native non-secret metadata, not a credential value.")
+    if route["harness"] != "opencode" and set(route) & {"subscription_confirmed", "credential_id"}:
+        raise DispatchError("Subscription attestation fields apply only to OpenCode routes.")
 
 
 def routing(path):
@@ -43,22 +70,7 @@ def routing(path):
     if type(config.get("version")) is not int or config.get("version") != 1 or not isinstance(agents, dict) or not agents:
         raise DispatchError("Routing requires version = 1 and a non-empty agents table.")
     for name, route in agents.items():
-        if not re.fullmatch(r"[a-z][a-z0-9-]*", name) or not isinstance(route, dict):
-            raise DispatchError("Routing contains an invalid specialist definition.")
-        if route.get("harness") not in ("codex", "claude", "opencode"):
-            raise DispatchError("Routing harness must be codex, claude or opencode.")
-        model = route.get("model", "")
-        if not isinstance(model, str) or (model and not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_./:#-]*", model)):
-            raise DispatchError("Routing model must be a native model identifier, not command arguments.")
-        if set(route) - {"harness", "model", "subscription_confirmed", "credential_id"}:
-            raise DispatchError("Routing contains unsupported specialist settings.")
-        if "subscription_confirmed" in route and type(route["subscription_confirmed"]) is not bool:
-            raise DispatchError("Subscription confirmation must be a boolean.")
-        if "credential_id" in route and (not isinstance(route["credential_id"], str)
-                                         or not re.fullmatch(r"[a-zA-Z0-9_-]+", route["credential_id"])):
-            raise DispatchError("Credential ID must be native non-secret metadata, not a credential value.")
-        if route["harness"] != "opencode" and set(route) & {"subscription_confirmed", "credential_id"}:
-            raise DispatchError("Subscription attestation fields apply only to OpenCode routes.")
+        validate_route(name, route)
     return agents
 
 
@@ -82,8 +94,9 @@ def executable(harness, environment):
 def metadata_command(command, environment, workspace=None):
     with tempfile.TemporaryDirectory(prefix="workforce-metadata-") as directory:
         job = Path(directory)
-        output, final = run_child(command, environment, workspace, job, "", 15)
-        errors = (job / "stderr.txt").read_text(errors="replace")
+        write_handoff(job, "")
+        output = run_child(command, environment, workspace, job, 15)
+        errors = read_private_output(job / "stderr.txt")
     return subprocess.CompletedProcess(command, 0, output, errors)
 
 
@@ -109,6 +122,17 @@ def authenticate(harness, binary, environment, route=None, workspace=None):
     return "subscription login verified"
 
 
+def active_credential_matches(integration, provider, credential):
+    if not isinstance(integration, dict) or integration.get("id") != provider:
+        return False
+    connections = integration.get("connections")
+    if not isinstance(connections, list) or not connections or not isinstance(connections[0], dict):
+        return False
+    active = connections[0]
+    return (active.get("type") == "credential" and active.get("id") == credential
+            and active.get("method") in ("key", "oauth"))
+
+
 def authenticate_opencode(binary, environment, route, workspace=None):
     model = route.get("model", "")
     if not route.get("subscription_confirmed") or not route.get("credential_id") or "/" not in model:
@@ -121,15 +145,8 @@ def authenticate_opencode(binary, environment, route, workspace=None):
     provider = model.split("/", 1)[0]
     if status.returncode or not isinstance(integrations, list):
         raise DispatchError("Cannot verify OpenCode cached authentication metadata.")
-    for integration in integrations:
-        if not isinstance(integration, dict) or integration.get("id") != provider:
-            continue
-        connections = integration.get("connections")
-        if isinstance(connections, list) and connections and isinstance(connections[0], dict):
-            active = connections[0]
-            if (active.get("type") == "credential" and active.get("id") == route["credential_id"]
-                    and active.get("method") in ("key", "oauth")):
-                return "cached credential matches user-attested subscription; entitlement and spending are not verified"
+    if any(active_credential_matches(integration, provider, route["credential_id"]) for integration in integrations):
+        return "cached credential matches user-attested subscription; entitlement and spending are not verified"
     raise DispatchError("OpenCode active cached credential does not match the attested provider; reconnect using the native CLI.")
 
 
@@ -150,23 +167,23 @@ def persona_path(name, harness):
     if harness == "codex":
         return ROOT / "roles" / "codex" / "files" / "agents" / (name + ".toml")
     if harness == "claude":
-        directory = Path(os.environ.get("CLAUDE_CONFIG_DIR", str(Path.home() / ".claude")))
+        directory = Path(os.environ.get("CLAUDE_CONFIG_DIR", str(Path.home() / CLAUDE_DIRECTORY)))
     else:
         directory = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))) / "opencode"
     return directory / "agents" / (name + ".md")
 
 
 def check_claude_settings(workspace):
-    directory = Path(os.environ.get("CLAUDE_CONFIG_DIR", str(Path.home() / ".claude")))
+    directory = Path(os.environ.get("CLAUDE_CONFIG_DIR", str(Path.home() / CLAUDE_DIRECTORY)))
     paths = [directory / "settings.json", directory / "settings.local.json",
-             workspace / ".claude" / "settings.json", workspace / ".claude" / "settings.local.json",
+             workspace / CLAUDE_DIRECTORY / "settings.json", workspace / CLAUDE_DIRECTORY / "settings.local.json",
              Path("/Library/Application Support/ClaudeCode/managed-settings.json")]
     for path in paths:
         if not path.is_file():
             continue
         try:
             settings = json.loads(path.read_text())
-        except (OSError, UnicodeError, ValueError) as error:
+        except (OSError, ValueError) as error:
             raise DispatchError("Cannot verify Claude authentication settings; check native configuration.") from error
         if not isinstance(settings, dict) or settings.get("apiKeyHelper"):
             raise DispatchError("Claude API-key helpers are not permitted for subscription-only delegation.")
@@ -187,17 +204,18 @@ def require_persona(name, harness):
     return ""
 
 
-def command_for(binary, name, route, write, result_file):
+def command_for(binary, name, route, write):
+    validate_route(name, route)
     harness = route["harness"]
     if harness == "codex":
         command = [binary, "exec", "--sandbox", "workspace-write" if write else "read-only",
-                   "--json", "--color", "never", "--output-last-message", str(result_file),
+                   "--json", "--color", "never",
                    "-c", 'forced_login_method="chatgpt"', "-c", 'model_provider="openai"']
     elif harness == "claude":
         command = [binary, "--print", "--agent", name, "--output-format", "json",
                    "--permission-mode", "manual" if write else "plan",
                    "--disallowedTools", "Agent,Task", "--settings",
-                   json.dumps({"env": {variable: "" for variable in API_OVERRIDES["claude"]},
+                   json.dumps({"env": dict.fromkeys(API_OVERRIDES["claude"], ""),
                                "forceLoginMethod": "claudeai"})]
         if not write:
             command += ["--tools", "Read,Glob,Grep", "--strict-mcp-config",
@@ -227,6 +245,9 @@ def workspace_job(workspace):
         raise DispatchError("Existing .context/workforce must have private permissions (0700).")
     descriptor = os.open(runtime / ".lock", os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
     try:
+        lock = os.fstat(descriptor)
+        if not stat.S_ISREG(lock.st_mode) or lock.st_nlink != 1 or lock.st_mode & 0o077:
+            raise DispatchError("Workspace lock must be a private regular file with a single link.")
         try:
             fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as error:
@@ -238,51 +259,91 @@ def workspace_job(workspace):
 
 
 def stop_process(process):
-    try:
-        os.killpg(process.pid, signal.SIGTERM)
-    except ProcessLookupError:
+    if getattr(process, "_workforce_stopped", False):
         return
-    try:
-        process.wait(timeout=1)
-    except subprocess.TimeoutExpired:
-        pass
     try:
         os.killpg(process.pid, signal.SIGKILL)
     except ProcessLookupError:
         pass
     process.wait()
+    process._workforce_stopped = True
 
 
-def run_child(command, environment, workspace, job, prompt, timeout):
-    input_file = job / "input.txt"
-    input_file.write_text(prompt)
-    input_file.chmod(0o600)
-    stdout_file, stderr_file = job / "stdout.jsonl", job / "stderr.txt"
-    result_file = job / "result.txt"
-    for path in (stdout_file, stderr_file, result_file):
-        path.touch(mode=0o600)
-    with input_file.open("rb") as source, stdout_file.open("wb") as output, stderr_file.open("wb") as errors:
-        process = subprocess.Popen(command, env=environment, cwd=workspace, stdin=source,
-                                   stdout=output, stderr=errors, start_new_session=True)
-        deadline = time.monotonic() + timeout
-        try:
-            while process.poll() is None:
-                if time.monotonic() >= deadline:
-                    raise DispatchError("Native CLI task timed out; its process group was stopped.", 124)
-                if sum(path.stat().st_size for path in (stdout_file, stderr_file, result_file)) > MAX_OUTPUT:
+def private_file(path):
+    return os.fdopen(os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600), "wb")
+
+
+def write_handoff(job, prompt, filename="input.txt"):
+    if filename not in ("input.txt", "task.md"):
+        raise DispatchError("Invalid private handoff filename.")
+    with private_file(job / filename) as destination:
+        destination.write(prompt.encode("utf-8"))
+
+
+def read_private_output(path):
+    descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(descriptor, "rb") as source:
+        metadata = os.fstat(source.fileno())
+        if not stat.S_ISREG(metadata.st_mode) or metadata.st_nlink != 1:
+            raise DispatchError("Native CLI output must be a regular file with a single link.")
+        output = source.read(MAX_OUTPUT + 1)
+    if len(output) > MAX_OUTPUT:
+        raise DispatchError("Native CLI output exceeded the safety limit.")
+    return output.decode("utf-8", errors="replace")
+
+
+def collect_output(process, output, errors, timeout):
+    deadline = time.monotonic() + timeout
+    captured = 0
+    with selectors.DefaultSelector() as selector:
+        selector.register(process.stdout, selectors.EVENT_READ, output)
+        selector.register(process.stderr, selectors.EVENT_READ, errors)
+        while selector.get_map():
+            if process.poll() is not None:
+                stop_process(process)
+            if time.monotonic() >= deadline:
+                raise DispatchError(TASK_TIMEOUT_MESSAGE, 124)
+            for event in selector.select(timeout=0.05):
+                key = event[0]
+                chunk = os.read(key.fd, min(65536, MAX_OUTPUT - captured + 1))
+                if not chunk:
+                    selector.unregister(key.fileobj)
+                    continue
+                if captured + len(chunk) > MAX_OUTPUT:
                     raise DispatchError("Native CLI output exceeded the safety limit; its process group was stopped.")
-                time.sleep(0.05)
+                key.data.write(chunk)
+                captured += len(chunk)
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise DispatchError(TASK_TIMEOUT_MESSAGE, 124)
+    try:
+        process.wait(timeout=remaining)
+    except subprocess.TimeoutExpired as error:
+        raise DispatchError(TASK_TIMEOUT_MESSAGE, 124) from error
+
+
+def run_child(command, environment, workspace, job, timeout):
+    input_file = job / "input.txt"
+    stdout_file, stderr_file = job / "stdout.jsonl", job / "stderr.txt"
+    descriptor = os.open(input_file, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(descriptor, "rb") as source, private_file(stdout_file) as output, private_file(stderr_file) as errors:
+        metadata = os.fstat(source.fileno())
+        if not stat.S_ISREG(metadata.st_mode) or metadata.st_nlink != 1:
+            raise DispatchError("Native CLI input must be a regular file.")
+        process = subprocess.Popen(command, env=environment, cwd=workspace, stdin=source,
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
+        try:
+            collect_output(process, output, errors, timeout)
         finally:
             stop_process(process)
-    if sum(path.stat().st_size for path in (stdout_file, stderr_file, result_file)) > MAX_OUTPUT:
-        raise DispatchError("Native CLI output exceeded the safety limit.")
+            process.stdout.close()
+            process.stderr.close()
     if process.returncode:
         raise DispatchError(f"Native CLI exited with status {process.returncode}; check its login, model and permissions.")
-    return stdout_file.read_text(errors="replace"), result_file.read_text(errors="replace")
+    return read_private_output(stdout_file)
 
 
-def result_text(harness, output, final):
-    text = []
+def result_events(output):
     try:
         document = json.loads(output)
         records = [document] if isinstance(document, dict) else []
@@ -297,13 +358,38 @@ def result_text(harness, output, final):
             continue
         if event.get("type") in ("error", "turn.failed") or event.get("is_error") is True:
             raise DispatchError("Native CLI reported a task failure; check its login, model and permissions.")
+        yield event
+
+
+def codex_result(output):
+    response, completed = "", False
+    for event in result_events(output):
+        if event.get("type") == "turn.started":
+            response, completed = "", False
+        if event.get("type") == "turn.completed":
+            completed = True
+        if event.get("type") != "item.completed":
+            continue
+        item = event.get("item")
+        if isinstance(item, dict) and item.get("type") == "agent_message" and isinstance(item.get("text"), str):
+            response = item["text"]
+    if not completed or not response.strip():
+        raise DispatchError("Native CLI returned no completed specialist response; no success is assumed.")
+    return response.strip()
+
+
+def result_text(harness, output):
+    if harness == "codex":
+        return codex_result(output)
+    text = []
+    for event in result_events(output):
         if harness == "claude" and event.get("type") == "result" and isinstance(event.get("result"), str):
             text.append(event["result"])
         if harness == "opencode" and event.get("type") == "text":
             part = event.get("part", {})
             if isinstance(part, dict) and isinstance(part.get("text"), str):
                 text.append(part["text"])
-    result = final.strip() if harness == "codex" else "\n".join(text).strip()
+    result = "\n".join(text).strip()
     if not result:
         raise DispatchError("Native CLI returned no final specialist response; no success is assumed.")
     return result
@@ -315,52 +401,71 @@ def redact(text):
             text = text.replace(value, "[REDACTED]")
     text = re.sub(r"-----BEGIN [^-\n]*PRIVATE KEY-----.*?-----END [^-\n]*PRIVATE KEY-----",
                   "[REDACTED PRIVATE KEY]", text, flags=re.S)
-    text = re.sub(r"\bBearer\s+[A-Za-z0-9._~+/-]+=*", "Bearer [REDACTED]", text, flags=re.I)
-    text = re.sub(r"\b(?:sk-[A-Za-z0-9_-]{12,}|gh[pousr]_[A-Za-z0-9_]{20,})", "[REDACTED]", text)
+    text = re.sub(r"\bBearer\s+[a-z0-9._~+/-]+=*", "Bearer [REDACTED]", text, flags=re.I)
+    text = re.sub(r"\b(?:sk-[\w-]{12,}|gh[pousr]_\w{20,})", "[REDACTED]", text, flags=re.ASCII)
     return text
 
 
-def delegate(options, agents):
-    if options.agent not in agents:
+def read_task(path):
+    if path is not None:
+        descriptor = os.open(path.expanduser(), os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
+        with os.fdopen(descriptor, "rb") as source:
+            if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
+                raise DispatchError("Task input must be a regular file.")
+            payload = source.read(MAX_TASK + 1)
+    else:
+        if sys.stdin.isatty():
+            raise DispatchError("Provide --task-file or pipe a task on stdin.")
+        payload = sys.stdin.buffer.read(MAX_TASK + 1)
+    if len(payload) > MAX_TASK:
+        raise DispatchError("Task must be non-empty and at most 64 KiB.")
+    try:
+        task = payload.decode("utf-8")
+    except UnicodeError as error:
+        raise DispatchError("Task input must be UTF-8 text.") from error
+    if not task.strip():
+        raise DispatchError("Task must be non-empty and at most 64 KiB.")
+    return task
+
+
+def delegation_context(options, agents):
+    name = next((name for name in agents if name == options.agent), None)
+    if name is None:
         raise DispatchError("Unknown specialist; run workforce list.")
-    if options.allow_write and options.agent in ADVISORY:
+    if options.allow_write and name in ADVISORY:
         raise DispatchError("Architecture guardian and principal engineer are advisory; write access is refused.")
     workspace = options.workspace.expanduser().resolve()
     if not workspace.is_dir():
         raise DispatchError("Workspace must be an existing directory.")
-    if options.task_file:
-        path = options.task_file.expanduser()
-        if path.stat().st_size > MAX_TASK:
-            raise DispatchError("Task file exceeds the safety limit.")
-        task = path.read_text()
-    else:
-        if sys.stdin.isatty():
-            raise DispatchError("Provide --task-file or pipe a task on stdin.")
-        task = sys.stdin.read(MAX_TASK + 1)
-    if not task.strip() or len(task.encode()) > MAX_TASK:
-        raise DispatchError("Task must be non-empty and at most 64 KiB.")
-    route = agents[options.agent]
+    task = read_task(options.task_file)
+    route = agents[name]
     harness = route["harness"]
-    result = {"agent": options.agent, "harness": harness, "model": route.get("model") or "configured-default",
+    result = {"agent": name, "harness": harness, "model": route.get("model") or "configured-default",
               "workspace": str(workspace), "access": "workspace-write" if options.allow_write else "read-only"}
-    if options.dry_run:
-        blocked = harness == "opencode" and (not options.allow_write or not route.get("subscription_confirmed")
-                  or not route.get("credential_id") or "/" not in route.get("model", ""))
-        return result | {"status": "dry-run", "blocked": blocked, "prerequisites": "not checked",
-                         "command": command_for(harness, options.agent, route,
-                                                options.allow_write, "<private-result-file>")}
-    if harness == "opencode" and not options.allow_write:
+    return name, route, workspace, task, result
+
+
+def dry_run_result(name, route, write, result):
+    blocked = route["harness"] == "opencode" and (not write or not route.get("subscription_confirmed")
+              or not route.get("credential_id") or "/" not in route.get("model", ""))
+    return result | {"status": "dry-run", "blocked": blocked, "prerequisites": "not checked",
+                     "command": command_for(route["harness"], name, route, write)}
+
+
+def delegation_prerequisites(name, route, workspace, write):
+    harness = route["harness"]
+    if harness == "opencode" and not write:
         raise DispatchError("OpenCode read-only delegation is disabled: effective native restrictions are not verified. Use a read-only Codex/Claude route for reviews; do not grant writes to bypass this guard.")
     if os.environ.get("WORKFORCE_ACTIVE"):
         raise DispatchError("Recursive workforce delegation is refused; return control to the coordinator.")
-    persona = require_persona(options.agent, harness)
+    persona = require_persona(name, harness)
     environment = child_environment(harness)
     binary = executable(harness, environment)
     if harness == "claude":
         check_claude_settings(workspace)
     authenticate(harness, binary, environment, route, workspace)
     if harness == "opencode":
-        verify_opencode_persona(binary, environment, workspace, options.agent)
+        verify_opencode_persona(binary, environment, workspace, name)
     environment["WORKFORCE_ACTIVE"] = "1"
     if not shutil.which("git", path=environment.get("PATH", "")):
         raise DispatchError("Git is required to validate the workspace.")
@@ -371,59 +476,78 @@ def delegate(options, agents):
     worktree = Path(checked.stdout.strip()).resolve()
     if harness == "claude" and worktree != workspace:
         check_claude_settings(worktree)
-    prompt = (f"You are handling a delegated {options.agent} task. Complete only this task and return your findings. "
+    return persona, environment, binary, worktree
+
+
+def delegation_prompt(name, persona, task):
+    prompt = (f"You are handling a delegated {name} task. Complete only this task and return your findings. "
               "Do not recursively delegate through workforce. Do not commit, push or deploy. "
               "Never include secrets, tokens, private keys or sensitive payloads in your response.\n\n")
     if persona:
         prompt += "Specialist operating instructions:\n" + persona + "\n\n"
     prompt += "Coordinator task:\n" + task
+    return prompt
+
+
+def attach_opencode_task(command, binary, environment, workspace, job, prompt):
+    help_result = metadata_command([binary, "run", "--help"], environment, workspace)
+    if help_result.returncode:
+        raise DispatchError("Cannot inspect OpenCode run capabilities.")
+    if "--standalone" in help_result.stdout:
+        command.append("--standalone")
+    write_handoff(job, prompt, "task.md")
+    command += ["--file", str(job / "task.md"), "Complete the delegated task in the attached file."]
+
+
+def delegate(options, agents):
+    name, route, workspace, task, result = delegation_context(options, agents)
+    if options.dry_run:
+        return dry_run_result(name, route, options.allow_write, result)
+    persona, environment, binary, worktree = delegation_prerequisites(name, route, workspace, options.allow_write)
+    harness = route["harness"]
+    prompt = delegation_prompt(name, persona, task)
     with workspace_job(worktree) as job:
-        command = command_for(binary, options.agent, route, options.allow_write, job / "result.txt")
+        command = command_for(binary, name, route, options.allow_write)
         if harness == "opencode":
-            help_result = metadata_command([binary, "run", "--help"], environment, workspace)
-            if help_result.returncode:
-                raise DispatchError("Cannot inspect OpenCode run capabilities.")
-            if "--standalone" in help_result.stdout:
-                command.append("--standalone")
-            prompt_file = job / "task.md"
-            prompt_file.write_text(prompt)
-            prompt_file.chmod(0o600)
-            command += ["--file", str(prompt_file), "Complete the delegated task in the attached file."]
-        output, final = run_child(command, environment, workspace, job,
-                                  "" if harness == "opencode" else prompt, options.timeout)
-        text = result_text(harness, output, final)
+            attach_opencode_task(command, binary, environment, workspace, job, prompt)
+        write_handoff(job, "" if harness == "opencode" else prompt)
+        output = run_child(command, environment, workspace, job, options.timeout)
+        text = result_text(harness, output)
     return result | {"status": "completed", "text": redact(text)}
 
 
-def doctor(agents):
-    statuses, ready = {}, True
-    for harness in sorted({route["harness"] for route in agents.values()}):
-        try:
-            environment = child_environment(harness)
-            binary = executable(harness, environment)
-            if harness == "claude":
-                check_claude_settings(Path.cwd())
-            statuses[harness] = {"executable": binary, "auth": "see per-route checks" if harness == "opencode"
-                                 else authenticate(harness, binary, environment)}
-        except DispatchError as error:
-            ready = False
-            statuses[harness] = {"error": str(error)}
-    route_checks, cache = {}, {}
-    for name, route in agents.items():
-        if route["harness"] != "opencode":
-            continue
+def harness_status(harness):
+    try:
+        environment = child_environment(harness)
+        binary = executable(harness, environment)
+        if harness == "claude":
+            check_claude_settings(Path.cwd())
+        return {"executable": binary, "auth": "see per-route checks" if harness == "opencode"
+                else authenticate(harness, binary, environment)}
+    except DispatchError as error:
+        return {"error": str(error)}
+
+
+def opencode_route_status(name, route, status, cache):
+    try:
+        if "executable" not in status:
+            raise DispatchError("OpenCode executable is unavailable.")
+        environment = child_environment("opencode")
         key = (route.get("model"), route.get("credential_id"), route.get("subscription_confirmed"))
         if key not in cache:
-            try:
-                if "executable" not in statuses["opencode"]:
-                    raise DispatchError("OpenCode executable is unavailable.")
-                cache[key] = {"auth": authenticate_opencode(statuses["opencode"]["executable"],
-                                                          child_environment("opencode"), route)}
-            except DispatchError as error:
-                cache[key] = {"error": str(error)}
-        route_checks[name] = cache[key] | {"read_only": "disabled"}
-        if "error" in cache[key]:
-            ready = False
+            cache[key] = authenticate_opencode(status["executable"], environment, route)
+        verify_opencode_persona(status["executable"], environment, Path.cwd(), name)
+        return {"auth": cache[key], "persona": "primary execution verified", "read_only": "disabled"}
+    except DispatchError as error:
+        return {"error": str(error), "read_only": "disabled"}
+
+
+def doctor(agents):
+    statuses = {harness: harness_status(harness) for harness in sorted({route["harness"] for route in agents.values()})}
+    cache = {}
+    route_checks = {name: opencode_route_status(name, route, statuses["opencode"], cache)
+                    for name, route in agents.items() if route["harness"] == "opencode"}
+    ready = not any("error" in status for status in (*statuses.values(), *route_checks.values()))
     missing = [name for name, route in agents.items() if not persona_path(name, route["harness"]).is_file()]
     return {"status": "ready" if ready and not missing else "needs-attention", "harnesses": statuses,
             "opencode_routes": route_checks, "missing_personas": missing, "live_model_access": "not checked"}

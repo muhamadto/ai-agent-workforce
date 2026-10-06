@@ -73,12 +73,8 @@ def global_rules_errors() -> list[str]:
             if not re.search(rf"^## {re.escape(heading)}(?: —[^\n]*)?\s*$", contents, re.M)]
 
 
-def main() -> int:
-    local = {p.name for p in (REPO / "roles" / "skills" / "files").iterdir() if p.is_dir()}
-    github = github_selected_skills()
-    allowed = local | github | BUILTINS
-
-    errors = global_rules_errors()
+def claude_skill_errors(allowed: set[str]) -> list[str]:
+    errors = []
     for role in ("claude",):
         for agent in sorted((REPO / "roles" / role / "files" / "agents").glob("*.md")):
             for skill in frontmatter_skills(agent):
@@ -88,8 +84,11 @@ def main() -> int:
                         "matching directory in roles/skills/files/, no github_skill_sources "
                         "selection, and is not a known builtin"
                     )
+    return errors
 
-    codex_agents = sorted((REPO / "roles" / "codex" / "files" / "agents").glob("*.toml"))
+
+def specialist_routing_errors(codex_agents: list[Path]) -> list[str]:
+    errors = []
     claude_names = {path.stem for path in (REPO / "roles" / "claude" / "files" / "agents").glob("*.md")}
     opencode_names = {path.stem for path in (REPO / "roles" / "opencode" / "files" / "agents").glob("*.md")}
     if {path.stem for path in codex_agents} != claude_names or opencode_names != claude_names:
@@ -100,15 +99,31 @@ def main() -> int:
             errors.append("Dispatcher routing must contain exactly the shared specialist names.")
     except DispatchError as error:
         errors.append(f"config/agent-routing.toml: {error}")
+    return errors
+
+
+def codex_skill_errors(codex_agents: list[Path], allowed: set[str]) -> list[str]:
+    errors = []
     for agent in codex_agents:
         try:
             skills = codex_skills(agent)
-        except (tomllib.TOMLDecodeError, ValueError) as error:
+        except ValueError as error:
             errors.append(f"{agent.relative_to(REPO)}: {error}")
             continue
         for skill in skills:
-            if skill not in local | github:
+            if skill not in allowed:
                 errors.append(f"{agent.relative_to(REPO)}: skill '{skill}' has no local or GitHub-sourced definition")
+    return errors
+
+
+def main() -> int:
+    local = {path.name for path in (REPO / "roles" / "skills" / "files").iterdir() if path.is_dir()}
+    github = github_selected_skills()
+    codex_agents = sorted((REPO / "roles" / "codex" / "files" / "agents").glob("*.toml"))
+    errors = global_rules_errors()
+    errors.extend(claude_skill_errors(local | github | BUILTINS))
+    errors.extend(specialist_routing_errors(codex_agents))
+    errors.extend(codex_skill_errors(codex_agents, local | github))
 
     if errors:
         print("Invalid agents, unresolved skills or unsynchronised rules:", file=sys.stderr)

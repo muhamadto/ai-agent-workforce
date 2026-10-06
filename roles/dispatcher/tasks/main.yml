@@ -10,6 +10,12 @@
       - not dispatcher_command.startswith(dispatcher_home + '/')
     fail_msg: "Use present or absent and absolute, separate dispatcher home and command paths."
 
+- name: Guard dispatcher directory and command ancestors before inspection
+  ansible.builtin.include_tasks: parents.yml
+  loop: "{{ [dispatcher_home | dirname, dispatcher_command | dirname] | unique | list }}"
+  loop_control:
+    loop_var: dispatcher_parent_path
+
 - name: Inspect dispatcher directory
   ansible.builtin.stat:
     path: "{{ dispatcher_home }}"
@@ -32,6 +38,7 @@
   when:
     - dispatcher_marker.stat.isreg | default(false)
     - not (dispatcher_marker.stat.islnk | default(false))
+    - dispatcher_marker.stat.nlink | default(0) == 1
     - dispatcher_directory.stat.isdir | default(false)
     - not (dispatcher_directory.stat.islnk | default(false))
 
@@ -42,6 +49,7 @@
          and not (dispatcher_directory.stat.islnk | default(false))
          and (dispatcher_marker.stat.isreg | default(false))
          and not (dispatcher_marker.stat.islnk | default(false))
+         and (dispatcher_marker.stat.nlink | default(0) == 1)
          and (dispatcher_marker_content.content | default(''))
              in ['YWktYWdlbnQtd29ya2ZvcmNl', 'YWktYWdlbnQtd29ya2ZvcmNlCg=='] }}
 

@@ -1,9 +1,12 @@
 ---
-- name: Inspect global instruction entry point
-  ansible.builtin.stat:
-    path: "{{ instructions_destination }}"
-    follow: false
-  register: instructions_entry
+- name: Guard all instruction paths before reading or changing storage
+  ansible.builtin.include_tasks: preflight.yml
+
+- name: Resolve exact shipped instruction checksums
+  ansible.builtin.set_fact:
+    instructions_known_checksums: >-
+      {{ (lookup('ansible.builtin.file', role_path + '/files/legacy-fingerprints.json') | from_json | list) +
+         [lookup('ansible.builtin.file', role_path + '/../../instructions/AGENTS.md', rstrip=false) | hash('sha256')] }}
 
 - name: Read existing global instructions privately
   ansible.builtin.slurp:
@@ -21,10 +24,8 @@
          instructions_entry.stat.lnk_target | default('') == instructions_file) or
         (instructions_entry.stat.isreg | default(false) and
          (instructions_existing.content | default('') | b64decode
-          | regex_replace('(?m)^> \*\*Rule for maintaining[^\n]*\n?', '')
-          | regex_replace('(?m)^<!-- (BEGIN|END) AI AGENT WORKFORCE -->\n?', '') | trim) ==
-         (lookup('ansible.builtin.file', role_path + '/../../instructions/AGENTS.md')
-          | regex_replace('(?m)^> \*\*Rule for maintaining[^\n]*\n?', '') | trim))
+          | regex_replace('\A<!-- BEGIN AI AGENT WORKFORCE -->\n([\s\S]*)<!-- END AI AGENT WORKFORCE -->\n\Z', '\\1')
+          | hash('sha256')) in instructions_known_checksums)
     fail_msg: >-
       {{ instructions_destination }} contains personal instructions or an unfamiliar link.
       Merge personal additions into instructions/AGENTS.md explicitly before migrating;
@@ -46,6 +47,7 @@
   ansible.builtin.slurp:
     src: "{{ instructions_home }}/.managed"
   register: instructions_marker_content
+  no_log: true
   when: instructions_marker.stat.isreg | default(false)
 
 - name: Refuse to replace an unmanaged instructions directory
@@ -55,8 +57,68 @@
         not instructions_directory.stat.exists or
         (instructions_directory.stat.isdir | default(false) and
          not instructions_directory.stat.islnk | default(false) and
-         (instructions_marker_content.content | default('') | b64decode | trim) == 'ai-agent-workforce')
+         (instructions_marker_content.content | default('') | b64decode) in ['ai-agent-workforce', 'ai-agent-workforce\n'])
     fail_msg: "{{ instructions_home }} exists without this role's ownership marker; move it explicitly before installing."
+
+- name: Inspect canonical payload after storage validation
+  ansible.builtin.stat:
+    path: "{{ instructions_file }}"
+    follow: false
+    get_checksum: false
+    get_mime: false
+  register: instructions_canonical
+
+- name: Read existing canonical instructions privately
+  ansible.builtin.slurp:
+    src: "{{ instructions_file }}"
+  register: instructions_canonical_content
+  no_log: true
+  when: instructions_canonical.stat.isreg | default(false)
+
+- name: Refuse to replace personal canonical instructions
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_canonical.stat.exists or
+        (instructions_canonical_content.content | default('') | b64decode | hash('sha256')) in instructions_known_checksums
+    fail_msg: "The shared canonical payload contains unfamiliar instructions; nothing has been changed."
+
+- name: Inspect the canonical payload parent without following links
+  ansible.builtin.stat:
+    path: "{{ instructions_file | dirname }}"
+    follow: false
+    get_checksum: false
+    get_mime: false
+  register: instructions_canonical_parent
+
+- name: Inspect existing canonical timestamp backups without following links
+  ansible.builtin.find:
+    paths: "{{ instructions_file | dirname }}"
+    patterns: "{{ instructions_file | basename }}.*~"
+    file_type: any
+    follow: false
+    hidden: true
+    recurse: false
+  register: instructions_timestamp_backups
+  when: instructions_canonical_parent.stat.isdir | default(false)
+
+- name: Refuse incomplete canonical backup inspection
+  ansible.builtin.assert:
+    that:
+      - instructions_timestamp_backups.skipped_paths | default({}) | length == 0
+    fail_msg: "Canonical backups could not be fully inspected; nothing has been changed."
+
+- name: Refuse redirected or multiply linked canonical timestamp backups
+  ansible.builtin.assert:
+    that:
+      - instructions_timestamp_backup.isreg | default(false)
+      - not (instructions_timestamp_backup.islnk | default(false))
+      - instructions_timestamp_backup.nlink | default(0) == 1
+    fail_msg: "A canonical timestamp backup is not a single-link regular file; nothing has been changed."
+  loop: "{{ instructions_timestamp_backups.files | default([]) }}"
+  loop_control:
+    loop_var: instructions_timestamp_backup
+    label: "{{ instructions_timestamp_backup.path }}"
 
 - name: Ensure shared instructions directory exists
   ansible.builtin.file:

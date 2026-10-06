@@ -28,6 +28,7 @@
 - name: Inspect personal Codex configuration
   ansible.builtin.stat:
     path: "{{ codex_home }}/config.toml"
+    follow: false
   register: codex_config_file
 
 - name: Remove only managed Codex agent registrations

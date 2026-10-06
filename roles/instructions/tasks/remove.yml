@@ -1,4 +1,9 @@
 ---
+- name: Guard instruction destination ancestors before removal
+  ansible.builtin.include_tasks: parents.yml
+  vars:
+    instructions_parent_path: "{{ instructions_destination | dirname }}"
+
 - name: Inspect global instruction entry point
   ansible.builtin.stat:
     path: "{{ instructions_destination }}"

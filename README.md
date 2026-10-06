@@ -80,6 +80,7 @@ ansible-playbook playbook.yml -e setup_state=absent --limit local
 ```
 ai-agent-workforce/
 ├── .coderabbit.yaml          # Project-specific automated PR review rules
+├── .gitleaksignore           # Reviewed, exact historical documentation findings
 ├── .github/workflows/        # Ansible, agent/rule validation, and security checks
 ├── playbook.yml              # Main orchestration playbook
 ├── inventory.ini             # Target hosts configuration
@@ -91,7 +92,8 @@ ai-agent-workforce/
 ├── config/
 │   └── agent-routing.toml    # Cross-CLI specialist routing
 ├── docs/
-│   └── dispatcher.md        # Coordinator usage and runtime safety boundaries
+│   ├── dispatcher.md        # Coordinator usage and runtime safety boundaries
+│   └── security-review.md   # Historical scan adjudication and exception rationale
 ├── scripts/
 │   ├── dispatch_agent.py     # Standard-library native CLI dispatcher
 │   └── validate_skill_refs.py # Agent, skill-reference, and global-rule validation
@@ -105,6 +107,8 @@ ai-agent-workforce/
     │   └── tasks/            # Safe install/remove with personal-file preservation
     ├── dispatcher/           # Private workforce command (opt-in: --tags dispatcher)
     ├── instructions/         # Shared instructions and guarded client symlinks
+    │   ├── files/           # Exact historical instruction fingerprints
+    │   └── tasks/           # Preflight storage guards and safe migration
     └── skills/              # Shared skills
 ```
 
@@ -158,7 +162,9 @@ and links its documented global instruction path to that single installed file:
 - OpenCode: `~/.config/opencode/AGENTS.md`
 - Codex: `~/.codex/AGENTS.md` (or the configured `codex_home`)
 
-Recognised matching files are backed up with a `.before-ai-agent-workforce` suffix before migration.
+Exact current and recognised historical shipped files are backed up with a
+`.before-ai-agent-workforce` suffix before migration. Personal additions are not
+treated as shipped files. Redirected storage and multiply linked payloads are refused.
 Unfamiliar files or links block installation; explicitly merge personal additions into the canonical source first.
 Updates back up the installed shared file. Client removal deletes only its matching link and leaves shared instructions and backups intact.
 Claude's project-level `AGENTS.md` support does not change its global `CLAUDE.md` path.

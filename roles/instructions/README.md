@@ -17,15 +17,33 @@ Claude Cowork skips user-scope instruction symlinks pointing outside its working
 
 ## Migration and safety
 
-Matching existing files are copied to `<entry-point>.before-ai-agent-workforce` before becoming links.
-An existing backup is never overwritten. Matching ignores only the old maintenance note and this
-repository's former managed-block markers; all other text must match. Empty files, different personal
+Recognised existing files are copied to `<entry-point>.before-ai-agent-workforce` before becoming links.
+An existing backup is never overwritten. Recognition uses whole-payload SHA256: the exact current
+repository source or a shipped historical payload in `files/legacy-fingerprints.json`. Each historical
+digest records its source path and full Git commit, researched across this branch and `origin/main`.
+The earlier research in `.context/pr27-legacy-fingerprints.json` used trimmed text; these digests instead
+cover the complete original bytes, including the final newline and maintenance note. To verify provenance,
+hash `git show <commit>:<path>` with SHA256. Only a single complete pair of exact outer
+`<!-- BEGIN AI AGENT WORKFORCE -->` / `<!-- END AI AGENT WORKFORCE -->` lines may be removed;
+both markers require their final newline. No whitespace trimming, maintenance-note removal, internal
+marker removal, partial matching or similarity checks are permitted. Empty files, different personal
 rules, directories and unfamiliar symlinks block installation without replacing them. Explicitly merge
 desired personal additions into the canonical repository source, then rerun. Backups do not automatically
 restore on uninstall; remove the managed link first and restore a backup explicitly if desired.
 
-The shared directory must be absent or have this role's `.managed` ownership marker. Updates back up
-the shared file before replacing it, so edit the repository source rather than the installed file.
+Before reading payloads or changing anything, all shared-storage and destination directory ancestors
+must be absent or real directories, never symlinks. Existing ownership markers, canonical payloads,
+migration backups and regular entry points must be single-link regular files; dangling symlinks,
+hardlinks and special files are refused. Only the exact managed client link is permitted.
+The shared directory must be absent or have this role's `.managed` ownership marker. Canonical updates
+retain Ansible's timestamped backups; existing backups are inspected without following links and
+must be single-link regular files. Ansible names backups using the module PID and timestamp, then
+copies with `shutil.copy2`, not an exclusive-create primitive: validating existing backup paths and
+the private storage directory is required, rather than assuming the helper refuses redirects.
+Unrecognised shared payloads (including personal additions) block installation. Recognised successive
+updates do not require manually archiving earlier backups. Edit the repository source rather than
+the installed file. These are preflight checks, not an atomic defence against a concurrent filesystem
+attacker swapping paths after validation.
 Client removal preserves regular files and replacement links, the shared directory and all backups.
 No instruction text is logged during migration. A non-empty Codex `AGENTS.override.md` still takes precedence.
 

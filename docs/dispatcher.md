@@ -36,7 +36,9 @@ printf '%s\n' 'Review the README and return architecture risks. Do not edit file
 ```
 
 For larger tasks use `--task-file /absolute/path/task.md`, not command-line
-task text. Keep task files private and out of Git. A successful response contains
+task text. File inputs must be regular UTF-8 files, not symlinks, devices or
+FIFOs; reads are bounded to 64 KiB even if a file grows. Keep task files private
+and out of Git. A successful response contains
 `status`, `agent`, `harness`, requested `model`, `workspace`, `access` and `text`.
 `configured-default` describes model selection, not verified model identity.
 Failures return nonzero and a safe JSON error; timeout returns 124.
@@ -100,10 +102,15 @@ their named personas to be deployed through the corresponding roles.
 - Tasks travel through stdin or private files, never shell interpolation.
 - Handoffs use `0700` directories and `0600` files under the canonical Git
   worktree's `.context/workforce/`. Subdirectory calls share its exclusive lock.
+- Handoff files are created exclusively without following symlinks. Shared
+  hardlinks and redirected output files are refused rather than overwritten.
 - Normal completion, failures, timeout and catchable termination clean transient
   jobs and stop the child process group. SIGKILL or a machine crash cannot run
   cleanup; inspect leftover private jobs before manually deleting them.
 - Output is limited to 2 MiB, tasks to 64 KiB and timeout to at most one hour.
+  Stdout and stderr share a bounded pipe collector; over-limit bytes are never
+  written to handoff files. Codex's final message comes from its JSONL stream,
+  not a separately CLI-written result file.
 - Nested `workforce` delegation is refused. Delegates are instructed not to
   commit, push, deploy or disclose sensitive information.
 - Known environment secrets, private-key blocks and common token patterns are
@@ -118,4 +125,5 @@ their named personas to be deployed through the corresponding roles.
   descendant sessions or processes that bypass the dispatcher.
 
 Run `doctor` before delegating. It checks prerequisites without a model request,
-but does not establish subscription quota or live model availability.
+including each authenticated OpenCode route's effective primary-execution
+persona, but does not establish subscription quota or live model availability.

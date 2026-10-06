@@ -26,30 +26,6 @@
          codex_skills_entry.stat.lnk_target | default('') == ansible_facts['user_dir'] + '/.skills')
     fail_msg: "~/.agents/skills/ai-agent-workforce exists and does not point to ~/.skills."
 
-- name: Inspect personal Codex configuration
-  ansible.builtin.stat:
-    path: "{{ codex_home }}/config.toml"
-  register: codex_config_file
-
-- name: Read personal Codex configuration privately
-  ansible.builtin.slurp:
-    src: "{{ codex_home }}/config.toml"
-  register: codex_existing_config
-  no_log: true
-  when: codex_config_file.stat.exists
-
-- name: Validate personal Codex configuration and registration collisions
-  ansible.builtin.command:
-    argv:
-      - "{{ ansible_playbook_python }}"
-      - "{{ role_path }}/files/check_config.py"
-    stdin: "{{ codex_existing_config.content | default('') | b64decode }}"
-    stdin_add_newline: false
-  delegate_to: localhost
-  changed_when: false
-  check_mode: false
-  no_log: true
-
 - name: Link Codex shared instructions
   ansible.builtin.include_role:
     name: instructions
@@ -99,7 +75,7 @@
   ansible.builtin.blockinfile:
     path: "{{ codex_home }}/config.toml"
     marker: "# {mark} AI AGENT WORKFORCE"
-    block: "{{ lookup('ansible.builtin.template', 'agents.toml.j2') }}"
+    block: "{{ codex_registration_block }}"
     create: true
     backup: true
     mode: '0600'

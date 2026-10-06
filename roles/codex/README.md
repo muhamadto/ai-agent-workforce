@@ -51,6 +51,9 @@ Shared instructions and their backups survive removal. Matching existing instruc
 unfamiliar personal instructions block installation rather than being overwritten. Merge their additions into the canonical source explicitly first.
 Rule/config updates retain backup copies. Empty config files can remain after uninstall.
 Invalid TOML or a workforce registration outside the managed block fails before deployment. Configuration contents are excluded from Ansible output.
+The complete proposed TOML is validated before any installation or removal changes. Incompatible inline `agents` tables
+are rejected without rewriting personal configuration. Directory redirects, non-regular or hardlinked managed payloads,
+ownership markers and configuration files are refused before mutation; marker and configuration reads do not follow symlinks.
 
 If a non-empty `AGENTS.override.md` exists, Codex reads it instead of `AGENTS.md`; this role warns and does not modify the override.
 When using a custom `CODEX_HOME`, pass its absolute path with `-e codex_home=/your/codex/home`.

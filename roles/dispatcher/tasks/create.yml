@@ -13,7 +13,7 @@
   ansible.builtin.assert:
     that:
       - not dispatcher_directory.stat.exists or dispatcher_directory_owned
-    fail_msg: "{{ dispatcher_home }} exists without a regular workforce ownership marker; nothing has been replaced."
+    fail_msg: "{{ dispatcher_home }} exists without a regular, single-link workforce ownership marker; nothing has been replaced."
 
 - name: Refuse unrelated dispatcher command collisions
   ansible.builtin.assert:
@@ -85,8 +85,9 @@
     that:
       - >-
         not item.stat.exists or
-        (item.stat.isreg | default(false) and not (item.stat.islnk | default(false)))
-    fail_msg: "{{ item.item }} must be a regular managed file."
+        (item.stat.isreg | default(false) and not (item.stat.islnk | default(false))
+         and (item.stat.nlink | default(0) == 1))
+    fail_msg: "{{ item.item }} must be a regular managed file with exactly one hard link."
   loop: "{{ dispatcher_file_entries.results }}"
   loop_control:
     label: "{{ item.item }}"

@@ -11,30 +11,49 @@
       {{ query('ansible.builtin.fileglob', role_path + '/files/agents/*.toml')
          | map('basename') | sort | list }}
 
+- name: Guard Codex storage before inspecting or changing managed files
+  ansible.builtin.command:
+    argv:
+      - "{{ ansible_playbook_python }}"
+      - "{{ role_path }}/files/check_storage.py"
+    stdin: >-
+      {{ {'home': ansible_facts['user_dir'], 'codex_home': codex_home,
+          'managed_dir': codex_managed_dir, 'agent_files': codex_agent_files} | to_json }}
+    stdin_add_newline: false
+  delegate_to: localhost
+  register: codex_storage_check
+  changed_when: false
+  check_mode: false
+
+- name: Determine Codex directory ownership
+  ansible.builtin.set_fact:
+    codex_directory_owned: >-
+      {{ (codex_storage_check.stdout | from_json).owned }}
+
 - name: Inspect Codex managed directory
   ansible.builtin.stat:
     path: "{{ codex_managed_dir }}"
     follow: false
   register: codex_managed_directory
 
-- name: Inspect Codex ownership marker
-  ansible.builtin.stat:
-    path: "{{ codex_managed_dir }}/.managed"
-    follow: false
-  register: codex_marker
-
-- name: Read Codex ownership marker
-  ansible.builtin.slurp:
-    src: "{{ codex_managed_dir }}/.managed"
-  register: codex_marker_content
-  when: codex_marker.stat.isreg | default(false)
-
-- name: Determine Codex directory ownership
+- name: Render proposed Codex agent registrations privately
   ansible.builtin.set_fact:
-    codex_directory_owned: >-
-      {{ codex_managed_directory.stat.isdir | default(false)
-         and not (codex_managed_directory.stat.islnk | default(false))
-         and (codex_marker_content.content | default('') | b64decode | trim) == 'ai-agent-workforce' }}
+    codex_registration_block: "{{ lookup('ansible.builtin.template', 'agents.toml.j2') }}"
+  no_log: true
+
+- name: Validate full proposed Codex configuration privately before any mutation
+  ansible.builtin.command:
+    argv:
+      - "{{ ansible_playbook_python }}"
+      - "{{ role_path }}/files/check_config.py"
+    stdin: >-
+      {{ {'path': codex_home + '/config.toml', 'block': codex_registration_block,
+          'state': setup_state} | to_json }}
+    stdin_add_newline: false
+  delegate_to: localhost
+  changed_when: false
+  check_mode: false
+  no_log: true
 
 - name: Inspect Codex agent entry points
   ansible.builtin.stat:
