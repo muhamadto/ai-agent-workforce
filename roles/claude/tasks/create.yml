@@ -1,4 +1,10 @@
 ---
+- name: Link Claude Code shared instructions
+  ansible.builtin.include_role:
+    name: instructions
+  vars:
+    instructions_destination: "{{ ansible_facts['user_dir'] }}/.claude/CLAUDE.md"
+
 - name: Ensure ~/.claude directory exists
   ansible.builtin.file:
     path: "{{ ansible_facts['user_dir'] }}/.claude"
@@ -9,12 +15,6 @@
   ansible.builtin.copy:
     src: "settings.json"
     dest: "{{ ansible_facts['user_dir'] }}/.claude/settings.json"
-    mode: '0600'
-
-- name: Deploy global CLAUDE.md
-  ansible.builtin.copy:
-    src: "CLAUDE.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.claude/CLAUDE.md"
     mode: '0600'
 
 - name: Ensure ~/.claude/agents directory exists

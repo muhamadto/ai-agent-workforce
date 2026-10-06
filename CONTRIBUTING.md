@@ -47,6 +47,8 @@ Thank you for your interest in contributing! This document covers how to report 
    # Syntax check
    ansible-playbook playbook.yml --syntax-check
 
+   python3 scripts/validate_skill_refs.py
+
    # Dry run
    ansible-playbook playbook.yml --check
 
@@ -118,9 +120,10 @@ roles/model-name/
    - Configuration management
    - Cleanup tasks (when `setup_state == "absent"`)
 
-3. Add agent files to `roles/model-name/files/`:
-   - `settings.json`
-   - Agent definitions under `agents/`
+3. Add client-native agent files to `roles/model-name/files/`:
+   - Client configuration only where it is required; do not overwrite personal settings unnecessarily
+   - Agent definitions under `agents/` (Markdown for Claude/OpenCode, native TOML for Codex)
+   - For Codex, keep the same specialist names as Claude/OpenCode, matching `name`/filename and explicit resolvable skill paths
 
 4. Update `playbook.yml`:
 
@@ -136,6 +139,23 @@ roles/model-name/
    - Add to supported models list
    - Add to the recommended-model-per-agent table
    - Update usage examples
+
+For Codex changes, verify install, repeated install, removal and repeated removal against an isolated test home.
+Confirm that personal `config.toml`, `auth.json`, instructions, agents and skills survive, and that unmanaged collisions fail safely.
+Never point deployment smoke tests at your real home directory. Native TOML parsing uses Python 3.11+.
+
+Maintain global rules only in `instructions/AGENTS.md`, using the Claude workflow structure as the baseline.
+All three client roles link to the single installed `~/.instructions/AGENTS.md`; do not reintroduce client-specific copies.
+Client-specific routing belongs in the shared Specialist Delegation section. Validation checks the canonical source and required sections.
+Test matching-file migration backups, unfamiliar-file/link refusal, idempotence and removal in isolated homes.
+
+## Automated PR Review
+
+`.coderabbit.yaml` configures quiet, Australian-English reviews with project-specific instructions for Ansible roles,
+agent/skill payloads, Python validation, CI and shared variables. It focuses on major and critical findings rather than style feedback.
+Severity guidance is advisory, not a hard filter. The configuration only takes effect when the CodeRabbit GitHub App is installed
+and permitted to access this repository; installing the app, its cost and third-party code access remain the owner's decision.
+Do not replace these instructions with Java/Maven rules from other Sandpipers repositories. Repository instructions win on conflicts.
 
 ## Adding New Skills
 

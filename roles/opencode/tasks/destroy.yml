@@ -4,10 +4,12 @@
     path: "{{ ansible_facts['user_dir'] }}/.config/opencode/opencode.jsonc"
     state: absent
 
-- name: Remove global AGENTS.md
-  ansible.builtin.file:
-    path: "{{ ansible_facts['user_dir'] }}/.config/opencode/AGENTS.md"
-    state: absent
+- name: Remove OpenCode shared instruction link
+  ansible.builtin.include_role:
+    name: instructions
+    tasks_from: remove
+  vars:
+    instructions_destination: "{{ ansible_facts['user_dir'] }}/.config/opencode/AGENTS.md"
 
 - name: Remove opencode agents directory
   ansible.builtin.file:

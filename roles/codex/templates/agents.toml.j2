@@ -1,0 +1,6 @@
+{% for agent in codex_agent_files %}
+[agents.{{ agent | splitext | first }}]
+description = {{ (lookup('ansible.builtin.file', 'agents/' + agent) | regex_findall('(?m)^description = (.+)$') | first) }}
+config_file = {{ (codex_managed_dir + '/agents/' + agent) | to_json }}
+
+{% endfor %}

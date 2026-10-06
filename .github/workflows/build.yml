@@ -38,6 +38,9 @@ jobs:
       - name: Run Ansible syntax check
         run: ansible-playbook playbook.yml --syntax-check -i localhost,
 
+      - name: Validate agents, skills and canonical operating rules
+        run: python scripts/validate_skill_refs.py
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v8
         env:

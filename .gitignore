@@ -82,6 +82,7 @@ CLAUDE.md
 !roles/litellm/files/CLAUDE.md
 GEMINI.md
 AGENTS.md
+!instructions/AGENTS.md
 /.claude/
 .cursorrules
 .cursor/

@@ -1,0 +1,102 @@
+---
+- name: Inspect global instruction entry point
+  ansible.builtin.stat:
+    path: "{{ instructions_destination }}"
+    follow: false
+  register: instructions_entry
+
+- name: Read existing global instructions privately
+  ansible.builtin.slurp:
+    src: "{{ instructions_destination }}"
+  register: instructions_existing
+  no_log: true
+  when: instructions_entry.stat.isreg | default(false)
+
+- name: Refuse to replace unfamiliar global instructions
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_entry.stat.exists or
+        (instructions_entry.stat.islnk | default(false) and
+         instructions_entry.stat.lnk_target | default('') == instructions_file) or
+        (instructions_entry.stat.isreg | default(false) and
+         (instructions_existing.content | default('') | b64decode
+          | regex_replace('(?m)^> \*\*Rule for maintaining[^\n]*\n?', '')
+          | regex_replace('(?m)^<!-- (BEGIN|END) AI AGENT WORKFORCE -->\n?', '') | trim) ==
+         (lookup('ansible.builtin.file', role_path + '/../../instructions/AGENTS.md')
+          | regex_replace('(?m)^> \*\*Rule for maintaining[^\n]*\n?', '') | trim))
+    fail_msg: >-
+      {{ instructions_destination }} contains personal instructions or an unfamiliar link.
+      Merge personal additions into instructions/AGENTS.md explicitly before migrating;
+      nothing has been overwritten.
+
+- name: Inspect shared instructions directory
+  ansible.builtin.stat:
+    path: "{{ instructions_home }}"
+    follow: false
+  register: instructions_directory
+
+- name: Inspect shared instructions ownership marker
+  ansible.builtin.stat:
+    path: "{{ instructions_home }}/.managed"
+    follow: false
+  register: instructions_marker
+
+- name: Read shared instructions ownership marker
+  ansible.builtin.slurp:
+    src: "{{ instructions_home }}/.managed"
+  register: instructions_marker_content
+  when: instructions_marker.stat.isreg | default(false)
+
+- name: Refuse to replace an unmanaged instructions directory
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_directory.stat.exists or
+        (instructions_directory.stat.isdir | default(false) and
+         not instructions_directory.stat.islnk | default(false) and
+         (instructions_marker_content.content | default('') | b64decode | trim) == 'ai-agent-workforce')
+    fail_msg: "{{ instructions_home }} exists without this role's ownership marker; move it explicitly before installing."
+
+- name: Ensure shared instructions directory exists
+  ansible.builtin.file:
+    path: "{{ instructions_home }}"
+    state: directory
+    mode: '0700'
+
+- name: Record shared instructions ownership
+  ansible.builtin.copy:
+    content: "ai-agent-workforce\n"
+    dest: "{{ instructions_home }}/.managed"
+    mode: '0600'
+
+- name: Install canonical shared instructions
+  ansible.builtin.copy:
+    src: "{{ role_path }}/../../instructions/AGENTS.md"
+    dest: "{{ instructions_file }}"
+    backup: true
+    mode: '0600'
+  no_log: true
+
+- name: Ensure client instruction directory exists
+  ansible.builtin.file:
+    path: "{{ instructions_destination | dirname }}"
+    state: directory
+    mode: '0700'
+
+- name: Back up recognised instructions before migration
+  ansible.builtin.copy:
+    src: "{{ instructions_destination }}"
+    dest: "{{ instructions_destination }}.before-ai-agent-workforce"
+    remote_src: true
+    force: false
+    mode: '0600'
+  when: instructions_entry.stat.isreg | default(false)
+  no_log: true
+
+- name: Link client to canonical shared instructions
+  ansible.builtin.file:
+    src: "{{ instructions_file }}"
+    dest: "{{ instructions_destination }}"
+    state: link
+    force: true

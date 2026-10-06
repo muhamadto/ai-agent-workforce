@@ -36,3 +36,8 @@
     - role: skills
       tags:
         - skills
+
+    - role: codex
+      tags:
+        - never
+        - codex

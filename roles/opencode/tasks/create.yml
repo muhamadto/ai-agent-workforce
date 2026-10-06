@@ -1,4 +1,10 @@
 ---
+- name: Link OpenCode shared instructions
+  ansible.builtin.include_role:
+    name: instructions
+  vars:
+    instructions_destination: "{{ ansible_facts['user_dir'] }}/.config/opencode/AGENTS.md"
+
 - name: Ensure ~/.config/opencode directory exists
   ansible.builtin.file:
     path: "{{ ansible_facts['user_dir'] }}/.config/opencode"
@@ -9,12 +15,6 @@
   ansible.builtin.copy:
     src: "opencode.jsonc"
     dest: "{{ ansible_facts['user_dir'] }}/.config/opencode/opencode.jsonc"
-    mode: '0600'
-
-- name: Deploy global AGENTS.md
-  ansible.builtin.copy:
-    src: "AGENTS.md"
-    dest: "{{ ansible_facts['user_dir'] }}/.config/opencode/AGENTS.md"
     mode: '0600'
 
 - name: Ensure ~/.config/opencode/agents directory exists

@@ -1,0 +1,58 @@
+---
+- name: Validate Codex setup state
+  ansible.builtin.assert:
+    that:
+      - setup_state in ['present', 'absent']
+    fail_msg: "setup_state must be present or absent."
+
+- name: Resolve managed Codex agent files
+  ansible.builtin.set_fact:
+    codex_agent_files: >-
+      {{ query('ansible.builtin.fileglob', role_path + '/files/agents/*.toml')
+         | map('basename') | sort | list }}
+
+- name: Inspect Codex managed directory
+  ansible.builtin.stat:
+    path: "{{ codex_managed_dir }}"
+    follow: false
+  register: codex_managed_directory
+
+- name: Inspect Codex ownership marker
+  ansible.builtin.stat:
+    path: "{{ codex_managed_dir }}/.managed"
+    follow: false
+  register: codex_marker
+
+- name: Read Codex ownership marker
+  ansible.builtin.slurp:
+    src: "{{ codex_managed_dir }}/.managed"
+  register: codex_marker_content
+  when: codex_marker.stat.isreg | default(false)
+
+- name: Determine Codex directory ownership
+  ansible.builtin.set_fact:
+    codex_directory_owned: >-
+      {{ codex_managed_directory.stat.isdir | default(false)
+         and not (codex_managed_directory.stat.islnk | default(false))
+         and (codex_marker_content.content | default('') | b64decode | trim) == 'ai-agent-workforce' }}
+
+- name: Inspect Codex agent entry points
+  ansible.builtin.stat:
+    path: "{{ codex_home }}/agents/{{ item }}"
+    follow: false
+  loop: "{{ codex_agent_files }}"
+  register: codex_agent_entries
+
+- name: Inspect Codex shared skills entry point
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] }}/.agents/skills/ai-agent-workforce"
+    follow: false
+  register: codex_skills_entry
+
+- name: Install Codex configuration
+  ansible.builtin.include_tasks: create.yml
+  when: setup_state == 'present'
+
+- name: Remove Codex configuration
+  ansible.builtin.include_tasks: destroy.yml
+  when: setup_state == 'absent'
