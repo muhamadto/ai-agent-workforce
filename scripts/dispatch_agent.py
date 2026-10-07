@@ -467,9 +467,10 @@ def delegation_prerequisites(name, route, workspace, write):
     if harness == "opencode":
         verify_opencode_persona(binary, environment, workspace, name)
     environment["WORKFORCE_ACTIVE"] = "1"
-    if not shutil.which("git", path=environment.get("PATH", "")):
+    git_binary = shutil.which("git", path=environment.get("PATH", ""))
+    if not git_binary:
         raise DispatchError("Git is required to validate the workspace.")
-    checked = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=workspace,
+    checked = subprocess.run([os.path.abspath(git_binary), "rev-parse", "--show-toplevel"], cwd=workspace,
                              capture_output=True, text=True, timeout=10)
     if checked.returncode:
         raise DispatchError("Delegation requires a Git workspace.")

@@ -32,6 +32,9 @@ def main() -> int:
         home = Path(settings["home"])
         codex_home = Path(settings["codex_home"])
         managed = Path(settings["managed_dir"])
+        protected_roots = (home, codex_home, codex_home / "agents", home / ".agents", home / ".agents/skills")
+        if any(managed == root or managed in root.parents for root in protected_roots):
+            raise ValueError("Codex managed storage must not contain native or user storage roots.")
         directories = {home, codex_home, codex_home / "agents", managed,
                        managed / "agents", home / ".agents", home / ".agents/skills"}
         for directory in list(directories):
