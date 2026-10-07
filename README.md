@@ -1,7 +1,4 @@
 # AI Agent Workforce
-
-> Deploy Claude Code agent teams as code. Ansible automation for AI agent configurations, skills, and workspace management.
-
 [![Build](https://github.com/muhamadto/ai-agent-workforce/actions/workflows/build.yml/badge.svg)](https://github.com/muhamadto/ai-agent-workforce/actions/workflows/build.yml)
 [![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
@@ -11,6 +8,8 @@
 [![Reliability issues](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=software_quality_reliability_issues)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
 [![Security issues](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=software_quality_security_issues)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+> Deploy Claude Code agent teams as code. Ansible automation for AI agent configurations, skills, and workspace management.
 
 ## Overview
 
