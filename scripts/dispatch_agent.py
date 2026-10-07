@@ -80,6 +80,8 @@ def child_environment(harness):
         environment.pop(variable, None)
     if harness == "claude":
         environment.pop("CLAUDECODE", None)
+        if environment.get("CLAUDE_CONFIG_DIR"):
+            environment["CLAUDE_CONFIG_DIR"] = os.path.abspath(environment["CLAUDE_CONFIG_DIR"])
     return environment
 
 
