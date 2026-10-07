@@ -226,12 +226,12 @@ Deployed to `~/.skills/`, symlinked to both `~/.claude/skills/` and `~/.config/o
 | `git-branch` | Branch lifecycle — cut from `origin/main`, sync via rebase |
 | `git-commit` | Conventional Commits with hook awareness |
 | `incident` | Detect → contain → resolve, blameless postmortem |
-| `infrastructure-engineering` | AWS/GCP, Kubernetes, CDKTF, private-cloud stack |
+| `infrastructure-engineering` | AWS/GCP, Kubernetes, Pulumi Java, private-cloud stack |
 | `java-spring-engineering` | Java 24+, Spring Boot 4.x, GraalVM Native, Maven toolchain |
 | `junit5` | JUnit 5 patterns, parameterized tests, Testcontainers |
-| `microservice-template` | Maven multi-module layout: client / service / infra (CDKTF) |
+| `microservice-template` | Maven multi-module layout: client / service / infra (Pulumi Java) |
 | `mobile-engineering` | Swift/SwiftUI, Kotlin/Compose, Flutter, store distribution |
-| `modulith-template` | Maven Spring Modulith layout: contracts / app / infra (CDKTF) |
+| `modulith-template` | Maven Spring Modulith layout: contracts / app / infra (Pulumi Java) |
 | `oauth-threat-model` | OAuth2/OIDC flows: PKCE, redirect URIs, token theft |
 | `observability` | Micrometer/Prometheus, Loki, OpenTelemetry/Tempo, SLO alerting |
 | `openapi` | OpenAPI 3.1 spec authoring rules and HTTP status codes |

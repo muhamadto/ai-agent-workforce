@@ -14,7 +14,7 @@ This repository deploys Claude Code with specialized Agent Teams for peer-to-pee
 | **backend-developer** | Java 24+, Spring Boot 4.x, Spring Native, GraalVM, Clean Architecture |
 | **frontend-developer** | React 18+, Next.js 14+, Flutter 3.x, responsive UI |
 | **mobile-engineer** | iOS (Swift), Android (Kotlin), Flutter, React Native |
-| **infrastructure-engineer** | AWS, GCP, Kubernetes, Terraform, private cloud |
+| **infrastructure-engineer** | AWS, GCP, Kubernetes, Pulumi Java, private cloud |
 | **identity-security-developer** | OAuth2, OIDC, passkeys, Spring Security |
 | **data-engineer** | ETL/ELT, big data, SQL optimization, Python |
 | **secops-engineer** | OWASP, security tooling, vulnerability analysis |
@@ -84,7 +84,7 @@ Have them coordinate on API contract and error handling
 ### Example 2: Full Infrastructure Setup
 ```
 Create team:
-- infrastructure-engineer: Terraform AWS infra, Helm charts, monitoring stack
+- infrastructure-engineer: Pulumi Java AWS infra, Kubernetes GitOps manifests, monitoring stack
 - secops-engineer: Security hardening
 - principal-engineer: Documentation
 ```

@@ -1,6 +1,6 @@
 ---
 name: modulith-template
-description: Standard Maven multi-module layout for a Spring Modulith application — contracts JAR (controller interfaces + DTOs), app module (Spring Boot modulith with enforced module boundaries), and infra module (CDK for Terraform). Load when working on a Spring Modulith product — starting one, adding an application module, deciding which module/package a class belongs in, or extracting a module into a standalone microservice. Maven only, never Gradle.
+description: Standard Maven multi-module layout for a Spring Modulith application — contracts JAR (controller interfaces + DTOs), app module (Spring Boot modulith with enforced module boundaries), and infra module (Pulumi Java). Load when working on a Spring Modulith product — starting one, adding an application module, deciding which module/package a class belongs in, or extracting a module into a standalone microservice. Maven only, never Gradle.
 ---
 
 # Modulith Template — Maven Multi-Module Structure
@@ -25,7 +25,7 @@ modulith-template-project/               # Parent (packaging: pom)
 ├── pom.xml                               # modules, dependencyManagement, pluginManagement
 ├── modulith-template-contracts/          # Published contracts JAR — the API surface
 ├── modulith-template-app/                # Spring Boot modulith — the implementation
-└── modulith-template-infra/              # CDK for Terraform (CDKTF, Java) — the infrastructure
+└── modulith-template-infra/              # Pulumi Java — the infrastructure
 ```
 
 Dependency direction: `app` depends on `contracts`. `contracts` depends on nothing
@@ -117,7 +117,7 @@ Placement rules:
   ONLY; a failed publish leaves it incomplete for registry resubmission;
   `Nats-Msg-Id` = the event publication ID so JetStream's duplicate window makes
   resubmission safe. Never log-and-swallow a publish failure.
-- JetStream streams and consumers are provisioned in the infra module (CDKTF),
+- JetStream streams and consumers are provisioned in the infra module (Pulumi Java),
   never by shell scripts or in-app code, and never with no-ack — publish acks are
   load-bearing.
 - Event records are immutable Java records, named in past tense
@@ -160,20 +160,20 @@ class ModularityTests {
 
 ## modulith-template-infra
 
-Identical conventions to the microservice template: **CDK for Terraform (CDKTF)
-with Java**. Java code always gets CDKTF.
+Identical conventions to the microservice template: **Pulumi with Java**, using shared `sandpipers-iac` constructs.
 
 ```
 modulith-template-infra/
 └── src/main/java/<base.package>/infra/
-    ├── (root)             # CDKTF App entry point + configuration classes
-    ├── stack/             # Terraform stacks (one per deployable unit/environment)
+    ├── (root)             # Pulumi program entry point + configuration classes
+    ├── stack/             # Pulumi stack composition per deployable unit/environment
     └── construct/         # Reusable constructs composed into stacks
 ```
 
-- `cdktf.json` lives in the module root; synthesis runs through Maven
-  (`mvn compile exec:java`).
+- The stack convention is `Pulumi.yaml` with `runtime: {name: java, options: {binary: target/<app>.jar}}`; the application JAR is built with `./mvnw package`. Verify the executable configuration in the IaC spike before deployment.
 - No application code, no contracts/app dependencies.
+- Render Kubernetes resources into repository GitOps manifests for ArgoCD, using a render-only provider without Kubernetes credentials or API access. Helm resources use `Chart` rendering rather than `Release`. Render-only engine execution may update state; it never applies resources to the cluster.
+- Cloud resources use reviewed CI preview/apply. State belongs in owned object storage with an environment-specific KMS secrets provider; do not use Pulumi Cloud state.
 
 ## Extracting a Module into a Microservice
 
@@ -205,7 +205,7 @@ Mechanics (cheap by construction):
    piece with tests.
 4. Add the two modularity tests before writing the second module.
 5. Add stacks/constructs to the infra module for the runtime the app needs.
-6. Verify the build from the parent: `mvn clean verify` must pass at the root.
+6. Verify the build from the parent: `./mvnw clean verify` must pass at the root.
 
 ## Related Skills
 

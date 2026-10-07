@@ -1,6 +1,6 @@
 ---
 name: microservice-template
-description: Standard Maven multi-module layout for a Spring Boot microservice — client JAR (controller interfaces + DTOs), service module (implementation), and infra module (CDK for Terraform). Load when creating a new microservice, adding a module to one, or deciding which module/package a class belongs in. Maven only, never Gradle.
+description: Standard Maven multi-module layout for a Spring Boot microservice — client JAR (controller interfaces + DTOs), service module (implementation), and infra module (Pulumi Java). Load when creating a new microservice, adding a module to one, or deciding which module/package a class belongs in. Maven only, never Gradle.
 ---
 
 # Microservice Template — Maven Multi-Module Structure
@@ -20,7 +20,7 @@ microservice-template-project/              # Parent (packaging: pom)
 ├── pom.xml                                  # modules + <parent> sandpipers-microservice-parent
 ├── microservice-template-client/            # Published client JAR — the API contract
 ├── microservice-template-service/           # Spring Boot application — the implementation
-└── microservice-template-infra/             # CDK for Terraform (CDKTF, Java) — the infrastructure
+└── microservice-template-infra/             # Pulumi Java — the infrastructure
 ```
 
 Dependency direction: `service` depends on `client`. `client` depends on nothing internal.
@@ -85,20 +85,22 @@ Placement rules:
 
 ## microservice-template-infra
 
-Infrastructure for this service as code, using **CDK for Terraform (CDKTF) with Java**.
+Infrastructure for this service as code, using **Pulumi with Java**, using shared `sandpipers-iac` constructs.
 Mirrors the service module's structure idea — root package for entry point and
 configuration, one package per concern:
 
 ```
 microservice-template-infra/
 └── src/main/java/<base.package>/infra/
-    ├── (root)             # CDKTF App entry point + configuration classes
-    ├── stack/             # Terraform stacks (one per deployable unit/environment)
+    ├── (root)             # Pulumi program entry point + configuration classes
+    ├── stack/             # Pulumi stack composition per deployable unit/environment
     └── construct/         # Reusable constructs composed into stacks
 ```
 
-- `cdktf.json` lives in the module root; synthesis runs through Maven (`mvn compile exec:java`).
+- The stack convention is `Pulumi.yaml` with `runtime: {name: java, options: {binary: target/<app>.jar}}`; the application JAR is built with `./mvnw package`. Verify the executable configuration in the IaC spike before deployment.
 - No application code, no client/service dependencies.
+- Render Kubernetes resources into repository GitOps manifests for ArgoCD, using a render-only provider without Kubernetes credentials or API access. Helm resources use `Chart` rendering rather than `Release`. Render-only engine execution may update state; it never applies resources to the cluster.
+- Cloud resources use reviewed CI preview/apply. State belongs in owned object storage with an environment-specific KMS secrets provider; do not use Pulumi Cloud state.
 
 ## Parent POM
 
@@ -135,7 +137,7 @@ microservice-template-infra/
 3. Implement in the service module: entity → repository → service → controller,
    driving each piece with tests.
 4. Add stacks/constructs to the infra module for the runtime the service needs.
-5. Verify the build from the parent: `mvn clean verify` must pass at the root.
+5. Verify the build from the parent: `./mvnw clean verify` must pass at the root.
 
 ## Related Skills
 
