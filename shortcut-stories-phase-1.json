@@ -13,5 +13,27 @@
         "shortcut_id": 243
       }
     ]
+  },
+  {
+    "epic_name": "Enforce repository quality gates",
+    "epic_description": "Maintain version-controlled CI and GitHub rule configuration that makes quality gate completion a prerequisite for merging. Shortcut creation and custom-field assignment are pending under the user's explicit session-only exception for unavailable Shortcut access. Intended fields: Technical Area = CI/CD; Skill Set = Infrastructure engineering; Product Area = developer tooling (validate available workspace values when access returns). No external lifecycle state or Done status is claimed.",
+    "objective": "Prevent changes entering main without a successful Sonar quality gate and preserve existing merge protections.",
+    "shortcut_epic_id": 0,
+    "stories": [
+      {
+        "name": "Require SonarCloud Quality Gate for PRs into main",
+        "story_type": "chore",
+        "description": "As a repository maintainer, I want every PR into main to pass an independently reported Sonar quality gate, so that successful scanning alone cannot permit changes that fail the project quality thresholds.\n\n---\nShortcut creation and custom-field assignment are pending under the user's explicit session-only exception for unavailable Shortcut access. Intended fields: Technical Area = CI/CD; Skill Set = Infrastructure engineering; Product Area = developer tooling (validate available workspace values when access returns). No external lifecycle state or Done status is claimed. Architecture guardian and principal engineer approved the implementation approach before coding.",
+        "acceptance_criteria": "Scenario: Every applicable PR receives the gate\nGiven a PR targets main\nWhen it is opened, reopened, updated, or retargeted to main\nThen the independent job named SonarCloud Quality Gate runs, including drafts and documentation-only PRs, without path filters or conditional skips.\n\nScenario: Completed gate evaluation\nGiven valid scan credentials\nWhen the PR commit is analysed\nThen the scanner waits for that analysis quality gate and succeeds only when it passes, with a 300-second gate timeout and a 15-minute job timeout.\n\nScenario: Failures remain failures\nGiven missing or invalid credentials, scanner errors, a rejected quality gate, or a processing timeout\nWhen the job runs\nThen it fails without exposing secrets or substituting skipped or successful results.\n\nScenario: Least privilege and existing checks\nGiven the workflow configuration\nWhen it is reviewed\nThen token permissions are read-only, the scan action is pinned to verified commit d209202bc7d53ff1cc128f7f907dac145c9d6ae9, and existing analysis scope, quality thresholds, linting and validation remain intact.\n\nScenario: Required check enforcement\nGiven the committed ruleset is applied\nWhen GitHub evaluates a PR into refs/heads/main\nThen it requires SonarCloud Quality Gate from GitHub Actions integration 15368, requires an up-to-date branch, blocks missing or failing checks, has no bypass actors, and preserves unrelated protections.\n\nScenario: Safe application\nGiven current repository rules\nWhen preview runs\nThen it performs no writes.\nWhen the desired ruleset is applied again\nThen no write or duplicate is produced.\nWhen an API operation fails or ownership is ambiguous\nThen application stops with a non-zero exit status.\n\nScenario: Activation\nGiven the implementation PR current head has a passing Sonar gate\nWhen the committed ruleset is applied\nThen its readback matches the committed policy and GitHub reports the gate as required for that PR.",
+        "shortcut_id": 0
+      },
+      {
+        "name": "Align SonarCloud repository binding and main branch",
+        "story_type": "chore",
+        "description": "As a repository maintainer, I want SonarCloud bound to the GitHub repository with main as its main branch, so that project administration and PR decoration reflect the repository configuration. Requires Sonar administration access; does not block scanner-based enforcement.\n\n---\nShortcut creation and custom-field assignment are pending under the user's explicit session-only exception for unavailable Shortcut access. Intended fields: Technical Area = CI/CD; Skill Set = Infrastructure engineering; Product Area = developer tooling (validate available workspace values when access returns). No external lifecycle state or Done status is claimed.",
+        "acceptance_criteria": "Given authorised Sonar administration access, when the existing project is bound to muhamadto/ai-agent-workforce, then SonarCloud reports a bound project and a newly analysed PR receives the expected repository decoration.\n\nGiven GitHub default branch main, when Sonar main-branch configuration is corrected, then SonarCloud identifies main as its main branch and subsequent main analysis uses that branch, preserving existing quality thresholds and analysis scope.",
+        "shortcut_id": 0
+      }
+    ]
   }
 ]
