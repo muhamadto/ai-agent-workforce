@@ -57,7 +57,11 @@
         not instructions_directory.stat.exists or
         (instructions_directory.stat.isdir | default(false) and
          not instructions_directory.stat.islnk | default(false) and
-         (instructions_marker_content.content | default('') | b64decode) in ['ai-agent-workforce', 'ai-agent-workforce\n'])
+         ((instructions_marker_content.content | default(''))
+          in ['YWktYWdlbnQtd29ya2ZvcmNlOmluc3RydWN0aW9ucw==', 'YWktYWdlbnQtd29ya2ZvcmNlOmluc3RydWN0aW9ucwo=']
+          or (instructions_home == ansible_facts['user_dir'] + '/.instructions'
+              and (instructions_marker_content.content | default(''))
+              in ['YWktYWdlbnQtd29ya2ZvcmNl', 'YWktYWdlbnQtd29ya2ZvcmNlCg=='])))
     fail_msg: "{{ instructions_home }} exists without this role's ownership marker; move it explicitly before installing."
 
 - name: Inspect canonical payload after storage validation
@@ -185,7 +189,7 @@
 
 - name: Record shared instructions ownership
   ansible.builtin.copy:
-    content: "ai-agent-workforce\n"
+    content: "ai-agent-workforce:instructions\n"
     dest: "{{ instructions_home }}/.managed"
     mode: '0600'
 

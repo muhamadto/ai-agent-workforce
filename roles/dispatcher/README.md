@@ -72,7 +72,13 @@ collisions before mutation. Existing managed files must be regular files with
 exactly one hard link.
 Routing updates create Ansible backups within the owned configuration directory.
 An ownership marker must be a regular file with exactly one hard link containing
-exactly `ai-agent-workforce` (with an optional final newline).
+exactly `ai-agent-workforce:dispatcher` (with an optional final newline).
+The old `ai-agent-workforce` marker is accepted only at the original default
+`~/.local/share/ai-agent-workforce/dispatcher` path and upgraded on installation.
+Legacy custom paths fail closed: verify their ownership explicitly before
+replacing the marker with this role's value. Do not relabel another role's storage.
+All three managed role roots, shared skills and configured canonical instructions
+are checked for overlap before installation or removal, including resolved aliases.
 
 Removal deletes only a matching command symlink and a marked, real dispatcher
 directory. Replacement commands and unowned/replaced dispatcher directories

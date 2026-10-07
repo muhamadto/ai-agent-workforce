@@ -1,4 +1,7 @@
 ---
+- name: Guard shared instructions against cross-role storage overlap
+  ansible.builtin.include_tasks: guard_roots.yml
+
 - name: Validate instruction storage paths
   ansible.builtin.assert:
     that:

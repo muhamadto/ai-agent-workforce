@@ -1,4 +1,7 @@
 ---
+- name: Guard dispatcher against cross-role storage overlap
+  ansible.builtin.include_tasks: "{{ role_path }}/../instructions/tasks/guard_roots.yml"
+
 - name: Validate dispatcher setup and paths
   ansible.builtin.assert:
     that:
@@ -54,8 +57,11 @@
          and (dispatcher_marker.stat.isreg | default(false))
          and not (dispatcher_marker.stat.islnk | default(false))
          and (dispatcher_marker.stat.nlink | default(0) == 1)
-         and (dispatcher_marker_content.content | default(''))
-             in ['YWktYWdlbnQtd29ya2ZvcmNl', 'YWktYWdlbnQtd29ya2ZvcmNlCg=='] }}
+         and ((dispatcher_marker_content.content | default(''))
+              in ['YWktYWdlbnQtd29ya2ZvcmNlOmRpc3BhdGNoZXI=', 'YWktYWdlbnQtd29ya2ZvcmNlOmRpc3BhdGNoZXIK']
+              or (dispatcher_home == ansible_facts['user_dir'] + '/.local/share/ai-agent-workforce/dispatcher'
+                  and (dispatcher_marker_content.content | default(''))
+                  in ['YWktYWdlbnQtd29ya2ZvcmNl', 'YWktYWdlbnQtd29ya2ZvcmNlCg=='])) }}
 
 - name: Inspect dispatcher command
   ansible.builtin.stat:

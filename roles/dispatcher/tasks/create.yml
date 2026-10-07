@@ -116,7 +116,7 @@
 
 - name: Record dispatcher directory ownership
   ansible.builtin.copy:
-    content: "ai-agent-workforce\n"
+    content: "ai-agent-workforce:dispatcher\n"
     dest: "{{ dispatcher_home }}/.managed"
     mode: '0600'
 

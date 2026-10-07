@@ -45,7 +45,7 @@
 
 - name: Record Codex directory ownership
   ansible.builtin.copy:
-    content: "ai-agent-workforce\n"
+    content: "ai-agent-workforce:codex\n"
     dest: "{{ codex_managed_dir }}/.managed"
     mode: '0600'
 

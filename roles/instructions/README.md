@@ -37,7 +37,14 @@ Before reading payloads or changing anything, all shared-storage and destination
 must be absent or real directories, never symlinks. Existing ownership markers, canonical payloads,
 migration backups and regular entry points must be single-link regular files; dangling symlinks,
 hardlinks and special files are refused. Only the exact managed client link is permitted.
-The shared directory must be absent or have this role's `.managed` ownership marker. Canonical updates
+The shared directory must be absent or have this role's `.managed` ownership marker.
+Its value is `ai-agent-workforce:instructions`, with an optional final newline.
+Legacy `ai-agent-workforce` markers migrate only at the original `~/.instructions`
+path after the existing canonical-payload checks pass. For legacy custom paths,
+verify ownership explicitly before replacing the marker; never relabel another
+role's directory. Managed role roots, shared skills and configured canonical
+instructions must not overlap, including through resolved aliases.
+Canonical updates
 retain Ansible's timestamped backups; existing backups are inspected without following links and
 must be single-link regular files. Ansible names backups using the module PID and timestamp, then
 copies with `shutil.copy2`, not an exclusive-create primitive: validating existing backup paths and

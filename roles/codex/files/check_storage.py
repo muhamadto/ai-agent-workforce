@@ -50,7 +50,11 @@ def main() -> int:
                 raise ValueError("Codex storage requires real directories, not redirects.")
         marker = managed / ".managed"
         marker_exists = check_regular_file(marker)
-        owned = marker_exists and read_regular_file(marker) in ("ai-agent-workforce\n", "ai-agent-workforce")
+        marker_content = read_regular_file(marker) if marker_exists else ""
+        owned = marker_content in ("ai-agent-workforce:codex", "ai-agent-workforce:codex\n") or (
+            marker_content in ("ai-agent-workforce\n", "ai-agent-workforce")
+            and managed == home / ".codex/ai-agent-workforce"
+        )
         if marker_exists and not owned:
             raise ValueError("Codex ownership marker is malformed.")
         check_regular_file(codex_home / "config.toml")

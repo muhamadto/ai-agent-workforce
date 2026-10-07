@@ -1,4 +1,7 @@
 ---
+- name: Guard Codex against cross-role storage overlap
+  ansible.builtin.include_tasks: "{{ role_path }}/../instructions/tasks/guard_roots.yml"
+
 - name: Validate Codex setup state
   ansible.builtin.assert:
     that:

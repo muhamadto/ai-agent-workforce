@@ -58,6 +58,13 @@ ownership markers and configuration files are refused before mutation; marker an
 Storage and configuration guards run on the target using its Python interpreter,
 including in check mode. Trusted helper source is supplied inline, so validation
 does not require uploading files or inspecting the controller's home instead.
+The ownership marker is `ai-agent-workforce:codex`, with an optional final newline.
+Legacy `ai-agent-workforce` markers migrate on installation only at the original
+`~/.codex/ai-agent-workforce` path. Legacy custom paths fail closed; verify ownership
+explicitly before replacing their marker. Managed roots must not overlap other
+roles, shared skills or configured canonical instructions, including resolved aliases.
+Root comparisons conservatively ignore case and Unicode normalisation differences
+to protect case-insensitive macOS storage; use names distinct beyond their casing.
 
 If a non-empty `AGENTS.override.md` exists, Codex reads it instead of `AGENTS.md`; this role warns and does not modify the override.
 When using a custom `CODEX_HOME`, pass its absolute path with `-e codex_home=/your/codex/home`.

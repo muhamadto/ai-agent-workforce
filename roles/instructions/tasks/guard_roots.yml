@@ -1,0 +1,33 @@
+---
+- name: Guard managed role roots before installation or removal
+  ansible.builtin.command:
+    argv:
+      - "{{ ansible_facts.get('python', {}).get('executable', 'python3') }}"
+      - -c
+      - "{{ lookup('ansible.builtin.file', role_path + '/../instructions/files/check_roots.py') }}"
+    stdin: >-
+      {{ {'codex': codex_managed_dir |
+                    default((codex_home | default(ansible_facts['user_dir'] + '/.codex')) + '/ai-agent-workforce'),
+          'dispatcher': dispatcher_home | default(ansible_facts['user_dir'] + '/.local/share/ai-agent-workforce/dispatcher'),
+          'instructions': instructions_home | default(ansible_facts['user_dir'] + '/.instructions'),
+          'skills': ansible_facts['user_dir'] + '/.skills'} | to_json }}
+    stdin_add_newline: false
+  changed_when: false
+  check_mode: false
+
+- name: Guard configured canonical instructions from managed role roots
+  ansible.builtin.command:
+    argv:
+      - "{{ ansible_facts.get('python', {}).get('executable', 'python3') }}"
+      - -c
+      - "{{ lookup('ansible.builtin.file', role_path + '/../instructions/files/check_roots.py') }}"
+    stdin: >-
+      {{ {'codex': codex_managed_dir |
+                    default((codex_home | default(ansible_facts['user_dir'] + '/.codex')) + '/ai-agent-workforce'),
+          'dispatcher': dispatcher_home | default(ansible_facts['user_dir'] + '/.local/share/ai-agent-workforce/dispatcher'),
+          'skills': ansible_facts['user_dir'] + '/.skills',
+          'canonical': instructions_file |
+                       default((instructions_home | default(ansible_facts['user_dir'] + '/.instructions')) + '/AGENTS.md')} | to_json }}
+    stdin_add_newline: false
+  changed_when: false
+  check_mode: false
