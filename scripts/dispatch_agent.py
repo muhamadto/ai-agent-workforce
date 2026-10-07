@@ -88,7 +88,7 @@ def executable(harness, environment):
     found = shutil.which(candidate, path=environment.get("PATH", ""))
     if not found:
         raise DispatchError(f"{harness} executable not found; configure WORKFORCE_{harness.upper()} or PATH.")
-    return found
+    return os.path.abspath(found)
 
 
 def metadata_command(command, environment, workspace=None):

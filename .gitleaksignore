@@ -2,3 +2,5 @@
 46db9883f7d3f896f641b0755bd316519ff30b6b:roles/qwen/files/GIT_HOOKS_GUIDE.md:generic-api-key:273
 46db9883f7d3f896f641b0755bd316519ff30b6b:roles/claude/files/GIT_HOOKS_GUIDE.md:generic-api-key:270
 46db9883f7d3f896f641b0755bd316519ff30b6b:roles/claude/files/GIT_HOOKS_GUIDE.md:generic-api-key:273
+62a925c47b9f32827df634a3f7a1fda0e7b1b1aa:roles/litellm/files/settings.json:generic-api-key:37
+dcd6b1aad272874b1587bdf7d7e2139305b273e8:roles/litellm/files/settings.json:generic-api-key:37
