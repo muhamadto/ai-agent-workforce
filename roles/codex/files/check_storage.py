@@ -33,7 +33,14 @@ def main() -> int:
         codex_home = Path(settings["codex_home"])
         managed = Path(settings["managed_dir"])
         protected_roots = (home, codex_home, codex_home / "agents", home / ".agents", home / ".agents/skills")
-        if any(managed == root or managed in root.parents for root in protected_roots):
+        import unicodedata
+        folded_managed = Path(unicodedata.normalize("NFC", str(managed.resolve())).casefold())
+        folded_protected = tuple(
+            Path(unicodedata.normalize("NFC", str(root.resolve())).casefold())
+            for root in protected_roots
+        )
+        if (any(managed == root or managed in root.parents for root in protected_roots)
+                or any(folded_managed == root or folded_managed in root.parents for root in folded_protected)):
             raise ValueError("Codex managed storage must not contain native or user storage roots.")
         directories = {home, codex_home, codex_home / "agents", managed,
                        managed / "agents", home / ".agents", home / ".agents/skills"}
