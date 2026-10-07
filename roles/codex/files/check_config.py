@@ -17,6 +17,9 @@ def proposed_config(content: str, block: str) -> tuple[str, str]:
         raise ValueError("Codex registration block markers are malformed.")
     insertion = starts[0] if starts else len(lines)
     if starts:
+        # Refuse markers inside multiline strings or other unfinished TOML values.
+        tomllib.loads("".join(lines[:starts[0]]))
+        tomllib.loads("".join(lines[:ends[0]]))
         del lines[starts[0]:ends[0] + 1]
     unmanaged = "".join(lines)
     if insertion > 0 and not lines[insertion - 1].endswith("\n"):
