@@ -1,0 +1,31 @@
+---
+- name: Require normalised dispatcher directory paths
+  ansible.builtin.assert:
+    that:
+      - "'..' not in dispatcher_parent_path.split('/')"
+      - "'.' not in dispatcher_parent_path.split('/')"
+    fail_msg: "Dispatcher directories must not contain traversal components."
+
+- name: Inspect dispatcher ancestors without following links
+  ansible.builtin.stat:
+    path: "{{ dispatcher_parent_path.split('/')[:dispatcher_ancestor_depth] | join('/') or '/' }}"
+    follow: false
+    get_checksum: false
+    get_mime: false
+  loop: "{{ range(1, (dispatcher_parent_path.split('/') | length) + 1) | list }}"
+  loop_control:
+    loop_var: dispatcher_ancestor_depth
+  register: dispatcher_ancestors
+
+- name: Refuse redirected or non-directory dispatcher ancestors
+  ansible.builtin.assert:
+    that:
+      - >-
+        not dispatcher_ancestor_result.stat.exists or
+        (dispatcher_ancestor_result.stat.isdir | default(false) and
+         not (dispatcher_ancestor_result.stat.islnk | default(false)))
+    fail_msg: "Dispatcher ancestors must be real directories; no changes have been made."
+  loop: "{{ dispatcher_ancestors.results }}"
+  loop_control:
+    loop_var: dispatcher_ancestor_result
+    label: "{{ dispatcher_ancestor_result.stat.path | default('absent') }}"

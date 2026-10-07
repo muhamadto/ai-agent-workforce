@@ -36,3 +36,13 @@
     - role: skills
       tags:
         - skills
+
+    - role: codex
+      tags:
+        - never
+        - codex
+
+    - role: dispatcher
+      tags:
+        - never
+        - dispatcher

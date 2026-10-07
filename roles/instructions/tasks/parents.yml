@@ -1,0 +1,24 @@
+---
+- name: Inspect instruction path ancestors without following links
+  ansible.builtin.stat:
+    path: "{{ instructions_parent_path.split('/')[:instructions_ancestor_depth] | join('/') or '/' }}"
+    follow: false
+    get_checksum: false
+    get_mime: false
+  loop: "{{ range(1, (instructions_parent_path.split('/') | length) + 1) | list }}"
+  loop_control:
+    loop_var: instructions_ancestor_depth
+  register: instructions_ancestors
+
+- name: Refuse redirected or non-directory instruction ancestors
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_ancestor_result.stat.exists or
+        (instructions_ancestor_result.stat.isdir | default(false) and
+         not (instructions_ancestor_result.stat.islnk | default(false)))
+    fail_msg: "An instruction path ancestor is redirected or is not a directory; nothing has been changed."
+  loop: "{{ instructions_ancestors.results }}"
+  loop_control:
+    loop_var: instructions_ancestor_result
+    label: "{{ instructions_ancestor_result.stat.path | default('absent') }}"

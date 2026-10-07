@@ -1,0 +1,44 @@
+version = 1
+
+[agents.business-analyst]
+harness = "codex"
+
+[agents.principal-engineer]
+harness = "codex"
+
+[agents.architecture-guardian]
+harness = "claude"
+model = "sonnet"
+
+[agents.qe-engineer]
+harness = "claude"
+model = "sonnet"
+
+[agents.secops-engineer]
+harness = "claude"
+model = "sonnet"
+
+[agents.sre-engineer]
+harness = "claude"
+model = "sonnet"
+
+[agents.backend-developer]
+harness = "opencode"
+
+[agents.data-engineer]
+harness = "opencode"
+
+[agents.frontend-developer]
+harness = "opencode"
+
+[agents.identity-security-developer]
+harness = "opencode"
+
+[agents.infrastructure-engineer]
+harness = "opencode"
+
+[agents.mobile-engineer]
+harness = "opencode"
+
+[agents.native-macos-engineer]
+harness = "opencode"

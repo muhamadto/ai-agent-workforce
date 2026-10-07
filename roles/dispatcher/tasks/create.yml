@@ -1,0 +1,163 @@
+---
+- name: Verify dispatcher Python version without changes
+  ansible.builtin.command:
+    argv:
+      - "{{ dispatcher_python }}"
+      - -c
+      - "import sys; sys.exit('Python 3.11+ is required') if sys.version_info < (3, 11) else print(sys.executable)"
+  register: dispatcher_python_version
+  changed_when: false
+  check_mode: false
+
+- name: Refuse to replace an unmanaged dispatcher directory
+  ansible.builtin.assert:
+    that:
+      - not dispatcher_directory.stat.exists or dispatcher_directory_owned
+    fail_msg: "{{ dispatcher_home }} exists without a regular, single-link workforce ownership marker; nothing has been replaced."
+
+- name: Refuse unrelated dispatcher command collisions
+  ansible.builtin.assert:
+    that:
+      - >-
+        not dispatcher_command_entry.stat.exists or
+        (dispatcher_command_entry.stat.islnk | default(false) and
+         dispatcher_command_entry.stat.lnk_target | default('') == dispatcher_home + '/bin/workforce')
+    fail_msg: "{{ dispatcher_command }} is not the exact managed symlink; move it explicitly before installing."
+
+- name: Resolve dispatcher source payloads
+  ansible.builtin.set_fact:
+    dispatcher_agent_files: >-
+      {{ query('ansible.builtin.fileglob', role_path + '/../codex/files/agents/*.toml') | sort }}
+    dispatcher_source_files: >-
+      {{ query('ansible.builtin.fileglob', role_path + '/../../scripts/dispatch_agent.py')
+         + query('ansible.builtin.fileglob', role_path + '/../../config/agent-routing.toml') }}
+
+- name: Require dispatcher source payloads
+  ansible.builtin.assert:
+    that:
+      - dispatcher_source_files | length == 2
+      - dispatcher_agent_files | length > 0
+    fail_msg: "Dispatcher script, routing configuration and Codex personas must exist in the repository before deployment."
+
+- name: Resolve dispatcher managed directories
+  ansible.builtin.set_fact:
+    dispatcher_directories:
+      - "{{ dispatcher_home }}"
+      - "{{ dispatcher_home }}/bin"
+      - "{{ dispatcher_home }}/scripts"
+      - "{{ dispatcher_home }}/config"
+      - "{{ dispatcher_home }}/roles"
+      - "{{ dispatcher_home }}/roles/codex"
+      - "{{ dispatcher_home }}/roles/codex/files"
+      - "{{ dispatcher_home }}/roles/codex/files/agents"
+
+- name: Inspect managed dispatcher directories
+  ansible.builtin.stat:
+    path: "{{ item }}"
+    follow: false
+  loop: "{{ dispatcher_directories }}"
+  register: dispatcher_directory_entries
+
+- name: Refuse redirected dispatcher directories
+  ansible.builtin.assert:
+    that:
+      - >-
+        not item.stat.exists or
+        (item.stat.isdir | default(false) and not (item.stat.islnk | default(false)))
+    fail_msg: "{{ item.item }} must be a real directory, not a replacement or symlink."
+  loop: "{{ dispatcher_directory_entries.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: Inspect managed dispatcher files
+  ansible.builtin.stat:
+    path: "{{ item }}"
+    follow: false
+  loop: >-
+    {{ [dispatcher_home + '/bin/workforce', dispatcher_home + '/scripts/dispatch_agent.py',
+        dispatcher_home + '/config/agent-routing.toml']
+       + (dispatcher_agent_files | map('basename')
+          | map('regex_replace', '^', dispatcher_home + '/roles/codex/files/agents/') | list) }}
+  register: dispatcher_file_entries
+
+- name: Refuse redirected dispatcher files
+  ansible.builtin.assert:
+    that:
+      - >-
+        not item.stat.exists or
+        (item.stat.isreg | default(false) and not (item.stat.islnk | default(false))
+         and (item.stat.nlink | default(0) == 1))
+    fail_msg: "{{ item.item }} must be a regular managed file with exactly one hard link."
+  loop: "{{ dispatcher_file_entries.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: Inspect dispatcher command directory
+  ansible.builtin.stat:
+    path: "{{ dispatcher_command | dirname }}"
+    follow: false
+  register: dispatcher_command_directory
+
+- name: Require a real dispatcher command directory
+  ansible.builtin.assert:
+    that:
+      - >-
+        not dispatcher_command_directory.stat.exists or
+        (dispatcher_command_directory.stat.isdir | default(false) and
+         not (dispatcher_command_directory.stat.islnk | default(false)))
+    fail_msg: "The dispatcher command directory must not be a symlink or file."
+
+- name: Ensure private dispatcher directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0700'
+  loop: "{{ dispatcher_directories }}"
+
+- name: Record dispatcher directory ownership
+  ansible.builtin.copy:
+    content: "ai-agent-workforce:dispatcher\n"
+    dest: "{{ dispatcher_home }}/.managed"
+    mode: '0600'
+
+- name: Deploy dispatcher script
+  ansible.builtin.copy:
+    src: "{{ role_path }}/../../scripts/dispatch_agent.py"
+    dest: "{{ dispatcher_home }}/scripts/dispatch_agent.py"
+    mode: '0600'
+
+- name: Deploy dispatcher routing with backup
+  ansible.builtin.copy:
+    src: "{{ role_path }}/../../config/agent-routing.toml"
+    dest: "{{ dispatcher_home }}/config/agent-routing.toml"
+    backup: true
+    mode: '0600'
+
+- name: Deploy dispatcher Codex personas
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dispatcher_home }}/roles/codex/files/agents/{{ item | basename }}"
+    mode: '0600'
+  loop: "{{ dispatcher_agent_files }}"
+  loop_control:
+    label: "{{ item | basename }}"
+
+- name: Deploy dispatcher wrapper
+  ansible.builtin.template:
+    src: workforce.j2
+    dest: "{{ dispatcher_home }}/bin/workforce"
+    mode: '0700'
+
+- name: Create missing dispatcher command directory
+  ansible.builtin.file:
+    path: "{{ dispatcher_command | dirname }}"
+    state: directory
+    mode: '0700'
+  when: not dispatcher_command_directory.stat.exists
+
+- name: Link dispatcher command
+  ansible.builtin.file:
+    src: "{{ dispatcher_home }}/bin/workforce"
+    dest: "{{ dispatcher_command }}"
+    state: link
+    force: "{{ ansible_check_mode }}"

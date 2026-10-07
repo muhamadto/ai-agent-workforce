@@ -1,0 +1,227 @@
+---
+- name: Guard all instruction paths before reading or changing storage
+  ansible.builtin.include_tasks: preflight.yml
+
+- name: Resolve exact shipped instruction checksums
+  ansible.builtin.set_fact:
+    instructions_known_checksums: >-
+      {{ (lookup('ansible.builtin.file', role_path + '/files/legacy-fingerprints.json') | from_json | list) +
+         [lookup('ansible.builtin.file', role_path + '/../../instructions/AGENTS.md', rstrip=false) | hash('sha256')] }}
+
+- name: Read existing global instructions privately
+  ansible.builtin.slurp:
+    src: "{{ instructions_destination }}"
+  register: instructions_existing
+  no_log: true
+  when: instructions_entry.stat.isreg | default(false)
+
+- name: Refuse to replace unfamiliar global instructions
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_entry.stat.exists or
+        (instructions_entry.stat.islnk | default(false) and
+         instructions_entry.stat.lnk_target | default('') == instructions_file) or
+        (instructions_entry.stat.isreg | default(false) and
+         (instructions_existing.content | default('') | b64decode
+          | regex_replace('\A<!-- BEGIN AI AGENT WORKFORCE -->\n([\s\S]*)<!-- END AI AGENT WORKFORCE -->\n\Z', '\\1')
+          | hash('sha256')) in instructions_known_checksums)
+    fail_msg: >-
+      {{ instructions_destination }} contains personal instructions or an unfamiliar link.
+      Merge personal additions into instructions/AGENTS.md explicitly before migrating;
+      nothing has been overwritten.
+
+- name: Inspect shared instructions directory
+  ansible.builtin.stat:
+    path: "{{ instructions_home }}"
+    follow: false
+  register: instructions_directory
+
+- name: Inspect shared instructions ownership marker
+  ansible.builtin.stat:
+    path: "{{ instructions_home }}/.managed"
+    follow: false
+  register: instructions_marker
+
+- name: Read shared instructions ownership marker
+  ansible.builtin.slurp:
+    src: "{{ instructions_home }}/.managed"
+  register: instructions_marker_content
+  no_log: true
+  when: instructions_marker.stat.isreg | default(false)
+
+- name: Refuse to replace an unmanaged instructions directory
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_directory.stat.exists or
+        (instructions_directory.stat.isdir | default(false) and
+         not instructions_directory.stat.islnk | default(false) and
+         ((instructions_marker_content.content | default(''))
+          in ['YWktYWdlbnQtd29ya2ZvcmNlOmluc3RydWN0aW9ucw==', 'YWktYWdlbnQtd29ya2ZvcmNlOmluc3RydWN0aW9ucwo=']
+          or (instructions_home == ansible_facts['user_dir'] + '/.instructions'
+              and (instructions_marker_content.content | default(''))
+              in ['YWktYWdlbnQtd29ya2ZvcmNl', 'YWktYWdlbnQtd29ya2ZvcmNlCg=='])))
+    fail_msg: "{{ instructions_home }} exists without this role's ownership marker; move it explicitly before installing."
+
+- name: Inspect canonical payload after storage validation
+  ansible.builtin.stat:
+    path: "{{ instructions_file }}"
+    follow: false
+    get_checksum: false
+    get_mime: false
+  register: instructions_canonical
+
+- name: Read existing canonical instructions privately
+  ansible.builtin.slurp:
+    src: "{{ instructions_file }}"
+  register: instructions_canonical_content
+  no_log: true
+  when: instructions_canonical.stat.isreg | default(false)
+
+- name: Refuse to replace personal canonical instructions
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_canonical.stat.exists or
+        (instructions_canonical_content.content | default('') | b64decode | hash('sha256')) in instructions_known_checksums
+    fail_msg: "The shared canonical payload contains unfamiliar instructions; nothing has been changed."
+
+- name: Inspect the canonical payload parent without following links
+  ansible.builtin.stat:
+    path: "{{ instructions_file | dirname }}"
+    follow: false
+    get_checksum: false
+    get_mime: false
+  register: instructions_canonical_parent
+
+- name: Inspect existing canonical timestamp backups without following links
+  ansible.builtin.find:
+    paths: "{{ instructions_file | dirname }}"
+    patterns: "{{ instructions_file | basename }}.*~"
+    file_type: any
+    follow: false
+    hidden: true
+    recurse: false
+  register: instructions_timestamp_backups
+  when: instructions_canonical_parent.stat.isdir | default(false)
+
+- name: Refuse incomplete canonical backup inspection
+  ansible.builtin.assert:
+    that:
+      - instructions_timestamp_backups.skipped_paths | default({}) | length == 0
+    fail_msg: "Canonical backups could not be fully inspected; nothing has been changed."
+
+- name: Refuse redirected or multiply linked canonical timestamp backups
+  ansible.builtin.assert:
+    that:
+      - instructions_timestamp_backup.isreg | default(false)
+      - not (instructions_timestamp_backup.islnk | default(false))
+      - instructions_timestamp_backup.nlink | default(0) == 1
+    fail_msg: "A canonical timestamp backup is not a single-link regular file; nothing has been changed."
+  loop: "{{ instructions_timestamp_backups.files | default([]) }}"
+  loop_control:
+    loop_var: instructions_timestamp_backup
+    label: "{{ instructions_timestamp_backup.path }}"
+
+- name: Inspect the guarded client migration backup checksum
+  ansible.builtin.stat:
+    path: "{{ instructions_destination }}.before-ai-agent-workforce"
+    follow: false
+    checksum_algorithm: sha256
+  register: instructions_client_backup
+  when: instructions_entry.stat.isreg | default(false)
+
+- name: Select a migration backup without replacing prior revisions
+  ansible.builtin.set_fact:
+    instructions_migration_checksum: "{{ instructions_existing.content | b64decode | hash('sha256') }}"
+    instructions_migration_backup: >-
+      {{ instructions_destination + '.before-ai-agent-workforce' +
+         ('.' + (instructions_existing.content | b64decode | hash('sha256'))
+          if instructions_client_backup.stat.exists and
+             instructions_client_backup.stat.checksum != (instructions_existing.content | b64decode | hash('sha256'))
+          else '') }}
+  when: instructions_entry.stat.isreg | default(false)
+  no_log: true
+
+- name: Inspect the selected migration backup without following links
+  ansible.builtin.stat:
+    path: "{{ instructions_migration_backup }}"
+    follow: false
+    get_checksum: false
+    get_mime: false
+  register: instructions_selected_backup
+  when: instructions_entry.stat.isreg | default(false)
+
+- name: Refuse redirected or multiply linked migration backups
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_selected_backup.stat.exists or
+        (instructions_selected_backup.stat.isreg | default(false) and
+         instructions_selected_backup.stat.nlink | default(0) == 1)
+    fail_msg: "The selected migration backup must be a single-link regular file; nothing has been changed."
+  when: instructions_entry.stat.isreg | default(false)
+
+- name: Read an existing selected migration backup privately
+  ansible.builtin.slurp:
+    src: "{{ instructions_migration_backup }}"
+  register: instructions_selected_backup_content
+  when:
+    - instructions_entry.stat.isreg | default(false)
+    - instructions_selected_backup.stat.isreg | default(false)
+  no_log: true
+
+- name: Refuse a migration that cannot preserve the outgoing revision
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_selected_backup.stat.exists or
+        (instructions_selected_backup_content.content | b64decode | hash('sha256')) == instructions_migration_checksum
+    fail_msg: "The selected backup already contains a different revision; nothing has been changed."
+  when: instructions_entry.stat.isreg | default(false)
+
+- name: Ensure shared instructions directory exists
+  ansible.builtin.file:
+    path: "{{ instructions_home }}"
+    state: directory
+    mode: '0700'
+
+- name: Record shared instructions ownership
+  ansible.builtin.copy:
+    content: "ai-agent-workforce:instructions\n"
+    dest: "{{ instructions_home }}/.managed"
+    mode: '0600'
+
+- name: Install canonical shared instructions
+  ansible.builtin.copy:
+    src: "{{ role_path }}/../../instructions/AGENTS.md"
+    dest: "{{ instructions_file }}"
+    backup: true
+    mode: '0600'
+  no_log: true
+
+- name: Ensure client instruction directory exists
+  ansible.builtin.file:
+    path: "{{ instructions_destination | dirname }}"
+    state: directory
+    mode: '0700'
+
+- name: Back up recognised instructions before migration
+  ansible.builtin.copy:
+    src: "{{ instructions_destination }}"
+    dest: "{{ instructions_migration_backup }}"
+    remote_src: true
+    force: false
+    mode: '0600'
+  when:
+    - instructions_entry.stat.isreg | default(false)
+    - not instructions_selected_backup.stat.exists
+  no_log: true
+
+- name: Link client to canonical shared instructions
+  ansible.builtin.file:
+    src: "{{ instructions_file }}"
+    dest: "{{ instructions_destination }}"
+    state: link
+    force: true

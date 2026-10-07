@@ -1,24 +1,94 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 
+language: en-AU
+tone_instructions: >-
+  Direct and factual Australian English. Report only major and critical issues with concrete impact and a fix.
+  No minor, style, nitpick, trivial or praise comments. Repository instructions win on conflicts.
+
 reviews:
-  profile: "chill"  # Reduces noise — only flags meaningful issues, skips nitpicks
-  auto_review:
-    enabled: true
+  profile: quiet
   request_changes_workflow: true
   poem: false
   high_level_summary: true
   sequence_diagrams: false
   estimate_code_review_effort: false
 
-  auto_title_instructions: |
-    Generate a PR title using this MANDATORY format:
-    type(scope): [sc-XXXX] description
-
-    Rules (ALL MANDATORY):
-    - type: feat, fix, refactor, docs, chore, test, ci, perf, build, or style
-    - scope: brief context/area of change (e.g., initial-setup, python-env, dev-tools)
-    - [sc-XXXX]: Shortcut ticket ID from branch name (extract from branch like sc-260/...)
-    - description: concise summary of the change
-    - Total length: 50-72 characters max
-
-    Example: "refactor(initial-setup): [sc-260] modularised setup"
+  auto_title_instructions: >-
+    Use a Conventional Commit subject: type(scope): description. Types: feat, fix, docs, style, refactor,
+    perf, test, build, ci, chore, revert. Scope is optional and lowercase. Description is imperative,
+    lowercase, no trailing full stop, and the entire title is at most 72 characters. Never invent a
+    Shortcut story ID. Example: feat(codex): add native specialist agents.
+  path_filters:
+    - "!.context/**"
+    - "!.ansible/**"
+    - "!env/**"
+    - "!venv/**"
+    - "!**/__pycache__/**"
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+      - develop
+    ignore_usernames:
+      - "dependabot[bot]"
+  finishing_touches:
+    docstrings:
+      enabled: false
+    unit_tests:
+      enabled: false
+  path_instructions:
+    - path: "roles/**/tasks/*.yml"
+      instructions: |
+        Report only major and critical issues; no minor, style, nitpick or praise comments.
+        This repository configures coding agents on macOS through Ansible, not Java services.
+        - Flag non-idempotent tasks, failures hidden during deployment, and unsafe install/remove asymmetry.
+        - Flag deletion or replacement of unrelated personal files, configurations, agents or skill directories.
+        - Keep setup_state present/absent behaviour, check-mode support and tag selection correct.
+        - Credentials, auth.json, sessions and user-selected model/approval/MCP settings must not be overwritten.
+        - Removal must be scoped to role-owned resources. Unexpected filesystem collisions must be surfaced.
+        - Keep secrets out of task output and repository files; sensitive files must have restrictive permissions.
+    - path: "roles/**/files/**"
+      instructions: |
+        Report only major and critical issues; no minor, style, nitpick or praise comments.
+        These are agent instructions, client configurations and reusable skills, not application source.
+        - Match each client's supported native format; do not carry Claude-only metadata into Codex TOML.
+        - Skills referenced by agents must resolve to deployed local skills, selected external skills or a real client builtin.
+        - Flag instructions that fabricate tools, bypass approvals, disclose secrets or silently widen permissions.
+        - Advisory agents must not be instructed to mutate repositories or deploy changes.
+        - Keep model names and client features grounded in verified support; inherit user defaults where possible.
+        - Global CLI operating rules must come from instructions/AGENTS.md through the shared instructions role, not duplicated payloads.
+    - path: "instructions/**"
+      instructions: |
+        Report only major and critical issues; no minor, style, nitpick or praise comments.
+        - These global rules apply to Claude Code, OpenCode and Codex through one canonical installed file.
+        - Retain the Claude workflow baseline, communication, specialist delegation, and skills/safety rules.
+        - Do not fabricate host tools or treat instructions as a sandbox/security enforcement boundary.
+        - Protect secrets and personal configuration; client-specific commands must match supported capabilities.
+    - path: "scripts/**"
+      instructions: |
+        Report only major and critical issues; no minor, style, nitpick or praise comments.
+        - Validation must fail on malformed native agent definitions and unresolved skill references.
+        - Resolve repository paths independently of the caller's working directory and use safe YAML parsing.
+        - Match selected/enabled GitHub skill sources in group_vars/all.yml; do not validate against imaginary skills.
+        - Preserve the documented Python minimum and surface errors rather than returning success after partial checks.
+    - path: ".github/workflows/**"
+      instructions: |
+        Report only major and critical issues; no minor, style, nitpick or praise comments.
+        - Keep Ansible lint, playbook syntax and agent/skill validation effective on pull requests.
+        - Do not deploy agent configurations into a developer's home directory from CI.
+        - Use least-privilege workflow permissions and avoid untrusted PR code running with privileged credentials.
+        - Never print secrets or suppress a failing quality gate. This project uses pip/Ansible, not Maven.
+        - SonarCloud token references are legitimate; never embed token values or replace them with plaintext.
+    - path: "group_vars/**"
+      instructions: |
+        Report only major and critical issues; no minor, style, nitpick or praise comments.
+        - Keep setup_state and external skill source settings consistent with role behaviour.
+        - Enabled sources, selected skill names and source paths must actually produce the referenced skills.
+        - No credentials or personal access tokens in clone URLs or variable values.
+    - path: "playbook.yml"
+      instructions: |
+        Report only major and critical issues; no minor, style, nitpick or praise comments.
+        - Preserve the macOS deployment guard and pre-deployment skill-reference validation.
+        - Honour explicit role tags and do not unintentionally enable an opt-in coding client by default.
+        - Ensure role ordering makes shared resources available before their consumers need them.

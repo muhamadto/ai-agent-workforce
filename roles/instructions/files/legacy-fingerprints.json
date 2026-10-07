@@ -1,0 +1,74 @@
+{
+  "1c6466bb0ff374848c8da7364adc858a5b2e0d050665e5b5b5bf16436d5859f5": [
+    {
+      "commit": "b8e70ffec6855b7cc16c404b4dccf92b66dab087",
+      "path": "roles/claude/files/CLAUDE.md"
+    }
+  ],
+  "938ef6d3cbf0e9012b2289f554dcb8076aeae8d1eea1014fb3b875ce1b027928": [
+    {
+      "commit": "5ad56c3e44405bceae73ef242c3b03ff17d940bc",
+      "path": "roles/claude/files/CLAUDE.md"
+    }
+  ],
+  "3ce18ff6c2a1bc13c108937c7cf9d8d2e5eab7a8b86bf76f795e326874d522e9": [
+    {
+      "commit": "e6577a5e6afa7172640ac4b62a7104d5a4d1566b",
+      "path": "roles/claude/files/CLAUDE.md"
+    }
+  ],
+  "860f4ac9702a814964a5d762b7de3e50c582bc570b07594dcf2362e6b0285aa3": [
+    {
+      "commit": "0448986f496d3066984abfefcb831aad2ccf3c52",
+      "path": "roles/claude/files/CLAUDE.md"
+    }
+  ],
+  "50720740459ebe288e080907b21f6b9d31b4c217f67163ebf90c8028493f0c72": [
+    {
+      "commit": "3968ea15ae078b5d8c6376276875922734dcdd89",
+      "path": "roles/claude/files/CLAUDE.md"
+    }
+  ],
+  "672d01497c8690d219cf76e3daaaaf85deb0be756d66d7b3386c1fb98a3ffa68": [
+    {
+      "commit": "62a925c47b9f32827df634a3f7a1fda0e7b1b1aa",
+      "path": "roles/claude/files/CLAUDE.md"
+    }
+  ],
+  "6830ede7cefa8463b32427885b1aa33bc20fd48e98d52ff8bcf07f8324c94598": [
+    {
+      "commit": "b8e70ffec6855b7cc16c404b4dccf92b66dab087",
+      "path": "roles/opencode/files/AGENTS.md"
+    }
+  ],
+  "841c6a95cad1633db46b25ee95dca5e980bdbac58680c719b5fa0c4c5fa54525": [
+    {
+      "commit": "5ad56c3e44405bceae73ef242c3b03ff17d940bc",
+      "path": "roles/opencode/files/AGENTS.md"
+    }
+  ],
+  "344d7716a73e8d7da1a6415b6de40d0a492b998829caff9186f3a1848e14817c": [
+    {
+      "commit": "0448986f496d3066984abfefcb831aad2ccf3c52",
+      "path": "roles/opencode/files/AGENTS.md"
+    }
+  ],
+  "02356d4266280d8a0ad3e7e3e8bee18085934caad766ca8f9033fead1f436ce9": [
+    {
+      "commit": "3968ea15ae078b5d8c6376276875922734dcdd89",
+      "path": "roles/opencode/files/AGENTS.md"
+    }
+  ],
+  "1500837dd20ef32299efdeffe72eb4feeb626ef70cb1fa44cee9668a0e15ee84": [
+    {
+      "commit": "64482b45ba9f2b76a1507ee15bf75306afcb56ee",
+      "path": "instructions/AGENTS.md"
+    }
+  ],
+  "34ade89cdd2c281bcd0bf07afb4856985dafec205c782326d30696fe6acb3344": [
+    {
+      "commit": "265c48d39377b3ac5f74155bdba154bcbc4fedd8",
+      "path": "instructions/AGENTS.md"
+    }
+  ]
+}

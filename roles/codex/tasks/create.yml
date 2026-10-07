@@ -1,0 +1,102 @@
+---
+- name: Refuse to replace an unmanaged Codex directory
+  ansible.builtin.assert:
+    that:
+      - not codex_managed_directory.stat.exists or codex_directory_owned
+    fail_msg: "{{ codex_managed_dir }} already exists and is not owned by this role."
+
+- name: Refuse to replace personal Codex agents
+  ansible.builtin.assert:
+    that:
+      - >-
+        not item.stat.exists or
+        (item.stat.islnk | default(false) and
+         item.stat.lnk_target | default('') == codex_managed_dir + '/agents/' + item.item)
+    fail_msg: "{{ codex_home }}/agents/{{ item.item }} conflicts with a workforce agent; move it explicitly before installing."
+  loop: "{{ codex_agent_entries.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: Refuse to replace personal Codex skills
+  ansible.builtin.assert:
+    that:
+      - >-
+        not codex_skills_entry.stat.exists or
+        (codex_skills_entry.stat.islnk | default(false) and
+         codex_skills_entry.stat.lnk_target | default('') == ansible_facts['user_dir'] + '/.skills')
+    fail_msg: "~/.agents/skills/ai-agent-workforce exists and does not point to ~/.skills."
+
+- name: Link Codex shared instructions
+  ansible.builtin.include_role:
+    name: instructions
+  vars:
+    instructions_destination: "{{ codex_home }}/AGENTS.md"
+
+- name: Ensure Codex directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0700'
+  loop:
+    - "{{ codex_home }}"
+    - "{{ codex_home }}/agents"
+    - "{{ codex_managed_dir }}/agents"
+    - "{{ ansible_facts['user_dir'] }}/.agents/skills"
+
+- name: Record Codex directory ownership
+  ansible.builtin.copy:
+    content: "ai-agent-workforce:codex\n"
+    dest: "{{ codex_managed_dir }}/.managed"
+    mode: '0600'
+
+- name: Deploy native Codex agent definitions
+  ansible.builtin.copy:
+    src: "agents/{{ item }}"
+    dest: "{{ codex_managed_dir }}/agents/{{ item }}"
+    mode: '0600'
+  loop: "{{ codex_agent_files }}"
+
+- name: Register native Codex agents
+  ansible.builtin.file:
+    src: "{{ codex_managed_dir }}/agents/{{ item }}"
+    dest: "{{ codex_home }}/agents/{{ item }}"
+    state: link
+    force: "{{ ansible_check_mode }}"
+  loop: "{{ codex_agent_files }}"
+
+- name: Link shared skills for Codex
+  ansible.builtin.file:
+    src: "{{ ansible_facts['user_dir'] }}/.skills"
+    dest: "{{ ansible_facts['user_dir'] }}/.agents/skills/ai-agent-workforce"
+    state: link
+    force: true
+
+- name: Add managed Codex agent registrations
+  ansible.builtin.blockinfile:
+    path: "{{ codex_home }}/config.toml"
+    marker: "# {mark} AI AGENT WORKFORCE"
+    block: "{{ codex_registration_block }}"
+    create: true
+    backup: true
+    mode: '0600'
+  no_log: true
+
+- name: Inspect global Codex instruction override
+  ansible.builtin.stat:
+    path: "{{ codex_home }}/AGENTS.override.md"
+  register: codex_global_override
+
+- name: Explain Codex instruction override precedence
+  ansible.builtin.debug:
+    msg: "AGENTS.override.md takes precedence over AGENTS.md; workforce global rules will not load while it is non-empty."
+  when:
+    - codex_global_override.stat.exists
+    - codex_global_override.stat.size | default(0) > 0
+
+- name: Display Codex installation summary
+  ansible.builtin.debug:
+    msg: >-
+      Installed {{ codex_agent_files | length }} workforce agents in {{ codex_home }}/agents.
+      Restart Codex and ask it to delegate to backend-developer, qe-engineer,
+      or another workforce specialist. Model, reasoning, approvals, MCP, and authentication remain unchanged.
+      Shared skills require the skills role; run with --tags codex,skills to install both.

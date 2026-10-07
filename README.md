@@ -27,7 +27,7 @@ AI Agent Workforce is an Ansible-based automation tool for deploying and managin
 
 - macOS (Darwin)
 - Ansible 2.9+
-- Python 3.8+
+- Python 3.11+
 
 ## Installation
 
@@ -58,6 +58,9 @@ ansible-playbook playbook.yml -e setup_state=present --tags opencode --limit loc
 
 # Skills only
 ansible-playbook playbook.yml -e setup_state=present --tags skills --limit local
+
+# Codex agents and their shared skills (opt-in)
+ansible-playbook playbook.yml -e setup_state=present --tags codex,skills --limit local
 ```
 
 ### Uninstallation
@@ -76,14 +79,36 @@ ansible-playbook playbook.yml -e setup_state=absent --limit local
 
 ```
 ai-agent-workforce/
+├── .coderabbit.yaml          # Project-specific automated PR review rules
+├── .gitleaksignore           # Reviewed, exact historical documentation findings
+├── .github/workflows/        # Ansible, agent/rule validation, and security checks
 ├── playbook.yml              # Main orchestration playbook
 ├── inventory.ini             # Target hosts configuration
 ├── ansible.cfg               # Ansible settings
+├── instructions/
+│   └── AGENTS.md             # Single source of global rules for all three CLIs
 ├── group_vars/
-│   └── all.yml              # Global variables
+│   └── all.yml               # Global variables and external skill selections
+├── config/
+│   └── agent-routing.toml    # Cross-CLI specialist routing
+├── docs/
+│   ├── dispatcher.md        # Coordinator usage and runtime safety boundaries
+│   └── security-review.md   # Historical scan adjudication and exception rationale
+├── scripts/
+│   ├── dispatch_agent.py     # Standard-library native CLI dispatcher
+│   └── validate_skill_refs.py # Agent, skill-reference, and global-rule validation
 └── roles/
     ├── claude/              # Claude Code agents — all on Anthropic sonnet (default)
     ├── opencode/            # opencode agents with per-agent model routing (opt-in: --tags opencode)
+    ├── codex/                # Native Codex agents (opt-in: --tags codex)
+    │   ├── defaults/         # Codex home and managed-directory paths
+    │   ├── files/            # Native agent TOML and config validation
+    │   ├── templates/        # Managed agent-registration tables
+    │   └── tasks/            # Safe install/remove with personal-file preservation
+    ├── dispatcher/           # Private workforce command (opt-in: --tags dispatcher)
+    ├── instructions/         # Shared instructions and guarded client symlinks
+    │   ├── files/           # Exact historical instruction fingerprints
+    │   └── tasks/           # Preflight storage guards and safe migration
     └── skills/              # Shared skills
 ```
 
@@ -93,6 +118,58 @@ role deploys opencode configuration to `~/.config/opencode/` and is opt-in via `
 Agents are slim personas (standards, workflow, posture); their domain knowledge lives
 in lazy-loaded knowledge skills (e.g. `java-spring-engineering`, `auth-engineering`)
 that agents pull in on demand via their `skills:` frontmatter.
+
+The opt-in [Codex role](roles/codex/README.md) deploys 13 native TOML agents under
+`~/.codex/agents/*.toml`, links `~/.codex/AGENTS.md` to the shared instructions,
+and exposes shared skills through `~/.agents/skills/ai-agent-workforce`. It preserves
+personal configuration and authentication, inherits the session's model settings,
+and removes only role-owned files and links. Codex skills are loaded through explicit
+instruction references rather than Claude-style frontmatter.
+Agent registration is added as a managed block in `~/.codex/config.toml`; existing
+personal settings are retained. All three client roles use the same specialist names.
+
+### Cross-CLI Dispatcher
+
+The opt-in [dispatcher role](roles/dispatcher/README.md) installs a private Python
+3.11+ dispatcher and `~/.local/bin/workforce`, routing named specialists through
+existing Codex, Claude Code and OpenCode CLIs. It installs no packages or CLIs and
+preserves native settings, authentication and shared instruction links.
+
+```sh
+ansible-playbook playbook.yml -e setup_state=present --tags dispatcher --limit local
+~/.local/bin/workforce list
+~/.local/bin/workforce delegate business-analyst --task-file /absolute/path/task.txt --workspace "$PWD" --dry-run
+```
+
+`list` and `delegate --dry-run` are offline: they do not invoke native CLIs or
+models. Live delegation uses existing native subscription logins, defaults to
+read-only and requires explicit `--allow-write` for implementation tasks. Native
+controls are not an independent operating-system sandbox. OpenCode read-only
+handoffs are disabled because effective restrictions cannot be established;
+write handoffs require explicit local subscription attestation and matching
+cached authentication metadata. Default OpenCode routes fail closed until configured.
+A successful dry run does not prove
+live authentication or model access. See [dispatcher usage and safety](docs/dispatcher.md)
+and the role README for routing overrides, prerequisites, collision protection
+and safe removal.
+
+### Shared Global Instructions
+
+Edit `instructions/AGENTS.md` once. Each client role installs it as `~/.instructions/AGENTS.md`
+and links its documented global instruction path to that single installed file:
+
+- Claude Code: `~/.claude/CLAUDE.md`
+- OpenCode: `~/.config/opencode/AGENTS.md`
+- Codex: `~/.codex/AGENTS.md` (or the configured `codex_home`)
+
+Exact current and recognised historical shipped files are backed up with a
+`.before-ai-agent-workforce` suffix before migration. Personal additions are not
+treated as shipped files. Redirected storage and multiply linked payloads are refused.
+Unfamiliar files or links block installation; explicitly merge personal additions into the canonical source first.
+Updates back up the installed shared file. Client removal deletes only its matching link and leaves shared instructions and backups intact.
+Claude's project-level `AGENTS.md` support does not change its global `CLAUDE.md` path.
+This layout targets the CLIs; Claude Cowork skips user-level instruction symlinks pointing outside its working directory.
+See the [shared instructions role](roles/instructions/README.md) for instruction-only deployment.
 
 ## Agent Team
 
@@ -217,6 +294,9 @@ setup_state: present  # or absent
 ```bash
 # Syntax check
 ansible-playbook playbook.yml --syntax-check
+
+# Validate Claude skill references and native Codex agent definitions
+python3 scripts/validate_skill_refs.py
 
 # Dry run
 ansible-playbook playbook.yml --check

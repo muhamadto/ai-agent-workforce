@@ -38,8 +38,5 @@ jobs:
       - name: Run Ansible syntax check
         run: ansible-playbook playbook.yml --syntax-check -i localhost,
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v8
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Validate agents, skills and canonical operating rules
+        run: python scripts/validate_skill_refs.py

@@ -1,0 +1,4 @@
+---
+dispatcher_home: "{{ ansible_facts['user_dir'] }}/.local/share/ai-agent-workforce/dispatcher"
+dispatcher_command: "{{ ansible_facts['user_dir'] }}/.local/bin/workforce"
+dispatcher_python: python3

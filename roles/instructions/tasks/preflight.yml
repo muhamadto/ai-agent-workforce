@@ -1,0 +1,72 @@
+---
+- name: Guard shared instructions against cross-role storage overlap
+  ansible.builtin.include_tasks: guard_roots.yml
+
+- name: Validate instruction storage paths
+  ansible.builtin.assert:
+    that:
+      - instructions_validation_path is string
+      - instructions_validation_path.startswith('/')
+      - "'..' not in instructions_validation_path.split('/')"
+      - "'.' not in instructions_validation_path.split('/')"
+    fail_msg: "Instruction storage requires absolute paths without traversal components."
+  loop:
+    - "{{ instructions_home }}"
+    - "{{ instructions_file }}"
+    - "{{ instructions_destination }}"
+  loop_control:
+    loop_var: instructions_validation_path
+
+- name: Guard instruction storage and destination ancestors
+  ansible.builtin.include_tasks: parents.yml
+  loop: >-
+    {{ [instructions_home, instructions_file | dirname, instructions_destination | dirname] | unique | list }}
+  loop_control:
+    loop_var: instructions_parent_path
+
+- name: Inspect instruction payloads and backups without following links
+  ansible.builtin.stat:
+    path: "{{ instructions_storage_path }}"
+    follow: false
+    get_checksum: false
+    get_mime: false
+  loop:
+    - "{{ instructions_home }}/.managed"
+    - "{{ instructions_file }}"
+    - "{{ instructions_file }}.before-ai-agent-workforce"
+    - "{{ instructions_destination }}.before-ai-agent-workforce"
+  loop_control:
+    loop_var: instructions_storage_path
+  register: instructions_storage
+
+- name: Refuse redirected or multiply linked instruction storage
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_storage_result.stat.exists or
+        (instructions_storage_result.stat.isreg | default(false) and
+         not (instructions_storage_result.stat.islnk | default(false)) and
+         instructions_storage_result.stat.nlink | default(0) == 1)
+    fail_msg: "Instruction storage or backup is not a single-link regular file; nothing has been changed."
+  loop: "{{ instructions_storage.results }}"
+  loop_control:
+    loop_var: instructions_storage_result
+    label: "{{ instructions_storage_result.instructions_storage_path }}"
+
+- name: Inspect global instruction entry point
+  ansible.builtin.stat:
+    path: "{{ instructions_destination }}"
+    follow: false
+    get_checksum: false
+    get_mime: false
+  register: instructions_entry
+
+- name: Refuse unsafe global instruction entry points
+  ansible.builtin.assert:
+    that:
+      - >-
+        not instructions_entry.stat.exists or
+        (instructions_entry.stat.islnk | default(false) and
+         instructions_entry.stat.lnk_target | default('') == instructions_file) or
+        (instructions_entry.stat.isreg | default(false) and instructions_entry.stat.nlink | default(0) == 1)
+    fail_msg: "The instruction entry point is unfamiliar or multiply linked; nothing has been changed."

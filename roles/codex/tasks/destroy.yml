@@ -1,0 +1,47 @@
+---
+- name: Remove managed Codex agent links
+  ansible.builtin.file:
+    path: "{{ codex_home }}/agents/{{ item.item }}"
+    state: absent
+  loop: "{{ codex_agent_entries.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when:
+    - item.stat.islnk | default(false)
+    - item.stat.lnk_target | default('') == codex_managed_dir + '/agents/' + item.item
+
+- name: Remove managed Codex skills link
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.agents/skills/ai-agent-workforce"
+    state: absent
+  when:
+    - codex_skills_entry.stat.islnk | default(false)
+    - codex_skills_entry.stat.lnk_target | default('') == ansible_facts['user_dir'] + '/.skills'
+
+- name: Remove Codex shared instruction link
+  ansible.builtin.include_role:
+    name: instructions
+    tasks_from: remove
+  vars:
+    instructions_destination: "{{ codex_home }}/AGENTS.md"
+
+- name: Inspect personal Codex configuration
+  ansible.builtin.stat:
+    path: "{{ codex_home }}/config.toml"
+    follow: false
+  register: codex_config_file
+
+- name: Remove only managed Codex agent registrations
+  ansible.builtin.blockinfile:
+    path: "{{ codex_home }}/config.toml"
+    marker: "# {mark} AI AGENT WORKFORCE"
+    state: absent
+    backup: true
+  when: codex_config_file.stat.exists
+  no_log: true
+
+- name: Remove owned Codex agent definitions
+  ansible.builtin.file:
+    path: "{{ codex_managed_dir }}"
+    state: absent
+  when: codex_directory_owned

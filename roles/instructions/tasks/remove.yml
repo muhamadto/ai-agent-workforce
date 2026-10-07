@@ -1,0 +1,19 @@
+---
+- name: Guard instruction destination ancestors before removal
+  ansible.builtin.include_tasks: parents.yml
+  vars:
+    instructions_parent_path: "{{ instructions_destination | dirname }}"
+
+- name: Inspect global instruction entry point
+  ansible.builtin.stat:
+    path: "{{ instructions_destination }}"
+    follow: false
+  register: instructions_entry
+
+- name: Remove only the managed global instruction link
+  ansible.builtin.file:
+    path: "{{ instructions_destination }}"
+    state: absent
+  when:
+    - instructions_entry.stat.islnk | default(false)
+    - instructions_entry.stat.lnk_target | default('') == instructions_file
