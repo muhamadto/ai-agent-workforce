@@ -11,16 +11,25 @@
       {{ query('ansible.builtin.fileglob', role_path + '/files/agents/*.toml')
          | map('basename') | sort | list }}
 
+- name: Resolve target Python for Codex validation
+  ansible.builtin.set_fact:
+    codex_validation_python: >-
+      {{ ansible_facts.get('python', {}).get('executable')
+         | default(ansible_python_interpreter
+                   if (ansible_python_interpreter | default('') is string and
+                       ansible_python_interpreter | default('') is match('^(/.+|python[0-9]*([.][0-9]+)*)$'))
+                   else 'python3', true) }}
+
 - name: Guard Codex storage before inspecting or changing managed files
   ansible.builtin.command:
     argv:
-      - "{{ ansible_playbook_python }}"
-      - "{{ role_path }}/files/check_storage.py"
+      - "{{ codex_validation_python }}"
+      - -c
+      - "{{ lookup('ansible.builtin.file', role_path + '/files/check_storage.py') }}"
     stdin: >-
       {{ {'home': ansible_facts['user_dir'], 'codex_home': codex_home,
           'managed_dir': codex_managed_dir, 'agent_files': codex_agent_files} | to_json }}
     stdin_add_newline: false
-  delegate_to: localhost
   register: codex_storage_check
   changed_when: false
   check_mode: false
@@ -44,13 +53,19 @@
 - name: Validate full proposed Codex configuration privately before any mutation
   ansible.builtin.command:
     argv:
-      - "{{ ansible_playbook_python }}"
-      - "{{ role_path }}/files/check_config.py"
+      - "{{ codex_validation_python }}"
+      - -c
+      - |
+        import sys
+        import types
+        storage_module = types.ModuleType('check_storage')
+        exec({{ lookup('ansible.builtin.file', role_path + '/files/check_storage.py') | to_json }}, storage_module.__dict__)
+        sys.modules['check_storage'] = storage_module
+        exec({{ lookup('ansible.builtin.file', role_path + '/files/check_config.py') | to_json }})
     stdin: >-
       {{ {'path': codex_home + '/config.toml', 'block': codex_registration_block,
-          'state': setup_state} | to_json }}
+          'state': setup_state, 'agent_files': codex_agent_files} | to_json }}
     stdin_add_newline: false
-  delegate_to: localhost
   changed_when: false
   check_mode: false
   no_log: true

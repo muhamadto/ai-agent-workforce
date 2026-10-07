@@ -7,7 +7,8 @@ The role is opt-in: an unfiltered run of the main playbook does not install Code
 
 Use a current Codex CLI with custom-agent configuration. The role is verified with Codex CLI 0.160.1.
 It registers agents explicitly through a managed config block, so it does not rely on standalone-file auto-discovery.
-Python 3.11+ is required for repository agent validation. Install and authenticate Codex yourself; this role does neither.
+Python 3.11+ is required on the controller for repository agent validation and on the target for configuration validation.
+Install and authenticate Codex yourself; this role does neither.
 
 ```bash
 # Install Codex agents and the shared skills they reference
@@ -54,6 +55,9 @@ Invalid TOML or a workforce registration outside the managed block fails before 
 The complete proposed TOML is validated before any installation or removal changes. Incompatible inline `agents` tables
 are rejected without rewriting personal configuration. Directory redirects, non-regular or hardlinked managed payloads,
 ownership markers and configuration files are refused before mutation; marker and configuration reads do not follow symlinks.
+Storage and configuration guards run on the target using its Python interpreter,
+including in check mode. Trusted helper source is supplied inline, so validation
+does not require uploading files or inspecting the controller's home instead.
 
 If a non-empty `AGENTS.override.md` exists, Codex reads it instead of `AGENTS.md`; this role warns and does not modify the override.
 When using a custom `CODEX_HOME`, pass its absolute path with `-e codex_home=/your/codex/home`.

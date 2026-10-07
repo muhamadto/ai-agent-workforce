@@ -43,7 +43,10 @@ def main() -> int:
     if not isinstance(agents, dict):
         print("Existing Codex agents configuration is not a table.", file=sys.stderr)
         return 1
-    names = {path.stem for path in (Path(__file__).parent / "agents").glob("*.toml")}
+    agent_files = settings.get("agent_files")
+    if agent_files is None:
+        agent_files = [path.name for path in (Path(__file__).parent / "agents").glob("*.toml")]
+    names = {Path(filename).stem for filename in agent_files}
     if settings["state"] == "present" and names & agents.keys():
         print("A workforce agent is already registered outside the managed block; resolve the collision explicitly.", file=sys.stderr)
         return 1
