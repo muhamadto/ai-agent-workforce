@@ -18,6 +18,18 @@
     - source: roles/skills/files/sandpipers-platform/SKILL.md
       destination: '{{ ansible_facts[''user_dir''] }}/.skills/sandpipers-platform/SKILL.md'
       previous_sha256: dd48a349e69bc9dd4841ff9d2bb70d479941c5e628c1925dcfe0dd66db951e95
+    - source: roles/skills/files/infrastructure-engineering/SKILL.md
+      destination: '{{ ansible_facts[''user_dir''] }}/.codex/skills/infrastructure-engineering/SKILL.md'
+      previous_sha256: d53832fce96f4160c0eb1f04b5ab88c0e74b01e69496ffcbc984ed07fe30d20f
+    - source: roles/skills/files/microservice-template/SKILL.md
+      destination: '{{ ansible_facts[''user_dir''] }}/.codex/skills/microservice-template/SKILL.md'
+      previous_sha256: ed399757031b0a7481640800809673bcfdc23bc92efec9f2d9c67c6d4d43dbd4
+    - source: roles/skills/files/modulith-template/SKILL.md
+      destination: '{{ ansible_facts[''user_dir''] }}/.codex/skills/modulith-template/SKILL.md'
+      previous_sha256: 2c011165420d84f738577e1dff9070e9210ce67aeb2a04bb3ad387af3b0afba7
+    - source: roles/skills/files/sandpipers-platform/SKILL.md
+      destination: '{{ ansible_facts[''user_dir''] }}/.codex/skills/sandpipers-platform/SKILL.md'
+      previous_sha256: dd48a349e69bc9dd4841ff9d2bb70d479941c5e628c1925dcfe0dd66db951e95
     - source: roles/claude/files/agents/infrastructure-engineer.md
       destination: '{{ ansible_facts[''user_dir''] }}/.claude/agents/infrastructure-engineer.md'
       previous_sha256: 1f9432b198d585b05235220e7d9aeca87e88e2c50edf2966b0d6277d68922f2e
