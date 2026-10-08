@@ -1,6 +1,6 @@
 ---
 name: infrastructure-engineering
-description: Reference knowledge for infrastructure engineering — AWS and GCP service catalogs, the private cloud stack at ~/Workspace/private-cloud (K3S, Kong, Traefik, ArgoCD, MetalLB, Longhorn, Sealed Secrets), Infrastructure as Code (Terraform/CDKTF, Ansible, Helm, Kustomize), Kubernetes operations and security, networking, backup and disaster recovery, security hardening, and cost optimization. Load this BEFORE designing, implementing, or reviewing any infrastructure work. The platform service map (AWS equivalents) lives in the sandpipers-platform skill.
+description: Reference knowledge for infrastructure engineering — AWS and GCP service catalogs, the private cloud stack at ~/Workspace/private-cloud (K3S, Kong, Traefik, ArgoCD, MetalLB, Longhorn, Sealed Secrets), Infrastructure as Code (Pulumi Java, Ansible, Helm, Kustomize), Kubernetes operations and security, networking, backup and disaster recovery, security hardening, and cost optimization. Load this BEFORE designing, implementing, or reviewing any infrastructure work. The platform service map (AWS equivalents) lives in the sandpipers-platform skill.
 ---
 
 # Infrastructure Engineering Reference
@@ -33,7 +33,7 @@ Reference knowledge for infrastructure design, deployment, and operations across
 - **Load Balancing**: HTTP(S) Load Balancer, Network Load Balancer, Internal Load Balancer
 - **Security**: IAM, VPC Service Controls, Cloud KMS, Secret Manager, Cloud Armor (WAF)
 - **Monitoring**: Cloud Monitoring, Cloud Logging, Cloud Trace
-- **Infrastructure as Code**: Deployment Manager, Terraform
+- **Infrastructure as Code**: Pulumi Java using shared `sandpipers-iac` constructs
 
 ## Private Cloud Infrastructure (~/Workspace/private-cloud)
 
@@ -55,14 +55,14 @@ targets the platform. The stack, managed as Ansible code at `~/Workspace/private
 
 ## Infrastructure as Code (IaC)
 
-### Terraform
+### Pulumi with Java
 
-- **Multi-Cloud**: Provision AWS, GCP, Azure, Kubernetes resources
-- **State Management**: Remote state (S3, GCS, Terraform Cloud), state locking
-- **Modules**: Reusable infrastructure components
-- **Workspaces**: Environment isolation (dev, staging, prod)
-- **Best Practices**: Immutable infrastructure, versioned modules, automated testing
-- **CDK for Terraform (CDKTF)**: programmatic infrastructure in Java — used by the microservice-template infra module
+- **Shared constructs**: service infra modules consume `sandpipers-iac`; stacks compose the constructs for one environment and provider. CDKTF is excluded.
+- **State and secrets**: owned object storage per environment, with locking, versioning, encryption and backups; an environment-specific KMS secrets provider. Do not use Pulumi Cloud state.
+- **Build convention**: Maven Wrapper builds the Java application JAR; `Pulumi.yaml` uses the Java runtime with the application binary path. The spike verifies executable configuration before deployment.
+- **Kubernetes delivery**: a render-only provider without Kubernetes credentials or API access generates repository GitOps manifests; ArgoCD applies them. Use Helm `Chart` rendering rather than `Release`. Render-only Pulumi execution may update renderer state; it never applies resources to the cluster.
+- **Cloud delivery**: reviewed CI previews and applies, with separate preview/apply identities and approval for production.
+- **Verification**: Pulumi mocks, argument validation, preview policy checks and the approved end-to-end spike; never weaken security controls to make a preview succeed.
 
 ### Ansible
 
@@ -206,7 +206,7 @@ discipline, SLOs) lives in [/observability](../observability/SKILL.md). Cluster-
 
 ## Infrastructure Review Checklist
 
-- [ ] Infrastructure declared as code (Terraform, Ansible, Helm)?
+- [ ] Infrastructure declared as code (Pulumi Java, Ansible, rendered Kubernetes manifests)?
 - [ ] No manual changes (clickops prohibited)?
 - [ ] High availability configured (multi-AZ, multi-zone, multi-master)?
 - [ ] Backup and restore procedures defined and tested?
@@ -226,7 +226,7 @@ discipline, SLOs) lives in [/observability](../observability/SKILL.md). Cluster-
 
 - [/sandpipers-platform](../sandpipers-platform/SKILL.md) — the canonical AWS-equivalents service map for the private cloud
 - [/observability](../observability/SKILL.md) · [/event-messaging](../event-messaging/SKILL.md) · [/data-stores](../data-stores/SKILL.md) — cross-cutting platform topics
-- [/microservice-template](../microservice-template/SKILL.md) — the mandatory microservice layout; its infra module uses CDK for Terraform (CDKTF, Java)
+- [/microservice-template](../microservice-template/SKILL.md) — the mandatory microservice layout; its infra module uses Pulumi Java and shared `sandpipers-iac` constructs
 - [/threat-model](../threat-model/SKILL.md) — STRIDE threat modeling for new infrastructure or changed trust boundaries
 - [/incident](../incident/SKILL.md) — incident response and blameless postmortems
 - [/adr](../adr/SKILL.md) — record significant infrastructure architecture decisions

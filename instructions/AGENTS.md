@@ -25,6 +25,8 @@ Skip to Implement only when the change can be described in one sentence.
 
 If rate-limited or interrupted: on resume, finish the current task, complete the full DoD audit chain, then continue through remaining stories, epics, and objectives in order.
 
+Keep agent-only helper tests and auxiliary test harnesses local in gitignored `.context/`. Never stage, commit or push them. Runtime Ansible assertions and production security checks remain in the version-controlled implementation.
+
 ---
 
 ## Story Lifecycle
@@ -40,6 +42,8 @@ Stories must exist in **Shortcut** before any implementation starts. No exceptio
 
 Every story must be appended to the matching phase file in the repo:
 `shortcut-stories-phase-{N}.json` (one file per phase, N = 1, 2, 3, …)
+
+These ledgers are local-only: keep them gitignored and never stage, commit or push them.
 
 File format:
 ```json
@@ -96,7 +100,7 @@ Never mark Done before the commit reaches origin/main. An open PR or a pushed fe
 
 - SSH is allowed for **inspection only** (logs, debugging, validation). No direct changes via SSH.
 - No `kubectl edit`, `kubectl patch`, Helm CLI changes, or manual cluster modifications.
-- All changes must be implemented via code (Ansible, CDKTF, Kubernetes manifests) and committed to the repo.
+- All changes must be implemented via code (Ansible, Pulumi Java, Kubernetes manifests) and committed to the repo.
 - Repository is the single source of truth.
 - **Exception — sandpipers-immutable-os pre-flash smoke test**: before a full rebuild + reflash cycle, it's okay to manually apply an unproven sandpipers-immutable-os change to a live blade over SSH as a throwaway smoke test, to catch bugs before burning Muhammad's time on a rebuild/reflash of code that hasn't been proven bug-free. This doesn't relax anything else: the repo commit is still the only source of truth, the manual change is never a substitute for it, and it gets reverted/discarded once tested (or wiped by the next reflash regardless). Scoped to the sandpipers-immutable-os project only — every other "no manual changes" rule above still applies everywhere else.
 
@@ -157,11 +161,13 @@ Never shortcut this loop with broad permissive rules to "just make it work."
 
 ---
 
-## Infrastructure (CDKTF)
+## Infrastructure (Pulumi Java)
 
-- Java CDKTF for all Java project infrastructure changes.
-- Ansible for private/homelab infrastructure only.
-- Infra changes: CDKTF → commit → ArgoCD. Never `kubectl` directly.
+- Use Pulumi with Java for Java project infrastructure, consuming shared `sandpipers-iac` constructs. Do not use CDKTF.
+- Ansible remains the tool for private/homelab host automation.
+- Kubernetes resources are rendered into repository GitOps manifests and applied by ArgoCD. Render-only Pulumi execution must have no Kubernetes credentials or API access; it may update renderer state, but never apply resources to the cluster.
+- Cloud resources use reviewed CI preview and apply, with state in owned object storage and a KMS-backed secrets provider per environment. Never use vendor-hosted Pulumi Cloud state.
+- Commit and review infrastructure changes before delivery. No direct `kubectl` mutations.
 
 ---
 
@@ -174,7 +180,7 @@ Use the specialist agents for the active client (see Specialist Delegation):
 - **principal-engineer** — strategic decisions, conflict resolution, ADR authorship
 - **backend-developer** — Java/Spring implementation, ≥90% unit + ≥80% integration test coverage
 - **qe-engineer** — test strategy, automation, BDD, performance, quality gate sign-off
-- **infrastructure-engineer** — CDKTF, K3s, ArgoCD, CI/CD pipelines
+- **infrastructure-engineer** — Pulumi Java, K3s, ArgoCD, CI/CD pipelines
 - **identity-security-developer** — auth, OAuth2, OIDC, passkeys, security hardening
 - **data-engineer** — ETL/ELT pipelines, data warehousing, SQL optimization
 - **frontend-developer** — React, Next.js, Flutter UI

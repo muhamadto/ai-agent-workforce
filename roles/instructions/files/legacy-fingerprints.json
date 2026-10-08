@@ -70,5 +70,6 @@
       "commit": "265c48d39377b3ac5f74155bdba154bcbc4fedd8",
       "path": "instructions/AGENTS.md"
     }
-  ]
+  ],
+  "dc1c78298985ba55fddde026951c7ae75438c7ca9f2c8c91d018ce833fe1903a": "Reviewed Pulumi policy before owner local-only verification rules"
 }

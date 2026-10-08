@@ -90,3 +90,5 @@ AGENTS.md
 .github/copilot-instructions.md
 .aider*
 .continue/
+
+shortcut-stories-phase-*.json

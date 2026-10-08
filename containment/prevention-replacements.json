@@ -1,0 +1,148 @@
+[
+  {
+    "path": "/Users/matto/Workspace/ai-agent-workforce/ansible.cfg",
+    "before_sha256": "7eefd4923af3c6680dfb3fe73900156bed253c75fb2e38f94eb6e6df4dba1816",
+    "after_sha256": "eaa49101be6047f1d0bf1fabee6c3a392f9d9a6c694c48389911630e6ab89b17",
+    "replacements": [
+      {
+        "before": "fact_caching = jsonfile\n",
+        "after": "fact_caching = memory\n",
+        "count": 1
+      },
+      {
+        "before": "fact_caching_connection = .ansible/facts\n",
+        "after": "",
+        "count": 1
+      },
+      {
+        "before": "fact_caching_timeout = 3600\n",
+        "after": "",
+        "count": 1
+      },
+      {
+        "before": "host_key_checking = False",
+        "after": "host_key_checking = True",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "path": "/Users/matto/Workspace/ai-agent-workforce/playbook.yml",
+    "before_sha256": "ddc9db64186ebe1dc876c2a1275b3916e3230065028388d0b6c9c0abc55ac7b1",
+    "after_sha256": "8eb8e95f432c70b21090721e5ce8e760b22b7a734d697859b1988194ccbd1586",
+    "replacements": [
+      {
+        "before": "  gather_facts: true\n",
+        "after": "  gather_facts: true\n  gather_subset:\n    - '!all'\n    - '!min'\n    - 'system'\n    - 'user'\n    - 'python'\n",
+        "count": 1
+      },
+      {
+        "before": "  pre_tasks:\n",
+        "after": "  pre_tasks:\n    - name: Verify safe execution and required facts\n      ansible.builtin.assert:\n        that:\n          - lookup('ansible.builtin.config', 'CACHE_PLUGIN') == 'memory'\n          - lookup('ansible.builtin.config', 'HOST_KEY_CHECKING') | bool\n          - ansible_facts is mapping\n          - ansible_facts.env is not defined\n          - ansible_env is not defined\n          - ansible_facts['system'] is defined\n          - ansible_facts['user_dir'] is defined\n          - ansible_facts['python'] is defined\n        quiet: true\n        fail_msg: \"Unsafe execution settings or missing required facts; use the supported launcher.\"\n      tags:\n        - always\n\n",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "path": "/Users/matto/Workspace/mac-setup/ansible.cfg",
+    "before_sha256": "3b6cbc34040022ccdba35b32203a61e8ad685c38ef08b1bf2a1673a31b8791fa",
+    "after_sha256": "7924645a13300811421af70dd14c1e9a34176d5a80f265d8e0727bad2bcd6bf3",
+    "replacements": [
+      {
+        "before": "fact_caching = jsonfile\n",
+        "after": "fact_caching = memory\n",
+        "count": 1
+      },
+      {
+        "before": "fact_caching_connection = /tmp/ansible_facts\n",
+        "after": "",
+        "count": 1
+      },
+      {
+        "before": "fact_caching_timeout = 3600\n",
+        "after": "",
+        "count": 1
+      },
+      {
+        "before": "host_key_checking = False",
+        "after": "host_key_checking = True",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "path": "/Users/matto/Workspace/mac-setup/playbook.yml",
+    "before_sha256": "0db1ff2637774007174371e528ff989444e095fdb2431bc6529a8d9781f72bc2",
+    "after_sha256": "371e2c6f45d30485bda142e887f6f6b18b092590c0ead0631beb68d07b882648",
+    "replacements": [
+      {
+        "before": "  gather_facts: true\n",
+        "after": "  gather_facts: true\n  gather_subset:\n    - '!all'\n    - '!min'\n    - 'os_family'\n    - 'user'\n",
+        "count": 1
+      },
+      {
+        "before": "  pre_tasks:\n",
+        "after": "  pre_tasks:\n    - name: Verify safe execution and required facts\n      ansible.builtin.assert:\n        that:\n          - lookup('ansible.builtin.config', 'CACHE_PLUGIN') == 'memory'\n          - lookup('ansible.builtin.config', 'HOST_KEY_CHECKING') | bool\n          - ansible_facts is mapping\n          - ansible_facts.env is not defined\n          - ansible_env is not defined\n          - ansible_facts['os_family'] is defined\n          - ansible_facts['user_dir'] is defined\n          - ansible_facts['user_id'] is defined\n        quiet: true\n        fail_msg: \"Unsafe execution settings or missing required facts; use the supported launcher.\"\n      tags:\n        - always\n\n",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "path": "/Users/matto/Workspace/mac-setup/roles/git/tasks/main.yml",
+    "before_sha256": "6fe71988f200254cca1b9f0bea9cf3ab6a4a3c987a8015ec4061293c22fdcea8",
+    "after_sha256": "2e7bb070c020187051c67de7ec423e896635cc265994470071cece53fedb5f00",
+    "replacements": [
+      {
+        "before": "ansible_facts.env.HOME",
+        "after": "ansible_facts['user_dir']",
+        "count": 4
+      }
+    ]
+  },
+  {
+    "path": "/Users/matto/Workspace/mac-setup/roles/devtools/tasks/main.yml",
+    "before_sha256": "233e51ba7be45657c7bff7e19bb41cd88afb3bbb09ccde79acd9454257c71e11",
+    "after_sha256": "89d2fdc619d13a489583ce80b772d7fb24f314371ced1cf79d1d08d199ee4210",
+    "replacements": [
+      {
+        "before": "ansible_facts.env.HOME",
+        "after": "ansible_facts['user_dir']",
+        "count": 3
+      }
+    ]
+  },
+  {
+    "path": "/Users/matto/Workspace/mac-setup/roles/ai/tasks/ollama.yml",
+    "before_sha256": "bb869afc9d4eba1e091a86e2bc3f23dcd49c352de0577a31666847ab3b916628",
+    "after_sha256": "fdbb14cda949aadb8ec5201157a66bd31f69ea8d965d65ba3c81ae36e00751d6",
+    "replacements": [
+      {
+        "before": "ansible_facts.env.HOME",
+        "after": "ansible_facts['user_dir']",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "path": "/Users/matto/Workspace/mac-setup/roles/security_checks/tasks/persistence_audit.yml",
+    "before_sha256": "27235ae61ea2c3acabfb0fc6b63a65618c70aaac2b1e472513bd936cdda91ca1",
+    "after_sha256": "e119e0ad66b045042557bc8d4e759c8f75d0ee90397b60285b3c9d082ade3c7a",
+    "replacements": [
+      {
+        "before": "ansible_env.HOME",
+        "after": "ansible_facts['user_dir']",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "path": "/Users/matto/Workspace/ai-agent-workforce/run_playbook.py",
+    "source": "/Users/matto/Workspace/workspaces/sandpipers-iac/kathmandu/.context/ai-agent-workforce-pulumi/run_playbook.py",
+    "after_sha256": "8fe6e79270a698a0c970e03be8b227a14ca3242ceaa04648598fd19d3c9fa3d7"
+  },
+  {
+    "path": "/Users/matto/Workspace/mac-setup/run_playbook.py",
+    "source": "/Users/matto/Workspace/workspaces/sandpipers-iac/kathmandu/.context/mac-setup-k3d/run_playbook.py",
+    "after_sha256": "c28321bf8ba0bea7b8212490cad2e89b0c1411f9939537406d9d6ba85a58d60a"
+  }
+]
