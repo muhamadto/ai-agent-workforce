@@ -353,3 +353,5 @@ Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for detai
 
 - **Issues**: [GitHub Issues](https://github.com/muhamadto/ai-agent-workforce/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/muhamadto/ai-agent-workforce/discussions)
+
+SSH host verification is enforced. Any separately approved remote use requires host keys verified through a trusted channel and pre-provisioned in known_hosts; unknown or changed keys must fail. Never use automatic acceptance, disabled verification or an empty trust store as a workaround. The supported setup launcher remains local-only.

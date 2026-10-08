@@ -25,6 +25,8 @@ Skip to Implement only when the change can be described in one sentence.
 
 If rate-limited or interrupted: on resume, finish the current task, complete the full DoD audit chain, then continue through remaining stories, epics, and objectives in order.
 
+Keep agent-only helper tests and auxiliary test harnesses local in gitignored `.context/`. Never stage, commit or push them. Runtime Ansible assertions and production security checks remain in the version-controlled implementation.
+
 ---
 
 ## Story Lifecycle
@@ -40,6 +42,8 @@ Stories must exist in **Shortcut** before any implementation starts. No exceptio
 
 Every story must be appended to the matching phase file in the repo:
 `shortcut-stories-phase-{N}.json` (one file per phase, N = 1, 2, 3, …)
+
+These ledgers are local-only: keep them gitignored and never stage, commit or push them.
 
 File format:
 ```json

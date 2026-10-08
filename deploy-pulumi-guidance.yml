@@ -3,6 +3,11 @@
 - name: Deploy owner-approved Pulumi Java guidance
   hosts: local
   gather_facts: true
+  gather_subset:
+  - '!all'
+  - '!min'
+  - 'user'
+  - 'python'
   become: false
   vars:
     pulumi_guidance_files:
@@ -40,6 +45,21 @@
       destination: '{{ ansible_facts[''user_dir''] }}/.codex/ai-agent-workforce/agents/infrastructure-engineer.toml'
       previous_sha256: 9e340de23082c98ceb4ceba96757bf9cb94d46806634b158e328b9a6d7cdda63
   pre_tasks:
+  - name: Verify safe execution and required facts
+    ansible.builtin.assert:
+      that:
+      - lookup('ansible.builtin.config', 'CACHE_PLUGIN') == 'memory'
+      - lookup('ansible.builtin.config', 'HOST_KEY_CHECKING') | bool
+      - ansible_facts is mapping
+      - ansible_facts.env is not defined
+      - ansible_env is not defined
+      - ansible_facts['user_dir'] is defined
+      - ansible_facts['python'] is defined
+      quiet: true
+      fail_msg: "Unsafe execution settings or missing required facts; use the supported launcher."
+    tags:
+    - always
+
   - name: Validate references before deploying guidance
     ansible.builtin.command:
       argv:
