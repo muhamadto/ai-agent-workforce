@@ -1,0 +1,17 @@
+---
+- name: Contain recognised credential-bearing fact caches (Shortcut 742)
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Validate and privatise the three recognised caches
+      ansible.builtin.command:
+        argv: >-
+          {{ [containment_python, playbook_dir ~ '/contain_fact_caches.py']
+             + (['--check'] if ansible_check_mode else []) }}
+        expand_argument_vars: false
+      # Command supports its own complete read-only check mode.
+      check_mode: false
+      register: containment_result
+      changed_when: containment_result.stdout == 'changed'
+      no_log: true
