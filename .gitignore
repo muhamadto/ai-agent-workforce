@@ -65,7 +65,6 @@ ENV/
 *.tfstate.*
 .terraform/
 .terraform.lock.hcl
-cdktf.out/
 
 # Ansible
 *.retry
