@@ -1,6 +1,6 @@
 ---
 name: microservice-template
-description: Standard Maven multi-module layout for a Spring Boot microservice — client JAR (controller interfaces + DTOs), service module (implementation), and infra module (CDK for Terraform). Load when creating a new microservice, adding a module to one, or deciding which module/package a class belongs in. Maven only, never Gradle.
+description: Standard Maven multi-module layout for a Spring Boot microservice — client JAR (controller interfaces + DTOs), service module (implementation), and infra module (Pulumi Java). Load when creating a new microservice, adding a module to one, or deciding which module/package a class belongs in. Maven only, never Gradle.
 ---
 
 # Microservice Template — Maven Multi-Module Structure
@@ -20,7 +20,7 @@ microservice-template-project/              # Parent (packaging: pom)
 ├── pom.xml                                  # modules + <parent> sandpipers-microservice-parent
 ├── microservice-template-client/            # Published client JAR — the API contract
 ├── microservice-template-service/           # Spring Boot application — the implementation
-└── microservice-template-infra/             # CDK for Terraform (CDKTF, Java) — the infrastructure
+└── microservice-template-infra/             # Pulumi Java — the infrastructure
 ```
 
 Dependency direction: `service` depends on `client`. `client` depends on nothing internal.
@@ -42,11 +42,15 @@ no implementation logic. This JAR is published for consumers.
 microservice-template-client/
 └── src/main/java/<base.package>/client/
     ├── controller/        # Controller INTERFACES — request mappings, the API contract
-    └── model/             # DTOs — request/response models exposed to consumers
+    ├── model/             # DTOs — request/response models exposed to consumers
+    └── event/             # Event records the service publishes or consumes
 ```
 
+- One `-client` JAR carries controller interfaces, DTOs and events. There is no
+  separate `-contracts` module.
 - `controller/` holds interfaces only. Endpoints are defined here and nowhere else.
 - `model/` holds the DTOs those interfaces use. No entities, no domain objects.
+- `event/` holds immutable event records, named in past tense.
 
 ## microservice-template-service
 
@@ -55,15 +59,15 @@ The Spring Boot application. Implements the client contract.
 ```
 microservice-template-service/
 └── src/main/java/<base.package>/
-    ├── (root)             # @SpringBootApplication + ALL @Configuration classes — config stays in the root package
-    ├── controller/        # Classes IMPLEMENTING the controller interfaces from the client module
-    ├── service/           # Business services called by the controllers
-    ├── repository/        # Data access (Spring Data repositories)
-    ├── entity/            # Persistence entities
-    ├── converter/         # Converters between entity and domain model classes
-    ├── helper/            # Focused helper classes
-    ├── listener/          # Event listeners (consuming events)
-    └── publisher/         # Event publishers (producing events)
+    ├── (root)             # @SpringBootApplication + ALL @Configuration classes
+    └── earn/              # one package per feature (example)
+        ├── EarnController.java   # implements the interface from the client module
+        ├── EarnService.java
+        ├── EarnListener.java     # inbound events
+        ├── EarnPublish.java      # outbound events
+        ├── EarnConverter.java    # entity <-> DTO
+        ├── EarnRepository.java
+        └── Earn.java             # entity
 ```
 
 Add `io.sandpipers:sandpipers-microservice-starter` as a dependency (web, actuator, validation, and
@@ -76,29 +80,54 @@ Placement rules:
 
 - Controllers implement an interface from the client module — never define an endpoint
   that has no interface in the client JAR.
-- Controllers are thin: translate the call, delegate to `service/`. No business logic.
-- Entities never leave the service module: `converter/` maps entity ↔ domain model,
+- Controllers are thin: translate the call, delegate to the feature's service. No business logic.
+- Entities never leave the service module: the converter maps entity ↔ DTO,
   and only client-module DTOs cross the API boundary.
-- Configuration classes do not get their own package — they live in the root package
-  next to the application class.
-- Messaging is split by direction: inbound handlers in `listener/`, outbound in `publisher/`.
+- Messaging is split by direction: inbound handlers in `<Feature>Listener`, outbound in `<Feature>Publish`.
+
+## Package Rules
+
+- All `@Configuration` classes live in the application's root package, next to the
+  `@SpringBootApplication` class. No `config` package.
+- Package by feature: `<root>.<feature>` holds everything for that feature: controller,
+  service, listener, publisher, converter, repository and entity. Example for `earn`:
+  `earn/EarnController`, `EarnService`, `EarnListener`, `EarnPublish`, `EarnConverter`,
+  `EarnRepository`, `Earn` (entity).
+- Classes are package-private unless another feature genuinely needs them.
+- No `internal` packages and no layer sub-packages (`controller/`, `service/`,
+  `repository/` and the like).
+- Caching only through `@Cacheable`, `@CachePut` and `@CacheEvict` annotations; no
+  hand-written cache calls.
 
 ## microservice-template-infra
 
-Infrastructure for this service as code, using **CDK for Terraform (CDKTF) with Java**.
-Mirrors the service module's structure idea — root package for entry point and
-configuration, one package per concern:
+Infrastructure for this service as code, using **Pulumi with Java**, using shared `sandpipers-iac` constructs.
+The `-infra` module is a Pulumi Java program over the shared constructs:
 
 ```
 microservice-template-infra/
-└── src/main/java/<base.package>/infra/
-    ├── (root)             # CDKTF App entry point + configuration classes
-    ├── stack/             # Terraform stacks (one per deployable unit/environment)
-    └── construct/         # Reusable constructs composed into stacks
+├── Pulumi.yaml                  # runtime: java, options.binary: target/<app>.jar (shaded jar)
+├── Pulumi.<stack>.yaml          # one per environment (dev, staging, prod)
+└── src/
+    ├── main/java/<base.package>/infra/
+    │   ├── App.java                 # Pulumi entry point, render-only
+    │   ├── <Service>StackConfig.java  # whitelist-validated stack configuration
+    │   └── <Service>Stack.java      # composes NatsAccount, NatsStream, NatsConsumer,
+    │                                #   NatsDeadLetterStream and NatsServicePermissions
+    │                                #   with exact names (no wildcards)
+    └── test/java/<base.package>/infra/
+        ├── <Service>StackConfigTest.java  # config validation test
+        └── InfraAppTest.java        # runs App with PulumiMockStack
 ```
 
-- `cdktf.json` lives in the module root; synthesis runs through Maven (`mvn compile exec:java`).
+- The stack convention is `Pulumi.yaml` with `runtime: {name: java, options: {binary: target/<app>.jar}}`; the application JAR is built with `./mvnw package`. Verify the executable configuration in the IaC spike before deployment.
+- `<Service>StackConfig` validates every field against an allow-list (whitelist validation).
+- The stack class composes `NatsAccount`, `NatsStream`, `NatsConsumer`, `NatsDeadLetterStream`
+  and `NatsServicePermissions` with exact names; no wildcard subjects or permissions.
+- Tests: a config validation test and an `InfraAppTest` using `PulumiMockStack`.
 - No application code, no client/service dependencies.
+- Render Kubernetes resources into repository GitOps manifests for ArgoCD, using a render-only provider without Kubernetes credentials or API access. Helm resources use `Chart` rendering rather than `Release`. Render-only engine execution may update state; it never applies resources to the cluster.
+- Cloud resources use reviewed CI preview/apply. State belongs in owned object storage with an environment-specific KMS secrets provider; do not use Pulumi Cloud state.
 
 ## Parent POM
 
@@ -135,7 +164,7 @@ microservice-template-infra/
 3. Implement in the service module: entity → repository → service → controller,
    driving each piece with tests.
 4. Add stacks/constructs to the infra module for the runtime the service needs.
-5. Verify the build from the parent: `mvn clean verify` must pass at the root.
+5. Verify the build from the parent: `./mvnw clean verify` must pass at the root.
 
 ## Related Skills
 
