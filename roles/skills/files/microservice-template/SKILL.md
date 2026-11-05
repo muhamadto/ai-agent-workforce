@@ -41,16 +41,22 @@ no implementation logic. This JAR is published for consumers.
 ```
 microservice-template-client/
 └── src/main/java/<base.package>/client/
-    ├── controller/        # Controller INTERFACES — request mappings, the API contract
-    ├── model/             # DTOs — request/response models exposed to consumers
-    └── event/             # Event records the service publishes or consumes
+    ├── common/            # shared types only: ApiError, the OpenAPI error-response annotation
+    └── earn/              # one package per feature (example)
+        ├── EarnApi.java       # controller INTERFACE — request mappings, the API contract
+        ├── EarnRequest.java   # DTOs exposed to consumers
+        ├── EarnResponse.java
+        └── EarnCreated.java   # event record the service publishes or consumes
 ```
 
 - One `-client` JAR carries controller interfaces, DTOs and events. There is no
   separate `-contracts` module.
-- `controller/` holds interfaces only. Endpoints are defined here and nowhere else.
-- `model/` holds the DTOs those interfaces use. No entities, no domain objects.
-- `event/` holds immutable event records, named in past tense.
+- Client packages are by feature, mirroring the service module. No `controller/`,
+  `model/`, `event/` or `validation/` sub-packages.
+- Classes are public, because the client JAR is the published surface.
+- The controller interface is the only place endpoints are defined.
+- DTOs are the types those interfaces use. No entities, no domain objects.
+- Event records are immutable and named in past tense.
 
 ## microservice-template-service
 
