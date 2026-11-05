@@ -41,17 +41,22 @@ starters, no implementation logic.
 ```
 modulith-template-client/
 └── src/main/java/<base.package>/client/
+    ├── common/            # shared types only: ApiError, the OpenAPI error-response annotation
     ├── <module-a>/
-    │   ├── controller/    # Controller INTERFACES — request mappings, the API contract
-    │   └── model/         # DTOs — request/response models exposed to consumers
+    │   ├── <A>Api         # controller INTERFACE — request mappings, the API contract
+    │   ├── <A>Request     # DTOs exposed to consumers
+    │   ├── <A>Response
+    │   └── <A>Created     # published event record, where consumers outside the app need it
     └── <module-b>/
-        ├── controller/
-        └── model/
+        └── ...
 ```
 
 - Every public endpoint is defined here as an interface and nowhere else.
+- Feature packages hold the controller interface, DTOs and published events directly.
+  No `controller/`, `model/`, `event/` or `validation/` sub-packages. Classes are public,
+  because the client JAR is the published surface.
 - Packages mirror the application modules one-to-one. When a module is later
-  extracted, its slice of this JAR becomes the new service's client module verbatim.
+  extracted, its feature package in this JAR becomes the new service's client module verbatim.
 - OpenAPI specs are generated from these interfaces; SDKs are generated from the
   OpenAPI specs in CI. Never hand-write an SDK.
 
