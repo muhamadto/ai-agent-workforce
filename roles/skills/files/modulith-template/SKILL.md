@@ -63,29 +63,32 @@ Spring Modulith application module** — a bounded context with a verified bound
 ```
 modulith-template-app/
 └── src/main/java/<base.package>/
-    ├── (root)                 # @SpringBootApplication + cross-cutting @Configuration ONLY
-    ├── <module-a>/            # one application module = one bounded context
-    │   ├── (root)             # the module's API: facade interfaces + published event records
+    ├── (root)                 # @SpringBootApplication + ALL @Configuration classes
+    ├── <module-a>/            # one application module = one bounded context (a feature package)
     │   ├── package-info.java  # @ApplicationModule(allowedDependencies = ...)
-    │   └── internal/          # everything else — invisible to other modules
-    │       ├── (root)         # module @Configuration + facade implementations
-    │       ├── controller/    # implements interfaces from the client module
-    │       ├── service/       # business services
-    │       ├── repository/    # data access (Spring Data)
-    │       ├── entity/        # persistence entities
-    │       ├── converter/     # entity ↔ domain/DTO converters
-    │       ├── listener/      # @ApplicationModuleListener handlers (consuming events)
-    │       └── publisher/     # event publishers (producing events)
+    │   ├── <A>Controller      # implements the interface from the client module
+    │   ├── <A>Service         # business logic
+    │   ├── <A>Listener        # @ApplicationModuleListener handler (consuming events)
+    │   ├── <A>Publish         # event publisher (producing events)
+    │   ├── <A>Converter       # entity ↔ domain/DTO converter
+    │   ├── <A>Repository      # data access (Spring Data)
+    │   └── <A>                # persistence entity
     └── <module-b>/
         └── ...
 ```
 
+All module classes sit directly in the feature package and are package-private.
+There are no `internal/` packages and no layer sub-packages.
+
 Placement rules:
 
-- **Module API is the module root package**: facade interfaces and published event
-  types only. Everything in `internal/` is enforced as inaccessible to other modules
-  by Spring Modulith verification. Expose additional packages only via
-  `@NamedInterface`, and treat every use of it as a design smell to justify.
+- **Module API is the public types only**: classes are package-private unless another
+  module genuinely needs them. Spring Modulith does not expose non-public types to
+  other modules, so encapsulation holds without an `internal/` package. The only
+  public types are a module API interface (facade) and published event records (in the
+  client JAR where consumers outside the application need them). Expose additional
+  packages only via `@NamedInterface`, and treat every use of it as a design smell to
+  justify.
 - **Every module declares `@ApplicationModule(allowedDependencies = ...)`** in
   `package-info.java`. An empty list is the default posture; add dependencies
   deliberately, never retroactively to silence a verification failure.
@@ -93,14 +96,14 @@ Placement rules:
   with `@ApplicationModuleListener` (async, transactional, persisted). Direct calls
   to another module's facade are allowed but are the exception — each one couples
   the modules' availability and transaction context.
-- The structure inside `internal/` mirrors the microservice-template service module,
-  so an extracted module needs no internal reshuffling.
+- The feature package follows the same package rules as the microservice-template
+  service module, so an extracted module needs no reshuffling.
 - Controllers implement an interface from the client module — never define an
   endpoint without a client interface. Controllers are thin; no business logic.
 - Entities never leave their module. Only client-module DTOs cross the API
   boundary; only event records cross module boundaries internally.
-- App-root configuration is for genuinely cross-cutting concerns (observability,
-  security filter chain, event registry). Module-specific config lives in the module.
+- Every `@Configuration` class, cross-cutting or module-specific, lives in the
+  application root package; modules hold no `@Configuration` of their own.
 
 ## Events, Outbox, and Externalization
 
@@ -121,8 +124,8 @@ Placement rules:
   never by shell scripts or in-app code, and never with no-ack — publish acks are
   load-bearing.
 - Event records are immutable Java records, named in past tense
-  (`OrderCancelled`, not `CancelOrder`), and live in the publishing module's root
-  package — they are API.
+  (`OrderCancelled`, not `CancelOrder`), and are public API of the publishing module
+  (in the client JAR when consumers outside the application need them).
 
 ## Persistence
 
@@ -213,7 +216,8 @@ Mechanics (cheap by construction):
 1. Scaffold a new [/microservice-template](../microservice-template/SKILL.md) project.
 2. Move the module's client packages into the new client module — consumers
    recompile against the same interfaces.
-3. Move `internal/` into the new service module — the layout already matches.
+3. Move the module's feature package into the new service module's root package — the
+   layout already matches; move its `@Configuration` classes from the modulith root too.
 4. Replace internal event delivery with the broker: the events are already
    `@Externalized` records; point listeners at the broker topic.
 5. Move the module's schema and migration history to the new service's database.
@@ -227,8 +231,8 @@ Mechanics (cheap by construction):
    name.
 2. Define the first module's API in the client module (use the /api-design skill).
 3. Create the application module: `package-info.java` with `@ApplicationModule`,
-   API types in the module root, implementation under `internal/`, driving each
-   piece with tests.
+   a package-private implementation directly in the feature package (only the module
+   API interface and published events public), driving each piece with tests.
 4. Add the two modularity tests before writing the second module.
 5. Add stacks/constructs to the infra module for the runtime the app needs.
 6. Verify the build from the parent: `./mvnw clean verify` must pass at the root.
