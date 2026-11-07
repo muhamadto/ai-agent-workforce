@@ -100,6 +100,7 @@ Signed-off-by: <git config user.name> <git config user.email>
 8. Issue references go in footer: `Closes #123`, `Fixes #456`
 9. `Signed-off-by` is REQUIRED on every commit — must be preceded by an empty line, exactly as shown in the examples above
 10. Agent commits: must NOT include `Co-Authored-By:` footer
+11. Shortcut id: when the change belongs to a Shortcut story (almost always), the description starts with the lowercase story id, `sc-<id>`, then a space and the imperative description: `<type>(<scope>): sc-<id> <description>`. The id counts toward the 72-character limit (the commit-msg hook allows 72 characters after `: `). Find the id from the branch name, the PR or the task; if there is no story, stop and get one (stories must exist before code). Example: `fix(events): sc-809 keep the provider chosen rejection reason`. A change that truly has no story (rare, e.g. a repo-wide docs fix) omits it.
 
 ### Body (optional)
 
@@ -185,6 +186,8 @@ feat: Add feature    ← uppercase description
 feat: add feature.   ← period at end
 added feature        ← wrong tense — use imperative ("add" not "added")
 feat: adding feature ← wrong tense — use imperative ("add" not "adding")
+feat(events): add outbox executor        ← missing the Shortcut id: use `feat(events): sc-808 add outbox executor`
+feat(events): SC-808 add outbox executor ← id must be lowercase `sc-808`
 ```text
 
 Missing blank line between subject and body:

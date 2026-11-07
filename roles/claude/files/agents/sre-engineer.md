@@ -4,7 +4,7 @@ description: Site Reliability Engineer. Owns SLOs, error budgets, alerting quali
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 20
+maxTurns: 40
 memory: project
 skills:
   - observability

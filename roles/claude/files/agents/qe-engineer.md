@@ -4,7 +4,7 @@ description: Quality engineering expert. Test strategy, automation, BDD, perform
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 40
+maxTurns: 80
 memory: project
 skills:
   - quality-engineering

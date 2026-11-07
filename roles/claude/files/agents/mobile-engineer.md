@@ -4,7 +4,7 @@ description: Mobile engineering expert. iOS (Swift, SwiftUI), Android (Kotlin, C
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 20
+maxTurns: 40
 memory: project
 skills:
   - mobile-engineering

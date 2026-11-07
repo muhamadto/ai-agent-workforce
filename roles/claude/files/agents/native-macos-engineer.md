@@ -4,7 +4,7 @@ description: Native macOS engineering expert. Swift 6, SwiftUI for macOS, AppKit
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 20
+maxTurns: 40
 memory: project
 skills:
   - native-macos-engineering

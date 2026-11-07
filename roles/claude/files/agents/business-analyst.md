@@ -4,7 +4,7 @@ description: Business analysis expert. Requirements elicitation, user stories, a
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 20
+maxTurns: 40
 memory: project
 skills:
   - business-analysis

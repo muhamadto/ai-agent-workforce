@@ -4,7 +4,7 @@ description: Senior backend developer. Java 24+ and Spring Boot 4.x expert with 
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 40
+maxTurns: 80
 memory: project
 skills:
   - java-spring-engineering

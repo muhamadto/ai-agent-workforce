@@ -4,7 +4,7 @@ description: Enforces Clean Architecture, boundaries, and dependency rules. Ruth
 tools: Read, Grep, Glob
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 12
+maxTurns: 24
 memory: project
 skills:
   - clean-architecture
