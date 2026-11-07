@@ -26,12 +26,6 @@
          codex_skills_entry.stat.lnk_target | default('') == ansible_facts['user_dir'] + '/.skills')
     fail_msg: "~/.agents/skills/ai-agent-workforce exists and does not point to ~/.skills."
 
-- name: Link Codex shared instructions
-  ansible.builtin.include_role:
-    name: instructions
-  vars:
-    instructions_destination: "{{ codex_home }}/AGENTS.md"
-
 - name: Ensure Codex directories exist
   ansible.builtin.file:
     path: "{{ item }}"

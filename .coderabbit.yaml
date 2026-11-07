@@ -57,14 +57,6 @@ reviews:
         - Flag instructions that fabricate tools, bypass approvals, disclose secrets or silently widen permissions.
         - Advisory agents must not be instructed to mutate repositories or deploy changes.
         - Keep model names and client features grounded in verified support; inherit user defaults where possible.
-        - Global CLI operating rules must come from instructions/AGENTS.md through the shared instructions role, not duplicated payloads.
-    - path: "instructions/**"
-      instructions: |
-        Report only major and critical issues; no minor, style, nitpick or praise comments.
-        - These global rules apply to Claude Code, OpenCode and Codex through one canonical installed file.
-        - Retain the Claude workflow baseline, communication, specialist delegation, and skills/safety rules.
-        - Do not fabricate host tools or treat instructions as a sandbox/security enforcement boundary.
-        - Protect secrets and personal configuration; client-specific commands must match supported capabilities.
     - path: ".github/workflows/**"
       instructions: |
         Report only major and critical issues; no minor, style, nitpick or praise comments.

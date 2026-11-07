@@ -18,13 +18,6 @@
     - codex_skills_entry.stat.islnk | default(false)
     - codex_skills_entry.stat.lnk_target | default('') == ansible_facts['user_dir'] + '/.skills'
 
-- name: Remove Codex shared instruction link
-  ansible.builtin.include_role:
-    name: instructions
-    tasks_from: remove
-  vars:
-    instructions_destination: "{{ codex_home }}/AGENTS.md"
-
 - name: Inspect personal Codex configuration
   ansible.builtin.stat:
     path: "{{ codex_home }}/config.toml"

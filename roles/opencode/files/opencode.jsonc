@@ -6,7 +6,6 @@
   "model": "glm-5.2:cloud",
 
   // Global permission defaults — agents override where they need stricter or looser access.
-  // Global operating rules live in ~/.config/opencode/AGENTS.md — opencode auto-loads it.
   // Agents are defined as markdown files in ~/.config/opencode/agents/*.md
   "permission": {
     "edit": "ask",

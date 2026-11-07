@@ -35,21 +35,15 @@ The link may remain dangling until the shared skills role is installed. Removing
 | `~/.codex/ai-agent-workforce/.managed` | Ownership marker used to guard updates and removal |
 | `~/.codex/agents/*.toml` | Entry-point symlinks for the native agents |
 | `~/.codex/config.toml` | Managed workforce agent-registration tables; personal settings are retained |
-| `~/.codex/AGENTS.md` | Symlink to the shared `~/.instructions/AGENTS.md` |
-| `~/.instructions/AGENTS.md` | Canonical global rules shared by all three CLIs |
 | `~/.agents/skills/ai-agent-workforce` | Namespaced symlink to the central `~/.skills` directory |
 
 Existing `config.toml` settings are retained while a namespaced agent-registration block is added.
 `auth.json`, sessions, personal agents, personal skills, model selection, reasoning effort, approvals and MCP settings are not overwritten.
-Global rules use the Claude baseline in the single `instructions/AGENTS.md` source.
-Shared communication, workflow, specialist-delegation and skills/safety changes belong there, not in separate client copies.
 All agents inherit the parent model and reasoning settings. The architecture guardian and principal engineer additionally request a read-only sandbox and explicitly prohibit mutation in their instructions.
 Parent runtime permission overrides can take precedence over an agent's sandbox setting; read-only configuration is not an independent security boundary.
 
 Installation fails before deployment if a workforce agent entry, skills namespace or managed directory conflicts with an unmanaged personal resource.
 Uninstall removes only matching symlinks, the managed config block and the marked role-owned agent directory. Replaced personal agent files are preserved.
-Shared instructions and their backups survive removal. Matching existing instruction files are backed up before linking;
-unfamiliar personal instructions block installation rather than being overwritten. Merge their additions into the canonical source explicitly first.
 Rule/config updates retain backup copies. Empty config files can remain after uninstall.
 Invalid TOML or a workforce registration outside the managed block fails before deployment. Configuration contents are excluded from Ansible output.
 The complete proposed TOML is validated before any installation or removal changes. Incompatible inline `agents` tables
@@ -62,7 +56,7 @@ The ownership marker is `ai-agent-workforce:codex`, with an optional final newli
 Legacy `ai-agent-workforce` markers migrate on installation only at the original
 `~/.codex/ai-agent-workforce` path. Legacy custom paths fail closed; verify ownership
 explicitly before replacing their marker. Managed roots must not overlap other
-roles, shared skills or configured canonical instructions, including resolved aliases.
+roles or shared skills, including resolved aliases.
 Root comparisons conservatively ignore case and Unicode normalisation differences
 to protect case-insensitive macOS storage; use names distinct beyond their casing.
 

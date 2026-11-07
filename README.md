@@ -87,8 +87,6 @@ ai-agent-workforce/
 ├── playbook.yml              # Main orchestration playbook
 ├── inventory.ini             # Target hosts configuration
 ├── ansible.cfg               # Ansible settings
-├── instructions/
-│   └── AGENTS.md             # Single source of global rules for all three CLIs
 ├── group_vars/
 │   └── all.yml               # Global variables and external skill selections
 ├── docs/
@@ -101,9 +99,6 @@ ai-agent-workforce/
     │   ├── files/            # Native agent TOML and config validation
     │   ├── templates/        # Managed agent-registration tables
     │   └── tasks/            # Safe install/remove with personal-file preservation
-    ├── instructions/         # Shared instructions and guarded client symlinks
-    │   ├── files/           # Exact historical instruction fingerprints
-    │   └── tasks/           # Preflight storage guards and safe migration
     └── skills/              # Shared skills
 ```
 
@@ -115,31 +110,13 @@ in lazy-loaded knowledge skills (e.g. `java-spring-engineering`, `auth-engineeri
 that agents pull in on demand via their `skills:` frontmatter.
 
 The opt-in [Codex role](roles/codex/README.md) deploys 13 native TOML agents under
-`~/.codex/agents/*.toml`, links `~/.codex/AGENTS.md` to the shared instructions,
+`~/.codex/agents/*.toml`
 and exposes shared skills through `~/.agents/skills/ai-agent-workforce`. It preserves
 personal configuration and authentication, inherits the session's model settings,
 and removes only role-owned files and links. Codex skills are loaded through explicit
 instruction references rather than Claude-style frontmatter.
 Agent registration is added as a managed block in `~/.codex/config.toml`; existing
 personal settings are retained. All three client roles use the same specialist names.
-
-### Shared Global Instructions
-
-Edit `instructions/AGENTS.md` once. Each client role installs it as `~/.instructions/AGENTS.md`
-and links its documented global instruction path to that single installed file:
-
-- Claude Code: `~/.claude/CLAUDE.md`
-- OpenCode: `~/.config/opencode/AGENTS.md`
-- Codex: `~/.codex/AGENTS.md` (or the configured `codex_home`)
-
-Exact current and recognised historical shipped files are backed up with a
-`.before-ai-agent-workforce` suffix before migration. Personal additions are not
-treated as shipped files. Redirected storage and multiply linked payloads are refused.
-Unfamiliar files or links block installation; explicitly merge personal additions into the canonical source first.
-Updates back up the installed shared file. Client removal deletes only its matching link and leaves shared instructions and backups intact.
-Claude's project-level `AGENTS.md` support does not change its global `CLAUDE.md` path.
-This layout targets the CLIs; Claude Cowork skips user-level instruction symlinks pointing outside its working directory.
-See the [shared instructions role](roles/instructions/README.md) for instruction-only deployment.
 
 ## Agent Team
 

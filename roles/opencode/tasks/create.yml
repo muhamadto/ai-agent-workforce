@@ -1,10 +1,4 @@
 ---
-- name: Link OpenCode shared instructions
-  ansible.builtin.include_role:
-    name: instructions
-  vars:
-    instructions_destination: "{{ ansible_facts['user_dir'] }}/.config/opencode/AGENTS.md"
-
 - name: Ensure ~/.config/opencode directory exists
   ansible.builtin.file:
     path: "{{ ansible_facts['user_dir'] }}/.config/opencode"
@@ -48,7 +42,6 @@
     msg: |
       opencode configuration deployed to ~/.config/opencode/:
         opencode.jsonc — global defaults (model: glm-5.2:cloud)
-        AGENTS.md      — global operating rules (auto-loaded by opencode)
         agents/*.md    — 13 agent definitions (markdown with YAML frontmatter)
 
       Advisory agents (glm-5.2:cloud):
