@@ -4,7 +4,7 @@ description: Principal Engineer arbiter. Resolves conflicts between agents, make
 tools: Read, Grep, Glob
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 10
+maxTurns: 20
 memory: project
 skills:
   - modulith-template

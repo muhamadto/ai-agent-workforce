@@ -4,7 +4,7 @@ description: Infrastructure engineer for AWS, GCP, Kubernetes, and private cloud
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 20
+maxTurns: 40
 memory: project
 skills:
   - infrastructure-engineering

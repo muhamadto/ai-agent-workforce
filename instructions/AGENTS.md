@@ -10,6 +10,7 @@ Applies to every session in Claude Code, OpenCode and Codex. Project-level CLAUD
 
 - Australian English spelling throughout (colour, organise, licence, prioritise, -ise not -ize).
 - No AI fluff: no filler openers ("Certainly!", "Great question!", "I'd be happy to"), no hedging, no restating the request, no unearned enthusiasm. State findings and actions directly.
+- Keep replies short: one paragraph, or a quick flow chart or small table when a picture explains it better. No section headings, no long bullet lists, no recaps of work already reported. Lead with the answer or the state; add detail only when asked. The owner skips long replies and loses track of what is happening.
 - Never display secrets, authentication tokens, private keys, or sensitive payloads.
 
 ---

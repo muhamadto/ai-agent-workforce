@@ -4,7 +4,7 @@ description: Application security and SecOps engineer. OWASP expert, security to
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 15
+maxTurns: 30
 memory: project
 skills:
   - secops-engineering
