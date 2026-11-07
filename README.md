@@ -91,14 +91,8 @@ ai-agent-workforce/
 │   └── AGENTS.md             # Single source of global rules for all three CLIs
 ├── group_vars/
 │   └── all.yml               # Global variables and external skill selections
-├── config/
-│   └── agent-routing.toml    # Cross-CLI specialist routing
 ├── docs/
-│   ├── dispatcher.md        # Coordinator usage and runtime safety boundaries
 │   └── security-review.md   # Historical scan adjudication and exception rationale
-├── scripts/
-│   ├── dispatch_agent.py     # Standard-library native CLI dispatcher
-│   └── validate_skill_refs.py # Agent, skill-reference, and global-rule validation
 └── roles/
     ├── claude/              # Claude Code agents — all on Anthropic sonnet (default)
     ├── opencode/            # opencode agents with per-agent model routing (opt-in: --tags opencode)
@@ -107,7 +101,6 @@ ai-agent-workforce/
     │   ├── files/            # Native agent TOML and config validation
     │   ├── templates/        # Managed agent-registration tables
     │   └── tasks/            # Safe install/remove with personal-file preservation
-    ├── dispatcher/           # Private workforce command (opt-in: --tags dispatcher)
     ├── instructions/         # Shared instructions and guarded client symlinks
     │   ├── files/           # Exact historical instruction fingerprints
     │   └── tasks/           # Preflight storage guards and safe migration
@@ -129,31 +122,6 @@ and removes only role-owned files and links. Codex skills are loaded through exp
 instruction references rather than Claude-style frontmatter.
 Agent registration is added as a managed block in `~/.codex/config.toml`; existing
 personal settings are retained. All three client roles use the same specialist names.
-
-### Cross-CLI Dispatcher
-
-The opt-in [dispatcher role](roles/dispatcher/README.md) installs a private Python
-3.11+ dispatcher and `~/.local/bin/workforce`, routing named specialists through
-existing Codex, Claude Code and OpenCode CLIs. It installs no packages or CLIs and
-preserves native settings, authentication and shared instruction links.
-
-```sh
-ansible-playbook playbook.yml -e setup_state=present --tags dispatcher --limit local
-~/.local/bin/workforce list
-~/.local/bin/workforce delegate business-analyst --task-file /absolute/path/task.txt --workspace "$PWD" --dry-run
-```
-
-`list` and `delegate --dry-run` are offline: they do not invoke native CLIs or
-models. Live delegation uses existing native subscription logins, defaults to
-read-only and requires explicit `--allow-write` for implementation tasks. Native
-controls are not an independent operating-system sandbox. OpenCode read-only
-handoffs are disabled because effective restrictions cannot be established;
-write handoffs require explicit local subscription attestation and matching
-cached authentication metadata. Default OpenCode routes fail closed until configured.
-A successful dry run does not prove
-live authentication or model access. See [dispatcher usage and safety](docs/dispatcher.md)
-and the role README for routing overrides, prerequisites, collision protection
-and safe removal.
 
 ### Shared Global Instructions
 
@@ -296,9 +264,6 @@ setup_state: present  # or absent
 ```bash
 # Syntax check
 ansible-playbook playbook.yml --syntax-check
-
-# Validate Claude skill references and native Codex agent definitions
-python3 scripts/validate_skill_refs.py
 
 # Dry run
 ansible-playbook playbook.yml --check

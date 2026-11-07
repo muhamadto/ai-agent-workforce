@@ -1,2 +1,0 @@
-#!/bin/sh
-exec {{ dispatcher_python_version.stdout | trim | quote }} {{ (dispatcher_home + '/scripts/dispatch_agent.py') | quote }} "$@"
