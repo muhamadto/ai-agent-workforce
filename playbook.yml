@@ -27,7 +27,7 @@
           - ansible_facts['user_dir'] is defined
           - ansible_facts['python'] is defined
         quiet: true
-        fail_msg: "Unsafe execution settings or missing required facts; use the supported launcher."
+        fail_msg: "Unsafe settings or missing facts. Set ANSIBLE_CACHE_PLUGIN=memory and ANSIBLE_HOST_KEY_CHECKING=True, or use run_playbook.py."
       tags:
         - always
 

@@ -12,7 +12,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent
 EXECUTION_PATH = '/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
-PLAYS = {'guidance':'deploy-pulumi-guidance.yml', 'workforce':'playbook.yml'}
+PLAYS = {'workforce':'playbook.yml'}
 
 
 def clean_environment(temporary):
