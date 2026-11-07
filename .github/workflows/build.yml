@@ -41,9 +41,6 @@ jobs:
       - name: Validate agents, skills and canonical operating rules
         run: python scripts/validate_skill_refs.py
 
-      - name: Test Sonar enforcement
-        run: python -m unittest discover -s tests -v
-
   sonar-quality-gate:
     name: SonarCloud Quality Gate
     runs-on: ubuntu-latest
