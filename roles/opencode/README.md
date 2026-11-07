@@ -3,7 +3,6 @@
 Deploys and manages opencode agent configurations with per-agent model routing. Deploys to `~/.config/opencode/`:
 
 - **`opencode.jsonc`** — global defaults (model, permissions); agents are NOT listed here
-- **`AGENTS.md`** — global operating rules (workflow, story lifecycle, hard stops); auto-loaded by opencode without any config
 - **`agents/*.md`** — 12 specialist agents, one markdown file each with YAML frontmatter
 
 Each agent file follows the opencode markdown format: YAML frontmatter (`model`, `description`, `mode`, `steps`, `permission`) and a markdown body that becomes the system prompt.

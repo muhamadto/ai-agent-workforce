@@ -1,3 +1,0 @@
----
-instructions_home: "{{ ansible_facts['user_dir'] }}/.instructions"
-instructions_file: "{{ instructions_home }}/AGENTS.md"

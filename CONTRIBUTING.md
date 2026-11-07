@@ -142,11 +142,6 @@ For Codex changes, verify install, repeated install, removal and repeated remova
 Confirm that personal `config.toml`, `auth.json`, instructions, agents and skills survive, and that unmanaged collisions fail safely.
 Never point deployment smoke tests at your real home directory. Native TOML parsing uses Python 3.11+.
 
-Maintain global rules only in `instructions/AGENTS.md`, using the Claude workflow structure as the baseline.
-All three client roles link to the single installed `~/.instructions/AGENTS.md`; do not reintroduce client-specific copies.
-Client-specific routing belongs in the shared Specialist Delegation section. Validation checks the canonical source and required sections.
-Test matching-file migration backups, unfamiliar-file/link refusal, idempotence and removal in isolated homes.
-
 ## Automated PR Review
 
 `.coderabbit.yaml` configures quiet, Australian-English reviews with project-specific instructions for Ansible roles,
