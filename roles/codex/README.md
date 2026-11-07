@@ -104,7 +104,6 @@ No `codex --agent` or Claude-style `@agent` invocation is assumed. Whether a Con
 When those tools are unavailable, the global rules direct the main agent to read and apply the specialist instructions without claiming delegation occurred.
 
 ```bash
-python3 scripts/validate_skill_refs.py
 ansible-playbook playbook.yml --syntax-check --limit local
 
 # Inspect loaded instructions/skills without sending a model request, on a CLI supporting this debug command

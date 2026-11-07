@@ -11,34 +11,20 @@ configuration. SonarCloud's GitHub binding is not needed for this Actions check.
 The binding and the project's stale `master` main-branch setting are recorded
 as separate setup work. See [ADR-0001](adr/0001-require-sonar-quality-gate.md).
 
-## Apply the committed rule
+## Required-check ruleset
 
-Use Python 3.11+ and an authenticated GitHub CLI with administration access to
-`muhamadto/ai-agent-workforce`. No administration credential is passed to CI.
-
-Preview the committed policy without writing GitHub settings:
-
-```sh
-python3 scripts/apply_sonar_ruleset.py
-```
-
-Before activation, confirm that the implementation PR targets `main` and that
-its **current head** has completed a passing `SonarCloud Quality Gate` check
-from GitHub Actions. Commit the reviewed configuration before applying it.
+The committed policy is `.github/rulesets/sonar-quality-gate.json`. It requires
+the exact check name from GitHub Actions integration `15368`, an up-to-date
+branch and no bypass actors, and applies only to `refs/heads/main`. Apply or
+update it in the repository's GitHub rulesets settings (administration access
+required); no administration credential is passed to CI. Before activating it,
+confirm the current head of the implementation PR has a passing
+`SonarCloud Quality Gate` check. Verify with:
 
 ```sh
-python3 scripts/apply_sonar_ruleset.py --apply
-python3 scripts/apply_sonar_ruleset.py
 gh api repos/muhamadto/ai-agent-workforce/rules/branches/main
 gh pr checks --required
 ```
-
-The managed rule requires the exact check name from GitHub Actions integration
-`15368`, an up-to-date branch and no bypass actors. It applies only to
-`refs/heads/main`. Existing branch protection and other rulesets remain intact.
-The script manages only its named Sonar ruleset, refuses ambiguous ownership
-and verifies configuration after writing. Repeating an already matching
-application performs no write. API errors remain failures.
 
 ## Failed or missing checks
 
