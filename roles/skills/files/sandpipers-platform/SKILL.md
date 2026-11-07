@@ -49,7 +49,7 @@ with these equivalents. Load this skill before wiring any service to platform in
 
 1. **Tailscale-first**: every dashboard and non-public endpoint requires Tailscale; never expose a service publicly except through the Cloudflare tunnel + Kong path.
 2. **NetworkPolicies are enforced** — new services must declare their ingress/egress; assume deny-by-default posture.
-3. **Everything as code**: infrastructure via Ansible/`private-cloud` repo, app deployment via ArgoCD, service infra via CDKTF Java (the [/microservice-template](../microservice-template/SKILL.md) and [/modulith-template](../modulith-template/SKILL.md) infra modules).
+3. **Everything as code**: infrastructure via Ansible/`private-cloud` repo, app deployment via ArgoCD, service infra via Pulumi Java using shared `sandpipers-iac` constructs (the [/microservice-template](../microservice-template/SKILL.md) and [/modulith-template](../modulith-template/SKILL.md) infra modules).
 4. **Resource limits required**: K3S runs on constrained hardware — set requests/limits on every workload; unbounded workloads are rejected.
 
 ## Related Skills

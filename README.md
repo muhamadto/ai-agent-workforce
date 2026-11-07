@@ -1,13 +1,15 @@
 # AI Agent Workforce
+[![Build](https://github.com/muhamadto/ai-agent-workforce/actions/workflows/build.yml/badge.svg)](https://github.com/muhamadto/ai-agent-workforce/actions/workflows/build.yml)
+[![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
+[![Maintainability issues](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=software_quality_maintainability_issues)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
+[![Reliability issues](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=software_quality_reliability_issues)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
+[![Security issues](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=software_quality_security_issues)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 > Deploy Claude Code agent teams as code. Ansible automation for AI agent configurations, skills, and workspace management.
-
-[![Build](https://github.com/muhamadto/ai-agent-workforce/actions/workflows/build.yml/badge.svg)](https://github.com/muhamadto/ai-agent-workforce/actions/workflows/build.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=bugs)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=muhamadto_ai-agent-workforce&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=muhamadto_ai-agent-workforce)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Overview
 
@@ -226,12 +228,12 @@ Deployed to `~/.skills/`, symlinked to both `~/.claude/skills/` and `~/.config/o
 | `git-branch` | Branch lifecycle — cut from `origin/main`, sync via rebase |
 | `git-commit` | Conventional Commits with hook awareness |
 | `incident` | Detect → contain → resolve, blameless postmortem |
-| `infrastructure-engineering` | AWS/GCP, Kubernetes, CDKTF, private-cloud stack |
+| `infrastructure-engineering` | AWS/GCP, Kubernetes, Pulumi Java, private-cloud stack |
 | `java-spring-engineering` | Java 24+, Spring Boot 4.x, GraalVM Native, Maven toolchain |
 | `junit5` | JUnit 5 patterns, parameterized tests, Testcontainers |
-| `microservice-template` | Maven multi-module layout: client / service / infra (CDKTF) |
+| `microservice-template` | Maven multi-module layout: client / service / infra (Pulumi Java) |
 | `mobile-engineering` | Swift/SwiftUI, Kotlin/Compose, Flutter, store distribution |
-| `modulith-template` | Maven Spring Modulith layout: contracts / app / infra (CDKTF) |
+| `modulith-template` | Maven Spring Modulith layout: client / app / infra (Pulumi Java) |
 | `oauth-threat-model` | OAuth2/OIDC flows: PKCE, redirect URIs, token theft |
 | `observability` | Micrometer/Prometheus, Loki, OpenTelemetry/Tempo, SLO alerting |
 | `openapi` | OpenAPI 3.1 spec authoring rules and HTTP status codes |

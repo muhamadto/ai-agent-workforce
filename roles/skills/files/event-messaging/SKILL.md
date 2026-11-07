@@ -37,8 +37,9 @@ NOT used here. Load this skill before any work that publishes, consumes, or stre
 
 ## Event-Driven Microservice Patterns
 
-Per the [/microservice-template](../microservice-template/SKILL.md) layout, inbound handlers
-live in the service module's `listener/` package and outbound emitters in `publisher/`.
+Per the package rules in [/microservice-template](../microservice-template/SKILL.md), inbound
+handlers and outbound emitters are feature-local classes (for example `earn/EarnListener`,
+`earn/EarnPublish`), not layer packages.
 
 - **Outbox pattern** (standalone microservices): write the event to an outbox table in the same DB transaction as the state change; a relay publishes from the outbox to JetStream — never publish to the broker inside a transaction directly. **In Spring Modulith projects the event publication registry IS the outbox** — publish application events and externalize with `@Externalized` per [/modulith-template](../modulith-template/SKILL.md); do NOT build a second outbox table
 - **Idempotent consumers**: treat every delivery as possibly-duplicate; dedupe on business key or `Nats-Msg-Id`, make handlers safe to replay
@@ -50,7 +51,7 @@ live in the service module's `listener/` package and outbound emitters in `publi
 
 ## Client Usage
 
-- **Java**: `jnats` client; Spring integration via NATS Spring Boot starter or a thin `@Configuration` wrapper; consumers as beans in `listener/`, publishers in `publisher/`; virtual threads pair well with pull-consumer fetch loops
+- **Java**: `jnats` client; Spring integration via NATS Spring Boot starter or a thin `@Configuration` wrapper; consumers and publishers as feature-local beans (for example `EarnListener`, `EarnPublish`); virtual threads pair well with pull-consumer fetch loops
 - **Python** (data work): `nats-py` with asyncio; pull subscriptions for batch ingestion workers
 - **Testing**: Testcontainers `nats:latest` with JetStream enabled (`-js`) for integration tests; assert on stream state, redeliveries, and dedup behavior
 
