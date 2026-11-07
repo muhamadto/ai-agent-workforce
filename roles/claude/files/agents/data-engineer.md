@@ -4,7 +4,7 @@ description: Data engineering expert. ETL/ELT pipelines, big data, data warehous
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 40
+maxTurns: 80
 memory: project
 skills:
   - data-engineering

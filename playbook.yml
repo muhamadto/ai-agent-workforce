@@ -6,9 +6,31 @@
 - name: Deploy AI Agent Workforce
   hosts: all
   gather_facts: true
+  gather_subset:
+    - '!all'
+    - '!min'
+    - 'system'
+    - 'user'
+    - 'python'
   become: false
 
   pre_tasks:
+    - name: Verify safe execution and required facts
+      ansible.builtin.assert:
+        that:
+          - lookup('ansible.builtin.config', 'CACHE_PLUGIN') == 'memory'
+          - lookup('ansible.builtin.config', 'HOST_KEY_CHECKING') | bool
+          - ansible_facts is mapping
+          - ansible_facts.env is not defined
+          - ansible_env is not defined
+          - ansible_facts['system'] is defined
+          - ansible_facts['user_dir'] is defined
+          - ansible_facts['python'] is defined
+        quiet: true
+        fail_msg: "Unsafe execution settings or missing required facts; use the supported launcher."
+      tags:
+        - always
+
     - name: Verify macOS platform
       ansible.builtin.fail:
         msg: "This playbook is designed for macOS only. Detected OS: {{ ansible_facts.system }}"

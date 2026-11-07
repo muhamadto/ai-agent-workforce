@@ -4,7 +4,7 @@ description: Identity and authentication security expert. Spring Security, OAuth
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 40
+maxTurns: 80
 memory: project
 skills:
   - auth-engineering

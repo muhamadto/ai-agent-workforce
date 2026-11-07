@@ -4,7 +4,7 @@ description: Senior frontend developer. React 18+, Next.js 14+, Flutter 3.x expe
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 permissionMode: acceptEdits
-maxTurns: 20
+maxTurns: 40
 memory: project
 skills:
   - frontend-engineering
