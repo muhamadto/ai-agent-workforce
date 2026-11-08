@@ -124,6 +124,7 @@ Create review team to assess PR #123:
 2. **Security First**: Involve `identity-security-developer` and `secops-engineer` early
 3. **Test Coverage**: Enforce ≥90% unit and ≥80% integration tests
 4. **Conventional Commits**: All hooks enforce the conventional commits format
+5. **No Scripts in the Owner's Projects**: Never add Python scripts, or any other check, helper or glue scripts, to a project, least of all an Ansible, Pulumi or other infrastructure repo. Do checks and automation with the project's own tooling (Ansible assertions and modules, ansible-lint, yamllint, the existing CI, the build tool). Throwaway helpers stay local in the gitignored `.context/` and are never staged, committed or pushed. If a task seems to need a script in the project, say so and ask first.
 
 ## Deployment
 
